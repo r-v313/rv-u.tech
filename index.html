@@ -5,6 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RV_U — Ramez Medhat | Offensive Security &amp; Bug Bounty</title>
 <meta name="description" content="Live bug bounty training with Ramez Medhat — an active researcher specialized in IDOR, Broken Access Control and Business Logic vulnerabilities.">
+
+<!-- ⚠️ Replace https://your-domain.com with your real hosting URL once you have one, and upload og-image.png next to this file -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://your-domain.com/">
+<meta property="og:title" content="RV_U — Live Bug Bounty Training with Ramez Medhat">
+<meta property="og:description" content="Live 6-week bootcamp — IDOR, Broken Access Control &amp; Business Logic. Taught by an active researcher, with daily support and a weekly 1-on-1 call per student.">
+<meta property="og:image" content="https://your-domain.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ar_EG">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="RV_U — Live Bug Bounty Training with Ramez Medhat">
+<meta name="twitter:description" content="Live 6-week bootcamp — IDOR, Broken Access Control &amp; Business Logic. Daily support and a weekly 1-on-1 call per student.">
+<meta name="twitter:image" content="https://your-domain.com/og-image.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -239,6 +255,17 @@
   .bonus-box h4,.capstone-box h4{font-family:var(--display);font-size:1.35rem;letter-spacing:0.01em;}
   .bonus-box p,.capstone-box p{color:var(--text-muted);font-size:0.86rem;margin-top:6px;max-width:62ch;}
 
+  /* ---------- COMMITMENT / SUPPORT GRID ---------- */
+  .commit-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:44px;background:var(--border);}
+  @media(max-width:820px){.commit-grid{grid-template-columns:repeat(2,1fr);}}
+  .commit-card{background:var(--bg);padding:24px 20px;transition:.25s;}
+  .commit-card:hover{background:var(--bg-card);}
+  .commit-card.highlight{background:var(--accent-dim);}
+  .commit-card.highlight:hover{background:var(--accent-dim);}
+  .commit-num{font-family:var(--display);font-size:1.4rem;color:var(--accent);letter-spacing:0.02em;}
+  .commit-card h4{font-family:var(--display);font-size:1.15rem;margin-top:8px;letter-spacing:0.01em;}
+  .commit-card p{font-family:var(--mono);font-size:0.72rem;color:var(--text-muted);margin-top:8px;line-height:1.55;}
+
   /* ---------- TOOLKIT ---------- */
   .toolkit-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;margin-top:44px;background:var(--border);}
   @media(max-width:800px){.toolkit-grid{grid-template-columns:1fr;}}
@@ -293,7 +320,7 @@
   html[dir="rtl"] .tool-name,html[dir="rtl"] .session-card .s-week,html[dir="rtl"] .term-label,
   html[dir="rtl"] .p-label,html[dir="rtl"] .b-label,html[dir="rtl"] .fq-num,
   html[dir="rtl"] .demo-id,html[dir="rtl"] .brand-mark,html[dir="rtl"] .stat b,
-  html[dir="rtl"] .prog-card h3,html[dir="rtl"] .tool-card h3{
+  html[dir="rtl"] .prog-card h3,html[dir="rtl"] .tool-card h3,html[dir="rtl"] .commit-num{
     font-family:'IBM Plex Mono',monospace;direction:ltr;unicode-bidi:isolate;
   }
 
@@ -365,6 +392,17 @@
   var pctEl=document.getElementById('preloaderPct');
   var preloader=document.getElementById('preloader');
   if(!preloader) return;
+
+  // Skip the boot animation on repeat visits within the same tab session.
+  // try/catch matters here: sessionStorage can throw inside sandboxed previews —
+  // if it does, we just fall back to always playing the animation.
+  var alreadyPlayed = false;
+  try { alreadyPlayed = sessionStorage.getItem('rvu_preloader_played') === '1'; } catch(e){ alreadyPlayed = false; }
+  if(alreadyPlayed){
+    if(preloader.parentNode) preloader.parentNode.removeChild(preloader);
+    return;
+  }
+
   document.body.classList.add('loading');
   var CHAR_DELAY=6, LINE_PAUSE=45;
   var totalChars=lines.reduce(function(s,l){return s+l.text.length;},0);
@@ -373,6 +411,7 @@
 
   function finish(){
     barEl.style.width='100%'; pctEl.textContent='100%';
+    try { sessionStorage.setItem('rvu_preloader_played', '1'); } catch(e){}
     setTimeout(function(){
       preloader.classList.add('hide');
       document.body.classList.remove('loading');
@@ -473,6 +512,7 @@
       <div class="stat"><b>3+</b><span class="i18n" data-ar="سنين خبرة">Years active</span></div>
       <div class="stat"><b>IDOR · BAC</b><span class="i18n" data-ar="التخصص">Specialization</span></div>
       <div class="stat"><b>MAR 2023</b><span class="i18n" data-ar="بصطاد من">Active since</span></div>
+      <div class="stat"><b>1-2H/DAY</b><span class="i18n" data-ar="متابعة يومية">Daily support</span></div>
     </div>
 
     <div class="demo term">
@@ -622,7 +662,39 @@
 <section>
   <div class="container">
     <div class="section-head reveal">
-      <span class="section-num">06 / Toolkit</span>
+      <span class="section-num">06 / What's Actually Included</span>
+      <h2 class="i18n" data-ar="مش بس 12 سيشن">More than 12 sessions</h2>
+      <p class="i18n" data-ar="السيشنات اللايف نص الحكاية بس دي الصورة كاملة وإيه المطلوب منك انت كمان">The live sessions are just one part. Here's the full picture — including what's expected from you too.</p>
+    </div>
+    <div class="commit-grid reveal">
+      <div class="commit-card">
+        <div class="commit-num">30-36H</div>
+        <h4 class="i18n" data-ar="السيشنات لايف">Live Sessions</h4>
+        <p class="i18n" data-ar="شرح وتطبيق عملي في الـ 12 سيشن دي وقت الكلاس بس">Theory and hands-on practice, across all 12 sessions — this is the classroom time.</p>
+      </div>
+      <div class="commit-card">
+        <div class="commit-num">WEEKLY</div>
+        <h4 class="i18n" data-ar="واجبات وتمرين">Homework &amp; Practice</h4>
+        <p class="i18n" data-ar="تكليفات بين كل سيشن والمتوقع منك تعملها فعلا ده تدريب مش محاضرات بس">Assignments between every session. You're expected to actually do them — this is training, not a lecture series.</p>
+      </div>
+      <div class="commit-card highlight">
+        <div class="commit-num">1-2H/DAY</div>
+        <h4 class="i18n" data-ar="متابعة يومية">Daily Support Channel</h4>
+        <p class="i18n" data-ar="جروب شغال كل يوم اسأل أي سؤال وهترد عليك في نفس اليوم مش تستنى السيشن الجاي">Active every day. Ask anything, get answered the same day — not left waiting until next week's session.</p>
+      </div>
+      <div class="commit-card highlight">
+        <div class="commit-num">1-ON-1</div>
+        <h4 class="i18n" data-ar="مكالمة أسبوعية شخصية">Weekly Personal Call</h4>
+        <p class="i18n" data-ar="مكالمة معاك انت شخصيا كل أسبوع نراجع تطورك وغلطاتك مش بث جماعي">A call with you, every week, to go through your progress and your mistakes — personal, not a group broadcast.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-num">07 / Toolkit</span>
       <h2>Not just teaching — this is what I actually run</h2>
       <p class="i18n" data-ar="أدوات بنيتها لصيدي الشخصي هتشاركها مع كل طالب وواحدة كمان هتبنيها إنت بنفسك">Tools I built for my own hunts, shared with every student — plus one you'll build for yourself.</p>
     </div>
@@ -652,7 +724,7 @@
 <section id="faq">
   <div class="container">
     <div class="section-head reveal">
-      <span class="section-num">07 / FAQ</span>
+      <span class="section-num">08 / FAQ</span>
       <h2>Frequently asked questions</h2>
     </div>
     <div class="faq-list reveal">
@@ -674,7 +746,7 @@
       </details>
       <details class="faq-item">
         <summary><span class="fq-num mono">05</span><span class="i18n" data-ar="أشترك إزاي وبكام">How do I join, and what does it cost?</span><span class="fq-icon">+</span></summary>
-        <div class="fq-body i18n" data-ar="كل دفعة عدد مقاعدها محدود عشان المتابعة تفضل حقيقية كلمني على واتساب للسعر الحالي وموعد الدفعة الجاية">Each cohort has limited seats to keep the mentorship real. Get in touch for current pricing and the next cohort's dates.</div>
+        <div class="fq-body i18n" data-ar="كل دفعة 12 مكان بس 4 فرق كل فريق 3 عشان المتابعة تفضل حقيقية كلمني على واتساب للسعر الحالي وموعد الدفعة الجاية">Each cohort is 12 seats — 4 teams of 3 — to keep the mentorship real. Get in touch for current pricing and the next cohort's dates.</div>
       </details>
     </div>
   </div>
@@ -683,7 +755,7 @@
 <section id="contact">
   <div class="container">
     <div class="section-head reveal" style="margin-inline:auto;text-align:center;">
-      <span class="section-num">08 / Join</span>
+      <span class="section-num">09 / Join</span>
       <h2 class="i18n" data-ar="لو عاوز تدخل المجال ده صح">If you want to get into this field the right way</h2>
     </div>
     <div class="invest-box reveal">
@@ -692,7 +764,7 @@
       <div class="invest-facts">
         <div class="invest-fact i18n" data-ar="6 أسابيع">6 weeks</div>
         <div class="invest-fact i18n" data-ar="12 سيشن لايف">12 live sessions</div>
-        <div class="invest-fact i18n" data-ar="أماكن محدودة">Limited seats</div>
+        <div class="invest-fact i18n" data-ar="12 مكان (4 فرق × 3)">12 seats (4 teams of 3)</div>
       </div>
       <div class="hero-ctas">
         <a href="https://wa.me/201280499854" target="_blank" rel="noopener" class="btn-primary i18n" data-ar="راسلني على واتساب">Message on WhatsApp</a>
