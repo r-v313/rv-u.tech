@@ -328,7 +328,9 @@
   .preloader{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;align-items:center;
     justify-content:center;padding:20px;transition:opacity .5s ease,visibility .5s ease;}
   .preloader.hide{opacity:0;visibility:hidden;pointer-events:none;}
-  .preloader-term{width:100%;max-width:520px;box-shadow:0 30px 70px -25px rgba(0,0,0,0.8);}
+  .preloader-term{width:100%;max-width:520px;box-shadow:0 30px 70px -25px rgba(0,0,0,0.8);
+    transition:opacity .45s ease,transform .45s ease;}
+  .preloader-term.fade-out{opacity:0;transform:scale(0.96);}
   .preloader-body{padding:20px;min-height:250px;display:flex;flex-direction:column;justify-content:flex-end;}
   .preloader-lines{font-family:var(--mono);font-size:0.76rem;line-height:1.85;color:var(--text-muted);
     direction:ltr;text-align:left;}
@@ -344,6 +346,10 @@
   .preloader-bar-track{height:6px;background:var(--bg-elevated);border:1px solid var(--border);overflow:hidden;}
   .preloader-bar-fill{height:100%;width:0%;background:var(--accent);box-shadow:0 0 12px var(--accent);
     transition:width .1s linear;}
+  .preloader-logo-flash{display:none;font-family:var(--display);font-size:clamp(3rem,14vw,8rem);
+    color:var(--accent);letter-spacing:0.02em;text-align:center;opacity:0;transform:scale(0.82);
+    transition:opacity .55s ease,transform .55s ease;text-shadow:0 0 40px rgba(249,115,22,0.35);}
+  .preloader-logo-flash.show{opacity:1;transform:scale(1);}
   body.loading{overflow:hidden;}
 
   @media(prefers-reduced-motion:reduce){
@@ -360,7 +366,7 @@
 <body>
 
 <div class="preloader" id="preloader">
-  <div class="preloader-term term">
+  <div class="preloader-term term" id="preloaderTerm">
     <div class="term-bar">
       <span class="term-dot on"></span><span class="term-dot"></span><span class="term-dot"></span>
       <span class="term-label">RV_U@KALI:~</span>
@@ -373,6 +379,7 @@
       </div>
     </div>
   </div>
+  <div class="preloader-logo-flash" id="preloaderLogoFlash">RV_U</div>
 </div>
 <script>
 (function(){
@@ -391,6 +398,8 @@
   var barEl=document.getElementById('preloaderBar');
   var pctEl=document.getElementById('preloaderPct');
   var preloader=document.getElementById('preloader');
+  var termEl=document.getElementById('preloaderTerm');
+  var logoFlashEl=document.getElementById('preloaderLogoFlash');
   if(!preloader) return;
 
   // Skip the boot animation on repeat visits within the same tab session.
@@ -409,14 +418,33 @@
   var typed=0, li=0, ci=0;
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  function reveal(){
+    preloader.classList.add('hide');
+    document.body.classList.remove('loading');
+    setTimeout(function(){ if(preloader.parentNode) preloader.parentNode.removeChild(preloader); },550);
+  }
+
   function finish(){
     barEl.style.width='100%'; pctEl.textContent='100%';
     try { sessionStorage.setItem('rvu_preloader_played', '1'); } catch(e){}
+
+    if(reduceMotion){
+      setTimeout(reveal,220);
+      return;
+    }
+
+    // terminal fades out -> big orange RV_U flashes in -> holds -> whole overlay dissolves
     setTimeout(function(){
-      preloader.classList.add('hide');
-      document.body.classList.remove('loading');
-      setTimeout(function(){ if(preloader.parentNode) preloader.parentNode.removeChild(preloader); },550);
-    },220);
+      termEl.classList.add('fade-out');
+      setTimeout(function(){
+        termEl.style.display='none';
+        if(logoFlashEl){
+          logoFlashEl.style.display='block';
+          requestAnimationFrame(function(){ logoFlashEl.classList.add('show'); });
+        }
+        setTimeout(reveal, 700);
+      },450);
+    },250);
   }
 
   function step(){
@@ -633,24 +661,24 @@
     </div>
     <div class="cmd-line reveal">$ cat sessions.json</div>
     <div class="session-grid reveal">
-      <div class="session-card"><div class="s-week">Week 01 · S01</div><h4 class="i18n" data-ar="التعارف وتجهيز بيئة العمل">Intro &amp; Environment Setup</h4><p class="i18n" data-ar="نتعارف مع بعض ناخد الأساسيات ونجهز الأدوات Burp والبروكسي والشهادات">Meeting the group, fundamentals, and getting your setup (Burp, proxy, certs) ready.</p></div>
-      <div class="session-card"><div class="s-week">Week 01 · S02</div><h4 class="i18n" data-ar="أساسيات الويب">Web Fundamentals</h4><p class="i18n" data-ar="إزاي الويب شغال فعلي وأول نظرة على شكل الـ JWT">Core web mechanics, plus a first look at JWT structure.</p></div>
-      <div class="session-card"><div class="s-week">Week 02 · S03</div><h4 class="i18n" data-ar="الاستطلاع Recon">Recon</h4><p class="i18n" data-ar="subdomains وتحليل JS واكتشاف parameters وfuzzing بشكل عملي">Subdomains, JS analysis, parameter discovery and fuzzing, hands-on.</p></div>
-      <div class="session-card"><div class="s-week">Week 02 · S04</div><h4 class="i18n" data-ar="التحكم بالصلاحيات والجلسات وهجمات JWT">Access Control, Sessions &amp; JWT Attacks</h4><p class="i18n" data-ar="IDOR وBOLA وإدارة الجلسات وطرق هجوم الـ JWT">IDOR/BOLA, session handling, and JWT attack techniques.</p></div>
-      <div class="session-card"><div class="s-week">Week 03 · S05</div><h4 class="i18n" data-ar="منطق الأعمال وRace Conditions">Business Logic &amp; Race Conditions</h4><p class="i18n" data-ar="استغلال سير العمل والتلاعب بالحالة وتحليل تدفق الطلبات">Workflow abuse, state manipulation, and request-flow analysis.</p></div>
-      <div class="session-card"><div class="s-week">Week 03 · S06</div><h4 class="i18n" data-ar="تسميم الكاش والاستيلاء على الحسابات">Cache Poisoning &amp; Account Takeover</h4><p class="i18n" data-ar="هجمات الكاش وثغرات استعادة الباسورد وتجاوز الـ 2FA واستغلال OAuth">Cache attacks, password reset flaws, 2FA bypass, OAuth abuse.</p></div>
-      <div class="session-card"><div class="s-week">Week 04 · S07</div><h4 class="i18n" data-ar="أمن الـ API">API Security</h4><p class="i18n" data-ar="نظرة سريعة على SOAP وبعدها غوص كامل في GraphQL introspection وbatching وتجاوز الصلاحيات المتداخل">Quick SOAP overview, then a deep dive into GraphQL — introspection, batching, nested authZ bypass.</p></div>
-      <div class="session-card"><div class="s-week">Week 04 · S08</div><h4 class="i18n" data-ar="المنهجية">Methodology</h4><p class="i18n" data-ar="تبني منهجية صيد كاملة بإيدك وتجربها">Your own end-to-end hunting methodology, built and tested.</p></div>
-      <div class="session-card"><div class="s-week">Week 05 · S09</div><h4 class="i18n" data-ar="الذكاء الاصطناعي في صيد الثغرات">AI for Bug Bounty</h4><p class="i18n" data-ar="استخدام الـ AI في الاستطلاع وبناء الفرضيات ومساعدك الشخصي في الصيد">Using AI for recon, hypothesis-building, and your own hunting assistant.</p></div>
-      <div class="session-card"><div class="s-week">Week 05 · S10</div><h4 class="i18n" data-ar="الأتمتة">Automation</h4><p class="i18n" data-ar="تكتب سكريبت recon بتاعك ويشتغل لايف قبل ما السيشن يخلص">Scripting your own recon pipeline, running live by session's end.</p></div>
-      <div class="session-card"><div class="s-week">Week 06 · S11</div><h4 class="i18n" data-ar="صيد حقيقي لايف">Live Hunting</h4><p class="i18n" data-ar="برنامج حقيقي وفريق حقيقي وهدف حقيقي بتطبق كل حاجة اتعلمتها لايف">Real program, real team, real target — applying everything live.</p></div>
-      <div class="session-card"><div class="s-week">Week 06 · S12</div><h4 class="i18n" data-ar="كتابة التقارير والعروض">Reporting &amp; Presentations</h4><p class="i18n" data-ar="تكتب تقرير يتقبل وبعدين تعرض اللي لقيته">Writing a report that gets triaged, then presenting your findings.</p></div>
+      <div class="session-card"><div class="s-week">Week 01 · S01</div><h4>Intro &amp; Environment Setup</h4><p class="i18n" data-ar="نتعارف مع بعض ناخد الأساسيات ونجهز الأدوات Burp والبروكسي والشهادات">Meeting the group, fundamentals, and getting your setup (Burp, proxy, certs) ready.</p></div>
+      <div class="session-card"><div class="s-week">Week 01 · S02</div><h4>Web Fundamentals</h4><p class="i18n" data-ar="إزاي الويب شغال فعلي وأول نظرة على شكل الـ JWT">Core web mechanics, plus a first look at JWT structure.</p></div>
+      <div class="session-card"><div class="s-week">Week 02 · S03</div><h4>Recon</h4><p class="i18n" data-ar="subdomains وتحليل JS واكتشاف parameters وfuzzing بشكل عملي">Subdomains, JS analysis, parameter discovery and fuzzing, hands-on.</p></div>
+      <div class="session-card"><div class="s-week">Week 02 · S04</div><h4>Access Control, Sessions &amp; JWT Attacks</h4><p class="i18n" data-ar="IDOR وBOLA وإدارة الجلسات وطرق هجوم الـ JWT">IDOR/BOLA, session handling, and JWT attack techniques.</p></div>
+      <div class="session-card"><div class="s-week">Week 03 · S05</div><h4>Business Logic &amp; Race Conditions</h4><p class="i18n" data-ar="استغلال سير العمل والتلاعب بالحالة وتحليل تدفق الطلبات">Workflow abuse, state manipulation, and request-flow analysis.</p></div>
+      <div class="session-card"><div class="s-week">Week 03 · S06</div><h4>Cache Poisoning &amp; Account Takeover</h4><p class="i18n" data-ar="هجمات الكاش وثغرات استعادة الباسورد وتجاوز الـ 2FA واستغلال OAuth">Cache attacks, password reset flaws, 2FA bypass, OAuth abuse.</p></div>
+      <div class="session-card"><div class="s-week">Week 04 · S07</div><h4>API Security</h4><p class="i18n" data-ar="نظرة سريعة على SOAP وبعدها غوص كامل في GraphQL introspection وbatching وتجاوز الصلاحيات المتداخل">Quick SOAP overview, then a deep dive into GraphQL — introspection, batching, nested authZ bypass.</p></div>
+      <div class="session-card"><div class="s-week">Week 04 · S08</div><h4>Methodology</h4><p class="i18n" data-ar="تبني منهجية صيد كاملة بإيدك وتجربها">Your own end-to-end hunting methodology, built and tested.</p></div>
+      <div class="session-card"><div class="s-week">Week 05 · S09</div><h4>AI for Bug Bounty</h4><p class="i18n" data-ar="استخدام الـ AI في الاستطلاع وبناء الفرضيات ومساعدك الشخصي في الصيد">Using AI for recon, hypothesis-building, and your own hunting assistant.</p></div>
+      <div class="session-card"><div class="s-week">Week 05 · S10</div><h4>Automation</h4><p class="i18n" data-ar="تكتب سكريبت recon بتاعك ويشتغل لايف قبل ما السيشن يخلص">Scripting your own recon pipeline, running live by session's end.</p></div>
+      <div class="session-card"><div class="s-week">Week 06 · S11</div><h4>Live Hunting</h4><p class="i18n" data-ar="برنامج حقيقي وفريق حقيقي وهدف حقيقي بتطبق كل حاجة اتعلمتها لايف">Real program, real team, real target — applying everything live.</p></div>
+      <div class="session-card"><div class="s-week">Week 06 · S12</div><h4>Reporting &amp; Presentations</h4><p class="i18n" data-ar="تكتب تقرير يتقبل وبعدين تعرض اللي لقيته">Writing a report that gets triaged, then presenting your findings.</p></div>
     </div>
 
     <div class="bonus-box reveal">
       <span class="bonus-tag i18n" data-ar="سيشن هدية">Bonus session</span>
       <div>
-        <h4 class="i18n" data-ar="سيشن قانوني إضافي تحمي نفسك كباحث">Extra Legal Session — Protecting Yourself as a Researcher</h4>
+        <h4>Extra Legal Session — Protecting Yourself as a Researcher</h4>
         <p class="i18n" data-ar="سيشن زيادة عن العقود وصيغ الحماية القانونية وإزاي تتعامل مع المناطق الرمادية قبل ما تبلغ عن ثغرة موجود مع كل دفعة فوق الـ 12 سيشن الأساسيين">An additional session on contracts, safe-harbor language, and handling legal grey areas before you report — included with every cohort, on top of the core 12.</p>
       </div>
     </div>
