@@ -324,21 +324,26 @@
     font-family:'IBM Plex Mono',monospace;direction:ltr;unicode-bidi:isolate;
   }
 
-  /* ---------- PRELOADER ---------- */
-  .preloader{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;align-items:center;
-    justify-content:center;padding:20px;transition:opacity .5s ease,visibility .5s ease;}
+  /* ---------- PRELOADER BASE & SPACE CANVAS ---------- */
+  .preloader{position:fixed;inset:0;z-index:9999;background:radial-gradient(circle at center,#141414 0%,#050505 100%);
+    display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden;
+    transition:opacity .6s cubic-bezier(.4,0,.2,1),visibility .6s ease;}
   .preloader.hide{opacity:0;visibility:hidden;pointer-events:none;}
-  .preloader-term{width:100%;max-width:520px;box-shadow:0 30px 70px -25px rgba(0,0,0,0.8);
-    transition:opacity .3s ease,transform .3s ease;}
-  .preloader-term.fade-out{opacity:0;transform:scale(0.96);}
+  .space-canvas{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity 1.2s ease;
+    pointer-events:none;}
+  .space-canvas.active{opacity:0.65;}
+
+  /* ---------- TERMINAL ---------- */
+  .preloader-term{width:100%;max-width:540px;position:relative;z-index:2;
+    box-shadow:0 25px 60px -15px rgba(0,0,0,0.9),0 0 30px rgba(249,115,22,0.08);
+    transition:opacity .35s ease,transform .35s cubic-bezier(.4,0,.2,1);}
+  .preloader-term.fade-out{opacity:0;transform:scale(0.94) translateY(-10px);}
   .preloader-body{padding:20px;min-height:250px;display:flex;flex-direction:column;justify-content:flex-end;}
   .preloader-lines{font-family:var(--mono);font-size:0.76rem;line-height:1.85;color:var(--text-muted);
     direction:ltr;text-align:left;}
   .preloader-lines .boot-title{color:var(--accent);font-weight:700;}
   .preloader-lines .ready-line{color:var(--text);font-weight:600;}
   .preloader-lines .ok{color:var(--ok);font-weight:700;}
-  .preloader-lines .cursor{display:inline-block;width:6px;height:13px;background:var(--accent);
-    margin-inline-start:2px;animation:blink 0.9s steps(1) infinite;vertical-align:-2px;}
   .preloader-progress-wrap{margin-top:18px;}
   .preloader-progress-label{display:flex;justify-content:space-between;font-family:var(--mono);
     font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;
@@ -346,12 +351,22 @@
   .preloader-bar-track{height:6px;background:var(--bg-elevated);border:1px solid var(--border);overflow:hidden;}
   .preloader-bar-fill{height:100%;width:0%;background:var(--accent);box-shadow:0 0 12px var(--accent);
     transition:width .1s linear;}
-  .preloader-logo-flash{display:none;font-family:var(--display);font-size:clamp(3rem,14vw,8rem);
-    color:var(--accent);letter-spacing:0.02em;text-align:center;opacity:0;transform:scale(0.7);
-    text-shadow:0 0 40px rgba(249,115,22,0.35);}
+
+  /* ---------- LOGO REVEAL (no scale-snap: every state declares its own transform+transition) ---------- */
+  .preloader-logo-wrap{display:none;position:relative;z-index:2;text-align:center;}
+  .preloader-logo-flash{font-family:var(--display);font-size:clamp(4rem,16vw,9.5rem);color:var(--text);
+    line-height:1;letter-spacing:0.03em;opacity:0;transform:scale(0.85);
+    text-shadow:0 0 50px rgba(249,115,22,0.4),0 0 100px rgba(249,115,22,0.2);
+    will-change:transform,opacity,filter;}
+  .preloader-logo-wrap .logo-subtext{font-family:var(--mono);font-size:0.8rem;letter-spacing:0.35em;
+    color:var(--accent);margin-top:12px;opacity:0;transform:translateY(10px);
+    transition:opacity .8s ease,transform .8s ease;direction:ltr;}
   .preloader-logo-flash.grow-in{opacity:1;transform:scale(1);
-    transition:opacity 0.9s cubic-bezier(.16,1,.3,1),transform 0.9s cubic-bezier(.16,1,.3,1);}
-  .preloader-logo-flash.fade-out-slow{opacity:0;transition:opacity 1.3s ease;}
+    transition:opacity .8s cubic-bezier(.16,1,.3,1),transform 1.2s cubic-bezier(.16,1,.3,1);}
+  .preloader-logo-wrap.show-sub .logo-subtext{opacity:0.9;transform:translateY(0);}
+  .preloader-logo-flash.fade-out-slow{opacity:0;transform:scale(1.08);filter:blur(8px);
+    transition:opacity .9s cubic-bezier(.4,0,.2,1),transform 1.1s cubic-bezier(.4,0,.2,1),filter .9s ease;}
+
   body.loading{overflow:hidden;}
 
   @media(prefers-reduced-motion:reduce){
@@ -360,7 +375,8 @@
     .hero .hero-ctas,.hero .stat-row,.hero .demo{animation:none;opacity:1;transform:none;}
     .logo .blink{animation:none;}
     .preloader{transition:none;}
-    .preloader-lines .cursor{animation:none;}
+    .space-canvas{transition:none;opacity:0 !important;}
+    .preloader-logo-flash,.preloader-logo-wrap .logo-subtext{transition:none !important;}
     html{scroll-behavior:auto;}
   }
 </style>
@@ -368,6 +384,8 @@
 <body>
 
 <div class="preloader" id="preloader">
+  <canvas id="spaceCanvas" class="space-canvas"></canvas>
+
   <div class="preloader-term term" id="preloaderTerm">
     <div class="term-bar">
       <span class="term-dot on"></span><span class="term-dot"></span><span class="term-dot"></span>
@@ -376,39 +394,34 @@
     <div class="preloader-body">
       <div class="preloader-lines" id="preloaderLines"></div>
       <div class="preloader-progress-wrap">
-        <div class="preloader-progress-label"><span>LOADING SYSTEM</span><span id="preloaderPct">0%</span></div>
+        <div class="preloader-progress-label"><span>SYSTEM INITIALIZATION</span><span id="preloaderPct">0%</span></div>
         <div class="preloader-bar-track"><div class="preloader-bar-fill" id="preloaderBar"></div></div>
       </div>
     </div>
   </div>
-  <div class="preloader-logo-flash" id="preloaderLogoFlash">RV_U</div>
+
+  <div class="preloader-logo-wrap" id="preloaderLogoWrap">
+    <div class="preloader-logo-flash" id="preloaderLogoFlash">RV<span style="color:var(--accent);">_</span>U</div>
+    <p class="logo-subtext">OFFENSIVE SECURITY &amp; BUG BOUNTY</p>
+  </div>
 </div>
 <script>
 (function(){
-  var lines=[
-    {text:'RV_U_SECURITY_SYSTEM v4.2.1',cls:'boot-title'},
-    {text:'Initializing kernel modules..........',ok:true},
-    {text:'Loading recon frameworks.............',ok:true},
-    {text:'Connecting to hunting network........',ok:true},
-    {text:'Scanning attack surface..............',ok:true},
-    {text:'Enumerating subdomains...............',ok:true},
-    {text:'Bypassing WAF protections............',ok:true},
-    {text:'Loading exploit database.............',ok:true},
-    {text:'System ready. Welcome, hunter.',cls:'ready-line'}
-  ];
+  var preloader=document.getElementById('preloader');
+  var termEl=document.getElementById('preloaderTerm');
+  var logoWrap=document.getElementById('preloaderLogoWrap');
+  var logoFlash=document.getElementById('preloaderLogoFlash');
   var linesEl=document.getElementById('preloaderLines');
   var barEl=document.getElementById('preloaderBar');
   var pctEl=document.getElementById('preloaderPct');
-  var preloader=document.getElementById('preloader');
-  var termEl=document.getElementById('preloaderTerm');
-  var logoFlashEl=document.getElementById('preloaderLogoFlash');
+  var canvas=document.getElementById('spaceCanvas');
   if(!preloader) return;
 
   // Skip the boot animation on repeat visits within the same tab session.
   // try/catch matters here: sessionStorage can throw inside sandboxed previews —
   // if it does, we just fall back to always playing the animation.
-  var alreadyPlayed = false;
-  try { alreadyPlayed = sessionStorage.getItem('rvu_preloader_played') === '1'; } catch(e){ alreadyPlayed = false; }
+  var alreadyPlayed=false;
+  try{ alreadyPlayed = sessionStorage.getItem('rvu_preloader_played')==='1'; }catch(e){ alreadyPlayed=false; }
   if(alreadyPlayed){
     if(preloader.parentNode) preloader.parentNode.removeChild(preloader);
     return;
@@ -417,99 +430,146 @@
   document.body.classList.add('loading');
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ---- Whole sequence budget: 6.0s total, fixed and explicit ----
-  // Stage 1 — terminal boot, including its own fade-out: 3.5s
-  var TERM_PAUSE_MS = 100;   // beat after "System ready" before the terminal starts fading
-  var TERM_FADE_MS  = 300;   // terminal fade-out transition (must match the CSS below)
-  var TERM_TOTAL_MS = 3500;
-  var TYPE_BUDGET_MS = TERM_TOTAL_MS - TERM_PAUSE_MS - TERM_FADE_MS;
+  var bootLines=[
+    {text:'RV_U_SECURITY_SYSTEM v4.2.1',cls:'boot-title'},
+    {text:'Initializing kernel modules..........',ok:true},
+    {text:'Loading offensive recon framework....',ok:true},
+    {text:'Connecting to hunting nodes..........',ok:true},
+    {text:'Scanning attack surface..............',ok:true},
+    {text:'Enumerating target subdomains........',ok:true},
+    {text:'Bypassing WAF parameters............',ok:true},
+    {text:'System ready. Welcome, hunter.',cls:'ready-line'}
+  ];
+  var totalLines=bootLines.length;
 
-  var totalChars = lines.reduce(function(s,l){ return s + l.text.length; }, 0);
-  var LINE_TO_CHAR_RATIO = 8; // each line-pause costs about as much as 8 typed characters
-  var CHAR_DELAY = Math.max(4, Math.round(TYPE_BUDGET_MS / (totalChars + lines.length * LINE_TO_CHAR_RATIO)));
-  var LINE_PAUSE = CHAR_DELAY * LINE_TO_CHAR_RATIO;
-
-  // Stage 2 — big orange RV_U grows in, holds, fades away slowly: 2.5s
-  var LOGO_GROW_MS = 900;   // must match the CSS .grow-in transition duration
-  var LOGO_HOLD_MS = 300;
-  var LOGO_FADE_MS = 1300;  // must match the CSS .fade-out-slow transition duration
-
-  var typed=0, li=0, ci=0;
-
-  function reveal(){
+  function markPlayedAndRemove(){
+    try{ sessionStorage.setItem('rvu_preloader_played','1'); }catch(e){}
     preloader.classList.add('hide');
     document.body.classList.remove('loading');
-    setTimeout(function(){ if(preloader.parentNode) preloader.parentNode.removeChild(preloader); },500);
+    setTimeout(function(){ if(preloader.parentNode) preloader.parentNode.removeChild(preloader); },600);
   }
 
-  function finish(){
-    barEl.style.width='100%'; pctEl.textContent='100%';
-    try { sessionStorage.setItem('rvu_preloader_played', '1'); } catch(e){}
-
-    if(reduceMotion){
-      setTimeout(reveal,200);
-      return;
-    }
-
-    setTimeout(function(){
-      termEl.classList.add('fade-out');
-      setTimeout(function(){
-        termEl.style.display='none';
-        if(logoFlashEl){
-          logoFlashEl.style.display='block';
-          // Double rAF: guarantees the browser has painted the initial (opacity:0,
-          // scale:.7) state on its own frame before we add the class that animates
-          // away from it — otherwise the transition can get skipped and the logo
-          // just snaps straight to full size instead of growing in.
-          requestAnimationFrame(function(){
-            requestAnimationFrame(function(){ logoFlashEl.classList.add('grow-in'); });
-          });
-          setTimeout(function(){
-            logoFlashEl.classList.remove('grow-in');
-            logoFlashEl.classList.add('fade-out-slow');
-          }, LOGO_GROW_MS + LOGO_HOLD_MS);
-          setTimeout(reveal, LOGO_GROW_MS + LOGO_HOLD_MS + LOGO_FADE_MS);
-        } else {
-          setTimeout(reveal, 300);
-        }
-      }, TERM_FADE_MS);
-    }, TERM_PAUSE_MS);
-  }
-
-  function step(){
-    if(li>=lines.length){ finish(); return; }
-    var line=lines[li];
-    if(ci===0){
-      var div=document.createElement('div');
-      div.className='boot-line'+(line.cls?' '+line.cls:'');
-      linesEl.appendChild(div);
-    }
-    var div2=linesEl.lastElementChild;
-    ci++; typed++;
-    var shown=line.text.slice(0,ci);
-    if(ci<line.text.length){
-      div2.innerHTML=shown+'<span class="cursor"></span>';
-    } else {
-      div2.innerHTML=shown+(line.ok?' <span class="ok">OK</span>':'');
-    }
-    var pct=Math.min(100,Math.round((typed/totalChars)*100));
-    barEl.style.width=pct+'%'; pctEl.textContent=pct+'%';
-    if(ci>=line.text.length){ li++; ci=0; setTimeout(step,LINE_PAUSE); }
-    else { setTimeout(step,CHAR_DELAY); }
-  }
-
+  // ---- Reduced motion: skip the cinematic sequence entirely, reveal fast ----
   if(reduceMotion){
-    lines.forEach(function(line){
+    bootLines.forEach(function(item){
       var div=document.createElement('div');
-      div.className='boot-line'+(line.cls?' '+line.cls:'');
-      div.innerHTML=line.text+(line.ok?' <span class="ok">OK</span>':'');
+      div.className='boot-line'+(item.cls?' '+item.cls:'');
+      div.innerHTML=item.text+(item.ok?' <span class="ok">OK</span>':'');
       linesEl.appendChild(div);
     });
     barEl.style.width='100%'; pctEl.textContent='100%';
-    setTimeout(finish,300);
-  } else {
-    step();
+    setTimeout(markPlayedAndRemove,300);
+    return;
   }
+
+  /* --- Space / starfield canvas engine --- */
+  var ctx = canvas ? canvas.getContext('2d') : null;
+  var stars=[];
+  var animFrameId=null;
+
+  function initStars(){
+    if(!canvas||!ctx) return;
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
+    stars=[];
+    var count=Math.min(600, Math.floor((canvas.width*canvas.height)/7000));
+    for(var i=0;i<count;i++){
+      stars.push({
+        x:(Math.random()-0.5)*canvas.width*2,
+        y:(Math.random()-0.5)*canvas.height*2,
+        z:Math.random()*canvas.width,
+        size:Math.random()*1.8+0.5,
+        color:Math.random()>0.3?'#f97316':'#ffffff'
+      });
+    }
+  }
+
+  function renderSpace(){
+    if(!ctx) return;
+    ctx.fillStyle='rgba(10,10,10,0.3)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    var cx=canvas.width/2, cy=canvas.height/2;
+    for(var i=0;i<stars.length;i++){
+      var s=stars[i];
+      s.z-=3.5;
+      if(s.z<=0) s.z=canvas.width;
+      var k=250/s.z;
+      var px=s.x*k+cx, py=s.y*k+cy;
+      if(px>=0&&px<=canvas.width&&py>=0&&py<=canvas.height){
+        var size=s.size*(1-s.z/canvas.width)*1.5;
+        var alpha=(1-s.z/canvas.width);
+        ctx.beginPath();
+        ctx.arc(px,py,Math.max(0.2,size),0,Math.PI*2);
+        ctx.fillStyle = s.color==='#f97316' ? 'rgba(249,115,22,'+alpha+')' : 'rgba(242,242,240,'+(alpha*0.7)+')';
+        ctx.fill();
+      }
+    }
+    animFrameId=requestAnimationFrame(renderSpace);
+  }
+
+  /* --- Terminal: one full line at a time (avoids sub-frame per-character timers) --- */
+  var lineIdx=0;
+
+  function runTerminal(){
+    if(lineIdx<totalLines){
+      var item=bootLines[lineIdx];
+      var div=document.createElement('div');
+      div.className='boot-line'+(item.cls?' '+item.cls:'');
+      div.innerHTML=item.text+(item.ok?' <span class="ok">OK</span>':'');
+      linesEl.appendChild(div);
+
+      lineIdx++;
+      var progress=Math.min(100,Math.round((lineIdx/totalLines)*100));
+      barEl.style.width=progress+'%'; pctEl.textContent=progress+'%';
+
+      var delay=(lineIdx===1)?320:(lineIdx===totalLines?400:220);
+      setTimeout(runTerminal,delay);
+    } else {
+      setTimeout(transitionToHero,300);
+    }
+  }
+
+  /* --- Terminal fades out -> starfield + big RV_U grow in, hold, fade away slowly -> reveal --- */
+  function transitionToHero(){
+    initStars();
+    renderSpace();
+    if(canvas) canvas.classList.add('active');
+
+    termEl.classList.add('fade-out');
+
+    setTimeout(function(){
+      termEl.style.display='none';
+      if(logoWrap && logoFlash){
+        logoWrap.style.display='block';
+
+        // Double rAF: guarantees the browser has painted the initial (opacity:0,
+        // scale:.85) state before we add the class that transitions away from it.
+        requestAnimationFrame(function(){
+          requestAnimationFrame(function(){
+            logoFlash.classList.add('grow-in');
+            logoWrap.classList.add('show-sub');
+          });
+        });
+
+        // hold with the starfield for ~3.2s, then dissolve (fade-out-slow declares
+        // its own transform target too, so it never snaps back — see CSS)
+        setTimeout(function(){
+          logoFlash.classList.remove('grow-in');
+          logoFlash.classList.add('fade-out-slow');
+          if(canvas) canvas.classList.remove('active');
+        },3200);
+
+        setTimeout(function(){
+          markPlayedAndRemove();
+          setTimeout(function(){ if(animFrameId) cancelAnimationFrame(animFrameId); },600);
+        },4100);
+      } else {
+        markPlayedAndRemove();
+      }
+    },350);
+  }
+
+  runTerminal();
 })();
 </script>
 
