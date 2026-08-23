@@ -350,8 +350,8 @@
     color:var(--accent);letter-spacing:0.02em;text-align:center;opacity:0;transform:scale(0.7);
     text-shadow:0 0 40px rgba(249,115,22,0.35);}
   .preloader-logo-flash.grow-in{opacity:1;transform:scale(1);
-    transition:opacity 2s cubic-bezier(.16,1,.3,1),transform 2s cubic-bezier(.16,1,.3,1);}
-  .preloader-logo-flash.fade-out-slow{opacity:0;transition:opacity 2s ease;}
+    transition:opacity 0.9s cubic-bezier(.16,1,.3,1),transform 0.9s cubic-bezier(.16,1,.3,1);}
+  .preloader-logo-flash.fade-out-slow{opacity:0;transition:opacity 1.3s ease;}
   body.loading{overflow:hidden;}
 
   @media(prefers-reduced-motion:reduce){
@@ -415,15 +415,31 @@
   }
 
   document.body.classList.add('loading');
-  var CHAR_DELAY=35, LINE_PAUSE=250;
-  var totalChars=lines.reduce(function(s,l){return s+l.text.length;},0);
-  var typed=0, li=0, ci=0;
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---- Whole sequence budget: 6.0s total, fixed and explicit ----
+  // Stage 1 — terminal boot, including its own fade-out: 3.5s
+  var TERM_PAUSE_MS = 100;   // beat after "System ready" before the terminal starts fading
+  var TERM_FADE_MS  = 300;   // terminal fade-out transition (must match the CSS below)
+  var TERM_TOTAL_MS = 3500;
+  var TYPE_BUDGET_MS = TERM_TOTAL_MS - TERM_PAUSE_MS - TERM_FADE_MS;
+
+  var totalChars = lines.reduce(function(s,l){ return s + l.text.length; }, 0);
+  var LINE_TO_CHAR_RATIO = 8; // each line-pause costs about as much as 8 typed characters
+  var CHAR_DELAY = Math.max(4, Math.round(TYPE_BUDGET_MS / (totalChars + lines.length * LINE_TO_CHAR_RATIO)));
+  var LINE_PAUSE = CHAR_DELAY * LINE_TO_CHAR_RATIO;
+
+  // Stage 2 — big orange RV_U grows in, holds, fades away slowly: 2.5s
+  var LOGO_GROW_MS = 900;   // must match the CSS .grow-in transition duration
+  var LOGO_HOLD_MS = 300;
+  var LOGO_FADE_MS = 1300;  // must match the CSS .fade-out-slow transition duration
+
+  var typed=0, li=0, ci=0;
 
   function reveal(){
     preloader.classList.add('hide');
     document.body.classList.remove('loading');
-    setTimeout(function(){ if(preloader.parentNode) preloader.parentNode.removeChild(preloader); },550);
+    setTimeout(function(){ if(preloader.parentNode) preloader.parentNode.removeChild(preloader); },500);
   }
 
   function finish(){
@@ -431,29 +447,33 @@
     try { sessionStorage.setItem('rvu_preloader_played', '1'); } catch(e){}
 
     if(reduceMotion){
-      setTimeout(reveal,220);
+      setTimeout(reveal,200);
       return;
     }
 
-    // terminal fades out (~450ms) -> big orange RV_U grows in slowly (~1.5s incl. hold)
-    // -> fades away slowly (~1.4s) -> whole overlay dissolves. Stage 2 totals ~3s.
     setTimeout(function(){
       termEl.classList.add('fade-out');
       setTimeout(function(){
         termEl.style.display='none';
         if(logoFlashEl){
           logoFlashEl.style.display='block';
-          requestAnimationFrame(function(){ logoFlashEl.classList.add('grow-in'); });
+          // Double rAF: guarantees the browser has painted the initial (opacity:0,
+          // scale:.7) state on its own frame before we add the class that animates
+          // away from it — otherwise the transition can get skipped and the logo
+          // just snaps straight to full size instead of growing in.
+          requestAnimationFrame(function(){
+            requestAnimationFrame(function(){ logoFlashEl.classList.add('grow-in'); });
+          });
           setTimeout(function(){
             logoFlashEl.classList.remove('grow-in');
             logoFlashEl.classList.add('fade-out-slow');
-          }, 3000);
-          setTimeout(reveal, 3000 + 1500);
+          }, LOGO_GROW_MS + LOGO_HOLD_MS);
+          setTimeout(reveal, LOGO_GROW_MS + LOGO_HOLD_MS + LOGO_FADE_MS);
         } else {
-          setTimeout(reveal, 400);
+          setTimeout(reveal, 300);
         }
-      },300);
-    },150);
+      }, TERM_FADE_MS);
+    }, TERM_PAUSE_MS);
   }
 
   function step(){
