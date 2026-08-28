@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>rv_u camp | Live Bug Bounty Mentorship Camp</title>
+<meta content="Live Bug Bounty Mentorship Camp عملي لمدة 6 أسابيع يركز على تطوير مهارتك لحد ما تقدر تبني Methodology خاصة بيك لكل Target: Recon، Authorization، APIs، Business Logic، AI-assisted workflows، Automation، Live Hunting وProfessional Reporting." name="description"/>
+<link href="https://rv-u.tech/" rel="canonical"/>
+<meta content="#070707" name="theme-color"/>
+<meta content="index,follow,max-image-preview:large" name="robots"/>
+<meta content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://raw.githubusercontent.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests" http-equiv="Content-Security-Policy"/>
+<meta content="website" property="og:type"/>
+<meta content="https://rv-u.tech/" property="og:url"/>
+<meta content="rv_u camp — Live Bug Bounty Mentorship Camp" property="og:title"/>
+<meta content="Mentorship عملي لمدة 6 أسابيع لبناء Methodology خاصة بيك، مع Live Hunting، Feedback، 1:1، Automation وProfessional Reporting." property="og:description"/>
+<meta content="https://rv-u.tech/og-image.png" property="og:image"/>
+<meta content="1200" property="og:image:width"/>
+<meta content="630" property="og:image:height"/>
+<meta content="ar_EG" property="og:locale"/>
+<meta content="en_US" property="og:locale:alternate"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="rv_u camp — Live Bug Bounty Mentorship Camp" name="twitter:title"/>
+<meta content="6-week live Bug Bounty mentorship focused on methodology, authorized hunting, feedback, automation and reporting." name="twitter:description"/>
+<meta content="https://rv-u.tech/og-image.png" name="twitter:image"/>
+<link crossorigin="anonymous" href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="anonymous" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Caveat:wght@600;700&amp;family=IBM+Plex+Sans:wght@300;400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600;700&amp;family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDggNDgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgY2xhc3M9InJ2LWVsaXRlLXN2ZyI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJsYXplR3JhZCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNGRjhBMDAiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjRTU1MzAwIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGZpbHRlciBpZD0iY3liZXJHbG93IiB4PSItMjAlIiB5PSItMjAlIiB3aWR0aD0iMTQwJSIgaGVpZ2h0PSIxNDAlIj4KICAgICAgPGZlRHJvcFNoYWRvdyBkeD0iMCIgZHk9IjIiIHN0ZERldmlhdGlvbj0iMyIgZmxvb2QtY29sb3I9IiNGOTczMTYiIGZsb29kLW9wYWNpdHk9IjAuMzUiLz4KICAgIDwvZmlsdGVyPgogIDwvZGVmcz4KICA8cmVjdCB4PSIxIiB5PSIxIiB3aWR0aD0iNDYiIGhlaWdodD0iNDYiIHJ4PSIxMCIgZmlsbD0iIzBDMEMwQyIgc3Ryb2tlPSIjMjIyMjIyIiBzdHJva2Utd2lkdGg9IjEuNSIgY2xhc3M9ImJhZGdlLWZyYW1lIi8+CiAgPHBhdGggZD0iTTYgMTRINDJNNiAzNEg0Mk0xNCA2VjQyTTM0IDZWNDIiIHN0cm9rZT0iIzE2MTYxNiIgc3Ryb2tlLXdpZHRoPSIwLjgiIHN0cm9rZS1kYXNoYXJyYXk9IjIgMiIvPgogIDxwYXRoIGQ9Ik0xMiAxMkgyM0MyNi44NjYgMTIgMzAgMTUuMTM0IDMwIDE5QzMwIDIyLjMgMj3uNyAyNS4xIDI4LjYgMjUuOEwzMCAzNkgyMy44TDE5IDI2LjVIMTcuNVYzNkgxMlYxMlpNMTcuNSAyMS41SDIyLjVDMjMuODggMjEuNSAyNSAyMC4zOCAyNSAxOUMyNSAxNy42MiAyMy44OCAxNi41IDIyLjUgMTYuNUgxNy41VjIxLjVaIiBmaWxsPSIjRjJGMkYwIiBjbGFzcz0ici1nbHlwaCIvPgogIDxwYXRoIGQ9Ik0yMiAyMkwyNy45IDM2SDMzLjVMNDAgMTZIMzQuNUwzMC41IDI5TDI2LjUgMTZIMjMuNUwyMiAyMloiIGZpbGw9InVybCgjYmxhemVHcmFkKSIgZmlsdGVyPSJ1cmwoI2N5YmVyR2xvdykiIGNsYXNzPSJ2LWdseXBoIi8+CiAgPGNpcmNsZSBjeD0iMzkiIGN5PSI5IiByPSIxLjUiIGZpbGw9IiNGOTczMTYiIGNsYXNzPSJyZXRpY2xlLWRvdCIvPgo8L3N2Zz4K" rel="icon" type="image/svg+xml"/>
+<link href="./styles.css" rel="stylesheet"/></head>
+<body>
+<div class="preloader" id="preloader">
+<canvas class="space-canvas" id="spaceCanvas"></canvas>
+<div class="preloader-content">
+<div class="preloader-badge">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<lineargradient id="pBlaze" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#FF8A00"></stop>
+<stop offset="100%" stop-color="#E55300"></stop>
+</lineargradient>
+<filter height="200%" id="pGlow" width="200%" x="-50%" y="-50%">
+<fedropshadow dx="0" dy="2" flood-color="#F97316" flood-opacity="0.5" stddeviation="4"></fedropshadow>
+</filter>
+</defs>
+<rect fill="#0C0C0C" height="46" rx="10" stroke="#333333" stroke-width="1.5" width="46" x="1" y="1"></rect>
+<path d="M6 14H42M6 34H42M14 6V42M34 6V42" stroke="#1c1c1c" stroke-dasharray="2 2" stroke-width="0.8"></path>
+<path d="M12 12H23C26.866 12 30 15.134 30 19C30 22.3 27.7 25.1 24.6 25.8L30 36H23.8L19 26.5H17.5V36H12V12ZM17.5 21.5H22.5C23.88 21.5 25 20.38 25 19C25 17.62 23.88 16.5 22.5 16.5H17.5V21.5Z" fill="#F2F2F0"></path>
+<path d="M22 22L27.5 36H33.5L40 16H34.5L30.5 29L26.5 16H23.5L22 22Z" fill="url(#pBlaze)" filter="url(#pGlow)"></path>
+<circle cx="39" cy="9" fill="#F97316" r="1.5"></circle>
+</svg>
+</div>
+<div class="preloader-logo">
+<span class="logo-part-rv">RV</span>
+<span class="logo-part-u"><span class="accent-dot">_</span>U</span>
+</div>
+<div class="preloader-sub">OFFENSIVE SECURITY &amp; BUG BOUNTY</div>
+</div>
+</div>
+<nav class="nav">
+<div class="container nav-inner">
+<a class="logo" href="#top">
+<span class="logo-icon">
+<svg class="rv-elite-svg" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<lineargradient id="blazeGrad" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#FF8A00"></stop>
+<stop offset="100%" stop-color="#E55300"></stop>
+</lineargradient>
+<filter height="140%" id="cyberGlow" width="140%" x="-20%" y="-20%">
+<fedropshadow dx="0" dy="2" flood-color="#F97316" flood-opacity="0.35" stddeviation="3"></fedropshadow>
+</filter>
+</defs>
+<rect class="badge-frame" fill="#0C0C0C" height="46" rx="10" stroke="#222222" stroke-width="1.5" width="46" x="1" y="1"></rect>
+<path d="M6 14H42M6 34H42M14 6V42M34 6V42" stroke="#161616" stroke-dasharray="2 2" stroke-width="0.8"></path>
+<path class="r-glyph" d="M12 12H23C26.866 12 30 15.134 30 19C30 22.3 27.7 25.1 24.6 25.8L30 36H23.8L19 26.5H17.5V36H12V12ZM17.5 21.5H22.5C23.88 21.5 25 20.38 25 19C25 17.62 23.88 16.5 22.5 16.5H17.5V21.5Z" fill="#F2F2F0"></path>
+<path class="v-glyph" d="M22 22L27.5 36H33.5L40 16H34.5L30.5 29L26.5 16H23.5L22 22Z" fill="url(#blazeGrad)" filter="url(#cyberGlow)"></path>
+<circle class="reticle-dot" cx="39" cy="9" fill="#F97316" r="1.5"></circle>
+</svg>
+</span>
+<span class="logo-text">rv_u<span class="blink">_</span></span>
+</a>
+<ul class="nav-links" id="navLinks"><li><a class="i18n" data-ar="الرئيسية" data-en="Home" href="#top">الرئيسية</a></li><li><a class="i18n" data-ar="عنّي والخبرة" data-en="About &amp; Proof" href="#about">عنّي والخبرة</a></li><li><a class="i18n" data-ar="الكامبات السابقة" data-en="Previous Camps" href="#previous-camps">الكامبات السابقة</a></li><li><a class="i18n" data-ar="الـMentorship" data-en="Mentorship" href="#included-section">الـMentorship</a></li><li><a class="i18n" data-ar="المنهج" data-en="Curriculum" href="#curriculum">المنهج</a></li><li><a class="i18n" data-ar="Hunt Loop" data-en="Hunt Loop" href="#hunt-loop">Hunt Loop</a></li><li><a class="i18n" data-ar="الرادار" data-en="Curriculum Radar" href="#radar-section">الرادار</a></li><li><a class="i18n" data-ar="التقديم" data-en="Apply" href="#contact">التقديم</a></li><li><a class="i18n" data-ar="أسئلة شائعة" data-en="FAQ" href="#faq-section">أسئلة شائعة</a></li></ul>
+<div class="nav-actions">
+<button aria-label="Switch to English Language" class="lang-toggle" id="langToggle" type="button">EN</button>
+<button class="nav-cta i18n" data-ar="قدّم للانترفيو" data-en="Apply for Interview" data-open-application="" type="button">قدّم للانترفيو</button>
+<button aria-expanded="false" aria-label="افتح قائمة التنقل" class="nav-burger" data-aria-ar="افتح قائمة التنقل" data-aria-en="Open navigation menu" id="navBurger" type="button"><span aria-hidden="true" class="nav-burger-lines"><span></span><span></span><span></span></span></button>
+</div>
+</div>
+</nav>
+<header class="hero" id="top" tabindex="-1">
+<div class="container">
+<span class="eyebrow i18n" data-ar="Live Bug Bounty Mentorship Camp · أول دفعة أونلاين · القبول بالانترفيو" data-en="Live Bug Bounty Mentorship Camp · Online Cohort 01 · Interview-based admission">Live Bug Bounty Mentorship Camp · أول دفعة أونلاين · القبول بالانترفيو</span>
+<div class="hero-brand-group">
+<div aria-label="rv_u camp" class="brand-mark">rv<span class="accent-x">_</span>u camp</div>
+<div class="hero-instructor-title i18n" data-ar="By Ramez Medhat" data-en="By Ramez Medhat">By Ramez Medhat</div>
+</div>
+<h1 class="hero-outcome-title i18n" data-ar="الهدف من الكامب إنه يحولك من إنك تايه بين &lt;span class='accent-word'&gt;Tools وPayloads&lt;/span&gt; إلى إنك تقدر تعمل بنفسك Methodology لأي Target بناءً على فهمك وتحليلك ليه، وتعرف تبدأ Hunting فعليًا وبمنطق صحيح — وده هنشتغل عليه خلال 6 أسابيع." data-en="The goal of the camp is to take you from being lost between Tools &amp; Payloads to building your own &lt;span class='accent-word'&gt;Methodology&lt;/span&gt; for any Target based on how you understand and analyze it — so you can start Hunting with sound logic. We build that foundation across 6 weeks.">
+      الهدف من الكامب إنه يحولك من إنك تايه بين <span class="accent-word">Tools وPayloads</span> إلى إنك تقدر تعمل بنفسك Methodology لأي Target بناءً على فهمك وتحليلك ليه، وتعرف تبدأ Hunting فعليًا وبمنطق صحيح — وده هنشتغل عليه خلال 6 أسابيع.
+    </h1>
+<p class="hero-outcome-sub i18n" data-ar="ده Mentorship عملي لمدة 6 أسابيع؛ مش مجرد كامب تحضر فيه وتمشي. هنشتغل خطوة بخطوة لحد ما تطور مهارتك وتقدر تبني Methodology خاصة بيك لكل Target تشتغل عليه: Recon، Authorization، APIs، Business Logic، AI-assisted workflows، Automation، Live Hunting وProfessional Reporting." data-en="This is a hands-on 6-week mentorship, not a course you simply attend. We work step by step so you can develop the skill to build your own methodology for each target you hunt: recon, authorization, APIs, business logic, AI-assisted workflows, automation, live hunting and professional reporting.">ده Mentorship عملي لمدة 6 أسابيع؛ مش مجرد كامب تحضر فيه وتمشي. هنشتغل خطوة بخطوة لحد ما تطور مهارتك وتقدر تبني Methodology خاصة بيك لكل Target تشتغل عليه: Recon، Authorization، APIs، Business Logic، AI-assisted workflows، Automation، Live Hunting وProfessional Reporting.</p>
+<div aria-label="تفاصيل الدفعة" class="hero-facts" data-aria-ar="تفاصيل الدفعة" data-aria-en="Cohort details">
+<span class="hero-fact i18n" data-ar="12 طالب فقط" data-en="12 students only">12 طالب فقط</span>
+<span class="hero-fact i18n" data-ar="يبدأ 6 سبتمبر" data-en="Starts September 6">يبدأ 6 سبتمبر</span>
+<span class="hero-fact i18n" data-ar="12 سيشن" data-en="12 live sessions">12 سيشن</span>
+<span class="hero-fact i18n" data-ar="ساعتان لكل سيشن" data-en="2 hours / session">ساعتان لكل سيشن</span>
+<span class="hero-fact i18n" data-ar="Mentorship + Feedback يومي" data-en="Daily mentorship + feedback">Mentorship + Feedback يومي</span>
+</div>
+<div class="hero-apply-wrap">
+<button class="btn-primary hero-apply-btn i18n" data-ar="قدّم للانترفيو" data-en="Apply for the Interview" data-open-application="" type="button">قدّم للانترفيو</button>
+<span class="hero-apply-note i18n" data-ar="التقديم والانترفيو من غير دفع. الدفع بيكون بعد القبول فقط لو إنت قررت تدخل." data-en="Application and interview are free. You pay only after acceptance, and only if you decide to join.">التقديم والانترفيو من غير دفع. الدفع بيكون بعد القبول فقط لو إنت قررت تدخل.</span>
+</div>
+<div class="quote-box">
+<p class="i18n" data-ar="غير رقم واحد في اللينك وشوف حاجات مش المفروض تشوفها.. دي أول حاجة هنتعلمها: بنصطاد IDOR وBroken Access Control لايف قدامك." data-en="Change one number in a URL, and see what you're not supposed to see. That's the first lesson: IDOR and Broken Access Control, taught by finding them live."><span class="hero-demo-highlight">غير رقم واحد في اللينك وشوف حاجات مش المفروض تشوفها..</span> دي أول حاجة هنتعلمها: بنصطاد IDOR وBroken Access Control لايف قدامك.</p>
+</div>
+<div class="demo term">
+<div class="term-bar">
+<span class="term-dot on"></span><span class="term-dot"></span><span class="term-dot"></span>
+<span class="demo-endpoint">GET /api/v1/invoices/<span class="id" id="endpointId">4471</span></span>
+</div>
+<div class="demo-body">
+<span class="demo-sim-tag"><span aria-hidden="true" class="dot"></span><span class="i18n" data-ar="محاكاة تفاعلية — من غير أي اتصال بسيرفر حقيقي" data-en="Interactive Simulation — no real server calls">محاكاة تفاعلية — من غير أي اتصال بسيرفر حقيقي</span></span>
+<div class="demo-controls">
+<button aria-label="إنقاص المعرف" class="demo-step" id="decBtn" type="button">−</button>
+<div class="demo-id mono" id="idDisplay">#4471</div>
+<button aria-label="زيادة المعرف" class="demo-step" id="incBtn" type="button">+</button>
+</div>
+<div class="demo-status ok" id="statusEl">200 OK — تمام دي بيانات حسابك انت</div>
+<div class="demo-json" id="jsonEl"></div>
+<div class="demo-note i18n" data-ar="السيرفر رجعلك بيانات حساب تاني من غير ما يتأكد إن الـ ID ده بتاعك فعلاً! دي بالظبط ثغرة Broken Access Control اللي بنصطادها في الكورس." data-en="The server returned another account's data — with no check that this ID actually belongs to you. That's a textbook Broken Access Control finding, the kind we hunt for in the course." id="noteEl">السيرفر رجعلك بيانات حساب تاني من غير ما يتأكد إن الـ ID ده بتاعك فعلاً! دي بالظبط ثغرة <b>Broken Access Control</b> اللي بنصطادها في الكورس.</div>
+</div>
+</div>
+</div>
+</header>
+<section id="about" tabindex="-1">
+<div class="container">
+<div class="section-head reveal">
+<span class="section-num i18n" data-ar="02 / عنّي والخبرة الميدانية" data-en="02 / ABOUT &amp; FIELD EXPERIENCE">02 / عنّي والخبرة الميدانية</span>
+<h2 class="i18n" data-ar="أنا مين وليه عامل الكامب ده؟" data-en="Who am I, and why did I build this camp?">أنا مين وليه عامل الكامب ده؟</h2>
+</div>
+<div class="about-profile-card reveal tilt-card">
+<div class="profile-header">
+<div class="profile-title-group">
+<div class="profile-avatar-icon">
+<svg viewbox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"></path></svg>
+</div>
+<div>
+<h3 class="instructor-name">Ramez Medhat — rv_u</h3>
+<div class="instructor-role i18n" data-ar="Security Researcher · Bug Bounty Hunter · Mentorship Instructor" data-en="Security Researcher · Bug Bounty Hunter · Mentorship Instructor">Security Researcher · Bug Bounty Hunter · Mentorship Instructor</div>
+</div>
+</div>
+<div class="status-badge">
+<span class="live-dot"></span>
+<span class="i18n" data-ar="نشط حالياً" data-en="ACTIVE HUNTER">نشط حالياً</span>
+</div>
+</div>
+<div class="profile-body">
+<div class="journey-story reveal">
+<span class="journey-kicker i18n" data-ar="ليه عملت الكامب بالشكل ده؟" data-en="WHY I BUILT THIS CAMP">ليه عملت الكامب بالشكل ده؟</span>
+<h3 class="i18n" data-ar="أنا نفسي كنت في يوم تايه بين الكورسات والمصادر والـTools." data-en="I was lost between courses, sources and tools too.">أنا نفسي كنت في يوم تايه بين الكورسات والمصادر والـTools.</h3>
+<p class="i18n" data-ar="قعدت تقريبًا سنة أتنقل بين مصادر وكورسات وحاجات كتير من غير ما يكون قدامي مسار واضح. ولما بدأت الصورة تركب مع بعض فهمت إن المشكلة مش نقص كورسات؛ المشكلة إن مفيش طريقة تفكير ومسار مرتب. عشان كده هدفي من الكامب إني أختصر عليك جزء كبير من التوهان ده، وأساعدك تشوف الطريق الصح بدري، ترتب الأساسيات، وتتعلم إزاي تفكر بحيث تعرف تكمل وتطور نفسك حتى بعد ما الست أسابيع يخلصوا." data-en="I spent roughly a year moving between resources without a clear path. When the pieces finally started connecting, I understood that the real problem was not a shortage of courses — it was the absence of a clear thinking process. That is why this camp is designed to shorten that confusion: I want to help you understand the path earlier, build the foundations in the right order, and learn how to think so you can keep developing after the six weeks are over.">قعدت تقريبًا سنة أتنقل بين مصادر وكورسات وحاجات كتير من غير ما يكون قدامي مسار واضح. ولما بدأت الصورة تركب مع بعض فهمت إن المشكلة مش نقص كورسات؛ المشكلة إن مفيش طريقة تفكير ومسار مرتب. عشان كده هدفي من الكامب إني أختصر عليك جزء كبير من التوهان ده، وأساعدك تشوف الطريق الصح بدري، ترتب الأساسيات، وتتعلم إزاي تفكر بحيث تعرف تكمل وتطور نفسك حتى بعد ما الست أسابيع يخلصوا.</p>
+</div>
+<div class="hunt-proof-grid reveal">
+<div class="proof-card proof-card-orange tilt-card">
+<b class="proof-title-orange">HUNTING SINCE 2023</b>
+<p class="i18n" data-ar="بهانت بشكل فعلي منذ 2023، وقدمت تقارير أمنية بمستويات خطورة مختلفة عبر برامج Bug Bounty عامة وخاصة." data-en="Hunting since 2023. Reported security issues across public and private bug bounty programs at different severity levels.">بهانت بشكل فعلي منذ 2023، وقدمت تقارير أمنية بمستويات خطورة مختلفة عبر برامج Bug Bounty عامة وخاصة.</p>
+</div>
+<div class="proof-card proof-card-green tilt-card">
+<b class="proof-title-green">3 OFFLINE CAMPS</b>
+<p class="i18n" data-ar="قدّمت 3 معسكرات Bug Bounty أوفلاين قبل إطلاق النسخة الأونلاين." data-en="Delivered 3 offline Bug Bounty camps before launching the online cohort.">قدّمت 3 معسكرات Bug Bounty أوفلاين قبل إطلاق النسخة الأونلاين.</p>
+</div>
+<div class="proof-card proof-card-blue tilt-card">
+<b class="proof-title-blue">PRACTICAL FOCUS</b>
+<p class="i18n" data-ar="التركيز على Web، Authorization، APIs، Business Logic، Recon workflows، practical automation، وبناء Methodology قابلة للتطوير." data-en="Practical focus on web, authorization, APIs, business logic, recon workflows, practical automation and building an evolving methodology.">التركيز على Web، Authorization، APIs، Business Logic، Recon workflows، practical automation، وبناء Methodology قابلة للتطوير.</p>
+</div>
+</div>
+<div class="proof-card proof-card-featured tilt-card proof-showcase-card">
+<b class="proof-title-featured proof-showcase-title">Some Bugs That I Found...</b>
+<div class="poc-gallery-box poc-gallery-compact">
+<div class="poc-marquee-wrapper">
+<div class="poc-marquee-track">
+<div class="poc-card-item" data-idx="0" title="Click to inspect PoC #1">
+<div class="poc-card-bar">
+<span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+<span class="bar-title">EVIDENCE_POC_01.PNG</span>
+</div>
+<div class="poc-card-img-wrap">
+<img alt="PoC 1" data-fallback-src="https://raw.githubusercontent.com/r-v313/rv-u.tech/main/Poc%20(1).png" decoding="async" fetchpriority="low" loading="lazy" src="https://raw.githubusercontent.com/r-v313/rv-u.tech/main/Poc%20(1).png"/>
+</div>
+</div>
+<div class="poc-card-item" data-idx="1" title="Click to inspect PoC #2">
+<div class="poc-card-bar">
+<span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+<span class="bar-title">EVIDENCE_POC_02.PNG</span>
+</div>
+<div class="poc-card-img-wrap">
+<img alt="PoC 2" data-fallback-src="https://raw.githubusercontent.com/r-v313/rv-u.tech/main/Poc%20(2).png" decoding="async" fetchpriority="low" loading="lazy" src="https://raw.githubusercontent.com/r-v313/rv-u.tech/main/Poc%20(2).png"/>
+</div>
+</div>
+<div class="poc-card-item" data-idx="2" title="Click to inspect PoC #3">
+<div class="poc-card-bar">
+<span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+<span class="bar-title">EVIDENCE_POC_03.PNG</span>
+</div>
+<div class="poc-card-img-wrap">
+<img alt="PoC 3" data-fallback-src="https://raw.githubusercontent.com/r-v313/rv-u.tech/main/Poc%20(3).png" decoding="async" fetchpriority="low" loading="lazy" src="https://raw.githubusercontent.com/r-v313/rv-u.tech/main/Poc%20(3).png"/>
+</div>
+</div>
+<div class="poc-card-item" data-idx="3" title="Click to inspect PoC #5">
+<div class="poc-card-bar">
+<span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+<span class="bar-title">EVIDENCE_POC_05.PNG</span>
+</div>
+<div class="poc-card-img-wrap">
+<img alt="PoC 5" data-fallback-src="https://raw.githubusercontent.com/r-v313/rv-u.tech/main/Poc%20(5).png" decoding="async" fetchpriority="low" loading="lazy" src="https://raw.githubusercontent.com/r-v313/rv-u.tech/main/Poc%20(5).png"/>
+</div>
+</div>
+<div class="poc-card-item" data-idx="4" title="Click to inspect PoC #6">
+<div class="poc-card-bar">
+<span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+<span class="bar-title">EVIDENCE_POC_06.PNG</span>
+</div>
+<div class="poc-card-img-wrap">
+<img alt="PoC 6" data-fallback-src="https://raw.githubusercontent.com/r-v313/rv-u.tech/main/Poc%20(6).png" decoding="async" fetchpriority="low" loading="lazy" src="https://raw.githubusercontent.com/r-v313/rv-u.tech/main/Poc%20(6).png"/>
+</div>
+</div>
+<div class="poc-card-item" data-idx="0" title="Click to inspect PoC #1">
+<div class="poc-card-bar">
+<span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+<span class="bar-title">EVIDENCE_POC_01.PNG</span>
+</div>
+<div class="poc-card-img-wrap">
+<img alt="PoC 1" data-fallback-src="https://raw.githubusercontent.com/r-v313/rv-u.tech/main/Poc%20(1).png" decoding="async" fetchpriority="low" loading="lazy" src="https://raw.githubusercontent.com/r-v313/rv-u.tech/main/Poc%20(1).png"/>
+</div>
+</div>
+<div class="poc-card-item" data-idx="1" title="Click to inspect PoC #2">
+<div class="poc-card-bar">
+<span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+<span class="bar-title">EVIDENCE_POC_02.PNG</span>
+</div>
+<div class="poc-card-img-wrap">
+<img alt="PoC 2" data-fallback-src="https://raw.githubusercontent.com/r-v313/rv-u.tech/main/Poc%20(2).png" decoding="async" fetchpriority="low" loading="lazy" src="https://raw.githubusercontent.com/r-v313/rv-u.tech/main/Poc%20(2).png"/>
+</div>
+</div>
+<div class="poc-card-item" data-idx="2" title="Click to inspect PoC #3">
+<div class="poc-card-bar">
+<span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+<span class="bar-title">EVIDENCE_POC_03.PNG</span>
+</div>
+<div class="poc-card-img-wrap">
+<img alt="PoC 3" data-fallback-src="https://raw.githubusercontent.com/r-v313/rv-u.tech/main/Poc%20(3).png" decoding="async" fetchpriority="low" loading="lazy" src="https://raw.githubusercontent.com/r-v313/rv-u.tech/main/Poc%20(3).png"/>
+</div>
+</div>
+<div class="poc-card-item" data-idx="3" title="Click to inspect PoC #5">
+<div class="poc-card-bar">
+<span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+<span class="bar-title">EVIDENCE_POC_05.PNG</span>
+</div>
+<div class="poc-card-img-wrap">
+<img alt="PoC 5" data-fallback-src="https://raw.githubusercontent.com/r-v313/rv-u.tech/main/Poc%20(5).png" decoding="async" fetchpriority="low" loading="lazy" src="https://raw.githubusercontent.com/r-v313/rv-u.tech/main/Poc%20(5).png"/>
+</div>
+</div>
+<div class="poc-card-item" data-idx="4" title="Click to inspect PoC #6">
+<div class="poc-card-bar">
+<span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span>
+<span class="bar-title">EVIDENCE_POC_06.PNG</span>
+</div>
+<div class="poc-card-img-wrap">
+<img alt="PoC 6" data-fallback-src="https://raw.githubusercontent.com/r-v313/rv-u.tech/main/Poc%20(6).png" decoding="async" fetchpriority="low" loading="lazy" src="https://raw.githubusercontent.com/r-v313/rv-u.tech/main/Poc%20(6).png"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="profile-highlight-box profile-highlight-accent">
+<p class="i18n" data-ar="&lt;b&gt;فلسفة بناء الأدوات:&lt;/b&gt; مش الهدف إني أحفظك أسطر كود وخلاص.. الهدف تفهم &lt;i&gt;إزاي تفكر في إنشاء الأدوات&lt;/i&gt;: ليه بتعمل الأداة؟ إيه هدفها المباشر؟ إزاي تربط سكريبت صغير مع سكريبت تاني لتسريع الصيد؟ وهوريك أدواتي وسكريبتاتي الشخصية اللي بصطاد بيها فعلياً." data-en="The Toolmaker's Mindset: The goal isn't just to memorize lines of code. You learn how to think about tool building: Why build a specific script? What is its exact objective? How do you chain small utilities to accelerate hunting? Plus, I'll walk you through my personal custom scripts and tools."><b>فلسفة بناء الأدوات:</b> مش الهدف إني أحفظك أسطر كود وخلاص.. الهدف تفهم <i>إزاي تفكر في إنشاء الأدوات</i>: ليه بتعمل الأداة؟ إيه هدفها المباشر؟ إزاي تربط سكريبت صغير مع سكريبت تاني لتسريع الصيد؟ وهوريك أدواتي وسكريبتاتي الشخصية اللي بصطاد بيها فعلياً.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="previous-camps-section" id="previous-camps" tabindex="-1">
+<div class="container">
+<div class="section-head reveal">
+<span class="section-num">03 / PREVIOUS OFFLINE CAMPS</span>
+<h2 class="i18n" data-ar="3 معسكرات أوفلاين قبل أول دفعة أونلاين" data-en="Three camps before the first online cohort">3 معسكرات أوفلاين قبل أول دفعة أونلاين</h2>
+<p class="i18n" data-ar="Timeline مختصر وواقعي للمعسكرات اللي قدمتها أوفلاين قبل ما أنقل التجربة لأول دفعة أونلاين." data-en="A simple factual timeline of the offline camps I delivered before moving the format online.">Timeline مختصر وواقعي للمعسكرات اللي قدمتها أوفلاين قبل ما أنقل التجربة لأول دفعة أونلاين.</p>
+</div>
+<div class="camp-history-grid reveal">
+<article class="camp-history-card tilt-card"><span class="camp-index">CAMP 01</span><strong class="i18n" data-ar="8 طلاب" data-en="8 students">8 طلاب</strong><p class="i18n" data-ar="فبراير → منتصف مارس 2026" data-en="Feb → Mid-Mar 2026">فبراير → منتصف مارس 2026</p><small class="i18n" data-ar="Offline Bug Bounty Camp" data-en="Offline Bug Bounty Camp">Offline Bug Bounty Camp</small></article>
+<article class="camp-history-card tilt-card"><span class="camp-index">CAMP 02</span><strong class="i18n" data-ar="11 طالب" data-en="11 students">11 طالب</strong><p class="i18n" data-ar="أول أبريل → منتصف مايو 2026" data-en="Early Apr → Mid-May 2026">أول أبريل → منتصف مايو 2026</p><small class="i18n" data-ar="Offline Bug Bounty Camp" data-en="Offline Bug Bounty Camp">Offline Bug Bounty Camp</small></article>
+<article class="camp-history-card tilt-card"><span class="camp-index">CAMP 03</span><strong class="i18n" data-ar="16 طالب" data-en="16 students">16 طالب</strong><p class="i18n" data-ar="يونيو → منتصف يوليو 2026" data-en="Jun → Mid-Jul 2026">يونيو → منتصف يوليو 2026</p><small class="i18n" data-ar="Offline Bug Bounty Camp" data-en="Offline Bug Bounty Camp">Offline Bug Bounty Camp</small></article>
+</div>
+</div>
+</section>
+<section id="included-section" tabindex="-1">
+<div class="container">
+<div class="section-head reveal">
+<span class="section-num i18n" data-ar="04 / ما الذي يتضمنه التدريب بالفعل" data-en="04 / WHAT THE TRAINING ACTUALLY INCLUDES">04 / ما الذي يتضمنه التدريب بالفعل</span>
+<h2 class="i18n" data-ar="المزايا الكاملة والمتابعة المباشرة" data-en="Training, Follow-up and Direct Support">المزايا الكاملة والمتابعة المباشرة</h2>
+</div>
+<div class="included-grid reveal">
+<div class="included-card highlight tilt-card">
+<span class="badge-top i18n" data-ar="أقوى ميزة تنافسية · تواصل مباشر" data-en="UNFAIR ADVANTAGE · HIGHLIGHT">أقوى ميزة تنافسية · تواصل مباشر</span>
+<h3 class="i18n" data-ar="مكالمة انترفيو قبل القبول (Interview Call)" data-en="Pre-admission Interview Call">مكالمة انترفيو قبل القبول (Interview Call)</h3>
+<p class="i18n" data-ar="مكالمة انترفيو شخصية معايا قبل القبول، علشان أفهم مستواك التقني وهدفك وأتأكد إن الكامب فعلًا مناسب ليك." data-en="A direct pre-admission interview call with me to review your current technical background, evaluate readiness, and make sure the cohort fits your goal.">مكالمة انترفيو شخصية معايا قبل القبول، علشان أفهم مستواك التقني وهدفك وأتأكد إن الكامب فعلًا مناسب ليك.</p>
+</div>
+<div class="included-card tilt-card">
+<span class="badge-top i18n" data-ar="تسجيلات · خاصة بطلاب الدفعة" data-en="RECORDINGS · PRIVATE COHORT ACCESS">RECORDINGS · PRIVATE COHORT ACCESS</span>
+<h3 class="i18n" data-ar="تسجيلات السيشنات للمراجعة" data-en="Session Recordings for Review">تسجيلات السيشنات للمراجعة</h3>
+<p class="i18n" data-ar="السيشنات بتتسجل علشان طلاب الدفعة يقدروا يراجعوا المحتوى بعد المحاضرة. التسجيلات خاصة بطلاب الدفعة وغير متاحة للعامة، والهدف منها المراجعة والتعلم داخل الكامب فقط." data-en="Sessions are recorded so cohort students can review the material after class. Recordings are private to enrolled students, are not public, and exist only for learning and review inside the camp.">السيشنات بتتسجل علشان طلاب الدفعة يقدروا يراجعوا المحتوى بعد المحاضرة. التسجيلات خاصة بطلاب الدفعة وغير متاحة للعامة، والهدف منها المراجعة والتعلم داخل الكامب فقط.</p>
+</div>
+<div class="included-card highlight tilt-card">
+<span class="badge-top i18n" data-ar="6 أسابيع · 12 محاضرة" data-en="6 WEEKS · 12 SESSIONS">6 أسابيع · 12 محاضرة</span>
+<h3 class="i18n" data-ar="+24 ساعة تدريب Live" data-en="24+ Hours of Live Sessions">+24 ساعة تدريب Live</h3>
+<p class="i18n" data-ar="12 سيشن Live على مدار 6 أسابيع، كل سيشن ساعتان: تحليل Requests، تطبيق عملي، أسئلة مباشرة، وربط كل فكرة بطريقة التفكير على Target حقيقي." data-en="12 live sessions across 6 weeks, two hours each: request analysis, hands-on practice, live questions and connecting each idea to real target reasoning.">12 سيشن Live على مدار 6 أسابيع، كل سيشن ساعتان: تحليل Requests، تطبيق عملي، أسئلة مباشرة، وربط كل فكرة بطريقة التفكير على Target حقيقي.</p>
+</div>
+<div class="included-card tilt-card">
+<span class="badge-top i18n" data-ar="Mentorship يومي · 5–7 مساءً" data-en="DAILY MENTORSHIP · 5–7 PM">Mentorship يومي · 5–7 مساءً</span>
+<h3 class="i18n" data-ar="Support Window يومي ثابت · 5–7 مساءً" data-en="Daily Support Window · 5–7 PM">Support Window يومي ثابت · 5–7 مساءً</h3>
+<p class="i18n" data-ar="كل يوم من 5 لـ7 مساءً فيه Support Window جماعي للدفعة: أسئلة، مراجعة أفكار، Debug للـblockers، وFeedback على طريقة تفكيرك. ده غير الـ1:1 الفردية." data-en="Every day from 5–7 PM there is a cohort support window for questions, blockers, idea review and feedback on your reasoning. This is separate from the personal 1-on-1 calls.">كل يوم من 5 لـ7 مساءً فيه Support Window جماعي للدفعة: أسئلة، مراجعة أفكار، Debug للـblockers، وFeedback على طريقة تفكيرك. ده غير الـ1:1 الفردية.</p>
+</div>
+<div class="included-card highlight tilt-card included-card-wide">
+<span class="badge-top i18n" data-ar="متابعة فردية · 20–30 دقيقة" data-en="PERSONAL 1-ON-1 · 20–30 MIN">PERSONAL 1-ON-1 · 20–30 MIN</span>
+<h3 class="i18n" data-ar="مكالمة فردية 20–30 دقيقة بعد كل سيشنين" data-en="20–30 Minute 1-on-1 Call After Every 2 Sessions">مكالمة فردية 20–30 دقيقة بعد كل سيشنين</h3>
+<p class="i18n" data-ar="مكالمة فردية مع كل طالب بعد كل سيشنين لمدة تقريبًا 20–30 دقيقة: نراجع تقدمك، نحدد اللي موقفك، ونرتب الخطوة التالية بشكل واقعي بعيدًا عن المتابعة العامة للجروب." data-en="A 20–30 minute personal call after every two sessions to review progress, identify blockers, and set the next practical step beyond the general group follow-up.">مكالمة فردية مع كل طالب بعد كل سيشنين لمدة تقريبًا 20–30 دقيقة: نراجع تقدمك، نحدد اللي موقفك، ونرتب الخطوة التالية بشكل واقعي بعيدًا عن المتابعة العامة للجروب.</p>
+</div>
+<div class="included-card practice-track-card tilt-card"><span class="badge-top i18n" data-ar="Practice Track إضافي · PortSwigger + HTB" data-en="EXTRA PRACTICE TRACK · PORTSWIGGER + HTB">Practice Track إضافي · PortSwigger + HTB</span><h3 class="i18n" data-ar="مش هنقف عند السيشن — هتتدرب لحد ما تعرف تحل الـLabs بنفسك" data-en="Practice until you can solve the labs on your own">مش هنقف عند السيشن — هتتدرب لحد ما تعرف تحل الـLabs بنفسك</h3><p class="i18n" data-ar="زيادة على الكامب، هنمشي في Practice Track منظم على PortSwigger Web Security Academy والـLabs المناسبة للمحاور اللي بناخدها، ومعاها أفكار وتحديات من HTB ومصادر عملية أحدث. الأفكار الأساسية والمتقدمة اللي تحتاجها مغطاة جوه المنهج، ودوري في المتابعة إني أوجّه طريقة تفكيرك وأفك الـblocker من غير ما أحرقلك الحل، لحد ما تعتمد على نفسك." data-en="Beyond the live sessions, you follow a structured practice track using PortSwigger Web Security Academy labs that match the topics we cover, plus ideas and challenges from HTB and other current practical sources. The concepts you need are built into the curriculum; my role is to guide your reasoning and unblock you without giving away the solution until you can work independently.">زيادة على الكامب، هنمشي في Practice Track منظم على PortSwigger Web Security Academy والـLabs المناسبة للمحاور اللي بناخدها، ومعاها أفكار وتحديات من HTB ومصادر عملية أحدث. الأفكار الأساسية والمتقدمة اللي تحتاجها مغطاة جوه المنهج، ودوري في المتابعة إني أوجّه طريقة تفكيرك وأفك الـblocker من غير ما أحرقلك الحل، لحد ما تعتمد على نفسك.</p></div></div>
+</div>
+</section><section class="hunt-loop-section" id="hunt-loop" tabindex="-1"><div class="container"><div class="hunt-loop reveal">
+<div class="section-head hunt-loop-head"><span class="section-num">THE HUNT LOOP</span><h2 class="i18n" data-ar="التعلم هنا دورة كاملة، مش مشاهدة محاضرة" data-en="Learning here is a complete loop — not just watching a lecture">التعلم هنا دورة كاملة، مش مشاهدة محاضرة</h2><p class="i18n" data-ar="كل خطوة ترجعك للخطوة اللي قبلها بعقلية أحسن؛ تشوف، تطبق، تاخد Feedback، تعدّل Methodology، وتعرض اللي وصلت له." data-en="Every pass through the loop improves the next: watch, practice, get feedback, refine your methodology, and present what you found.">كل خطوة ترجعك للخطوة اللي قبلها بعقلية أحسن؛ تشوف، تطبق، تاخد Feedback، تعدّل Methodology، وتعرض اللي وصلت له.</p></div>
+<div aria-label="Hunt Loop" class="hunt-loop-track">
+<div class="hunt-loop-step"><span>01</span><strong>Watch me hunt</strong><small class="i18n" data-ar="تشوفني بهانت Live داخل Scope مصرح به وتشوف القرارات والـDead Ends." data-en="Watch me hunt live inside an authorized scope, including decisions and dead ends.">تشوفني بهانت Live داخل Scope مصرح به وتشوف القرارات والـDead Ends.</small></div>
+<div class="hunt-loop-arrow">→</div>
+<div class="hunt-loop-step"><span>02</span><strong>Hunt with your team</strong><small class="i18n" data-ar="تطبق إنت مع فريقك على Target داخل Bug Bounty Program وبالالتزام بالـProgram Rules." data-en="Apply with your team on a target inside a Bug Bounty Program while respecting program rules.">تطبق إنت مع فريقك على Target داخل Bug Bounty Program وبالالتزام بالـProgram Rules.</small></div>
+<div class="hunt-loop-arrow">→</div>
+<div class="hunt-loop-step"><span>03</span><strong>Get feedback</strong><small class="i18n" data-ar="نراجع تفكيرك والـEvidence والقرارات اللي أخدتها، مش بس هل لقيت Bug ولا لأ." data-en="We review your reasoning, evidence and decisions — not only whether you found a bug.">نراجع تفكيرك والـEvidence والقرارات اللي أخدتها، مش بس هل لقيت Bug ولا لأ.</small></div>
+<div class="hunt-loop-arrow">→</div>
+<div class="hunt-loop-step"><span>04</span><strong>Refine your methodology</strong><small class="i18n" data-ar="تعدل خطواتك بناءً على اللي حصل فعلًا، مش بناءً على Template ثابت." data-en="Update your workflow based on what actually happened, not a fixed template.">تعدل خطواتك بناءً على اللي حصل فعلًا، مش بناءً على Template ثابت.</small></div>
+<div class="hunt-loop-arrow">→</div>
+<div class="hunt-loop-step"><span>05</span><strong>Present your findings</strong><small class="i18n" data-ar="تعرض النتيجة وطريقة التفكير وتتبادل الخبرة مع باقي الفرق." data-en="Present the result and reasoning and exchange lessons with the other teams.">تعرض النتيجة وطريقة التفكير وتتبادل الخبرة مع باقي الفرق.</small></div>
+</div>
+<div class="capacity-note"><b class="i18n" data-ar="ليه 12 طالب فقط؟" data-en="Why only 12 students?">ليه 12 طالب فقط؟</b><span class="i18n" data-ar="لأن كل طالب له متابعة فردية، ولأن الـLive Hunting بيتقسم إلى 4 فرق × 3 طلاب. العدد المحدود جزء من طريقة التنفيذ، مش مجرد Scarcity للتسويق." data-en="Because every student gets individual follow-up, and live hunting is split into 4 teams of 3. The limit is part of the delivery model, not artificial scarcity.">لأن كل طالب له متابعة فردية، ولأن الـLive Hunting بيتقسم إلى 4 فرق × 3 طلاب. العدد المحدود جزء من طريقة التنفيذ، مش مجرد Scarcity للتسويق.</span></div>
+</div></div></section>
+<section class="fit-section" id="fit-section" tabindex="-1">
+<div class="container">
+<div class="section-head reveal">
+<span class="section-num i18n" data-ar="05 / هل الكامب مناسب ليك؟" data-en="05 / IS THE CAMP A FIT FOR YOU?">05 / هل الكامب مناسب ليك؟</span>
+<h2 class="i18n" data-ar="مش كل حد محتاج يدخل الكامب — وده مقصود" data-en="This camp is selective by design">مش كل حد محتاج يدخل الكامب — وده مقصود</h2>
+<p class="i18n" data-ar="أقوى دفعة مش هي الأكبر عددًا؛ هي الدفعة اللي داخلة مستعدة تطبق، تفكر، تسأل، تجرب، تغلط، تراجع، وتكمل." data-en="The best cohort is not the largest cohort. It is the group that is ready to practice, think, ask, test, fail, review, and keep moving.">أقوى دفعة مش هي الأكبر عددًا؛ هي الدفعة اللي داخلة مستعدة تطبق، تفكر، تسأل، تجرب، تغلط، تراجع، وتكمل.</p>
+</div>
+<div class="fit-grid reveal">
+<article class="fit-card good tilt-card">
+<h3 class="i18n" data-ar="الكامب مناسب ليك لو..." data-en="The camp fits you if...">الكامب مناسب ليك لو...</h3>
+<ul class="fit-list">
+<li class="i18n" data-ar="فاهم أساسيات Linux والويب، لكن أول ما تدخل Target حقيقي بتحس إنك مش عارف تبدأ منين." data-en="You know basic Linux / web concepts, but you still feel lost when you open a real target.">فاهم أساسيات Linux والويب، لكن أول ما تدخل Target حقيقي بتحس إنك مش عارف تبدأ منين.</li>
+<li class="i18n" data-ar="بتتنقل بين Tools وPayloads كتير من غير Methodology ثابتة تعرف تمشي عليها." data-en="You jump between tools and payloads without a repeatable methodology.">بتتنقل بين Tools وPayloads كتير من غير Methodology ثابتة تعرف تمشي عليها.</li>
+<li class="i18n" data-ar="عاوز Feedback مباشر على طريقة تفكيرك، مش بس حد يقولك الـPayload اشتغل أو لأ." data-en="You want direct feedback on how you think — not only whether a payload worked.">عاوز Feedback مباشر على طريقة تفكيرك، مش بس حد يقولك الـPayload اشتغل أو لأ.</li>
+<li class="i18n" data-ar="مستعد تعمل واجبات، تراجع غلطاتك، وتلتزم بالـHunting والتطبيق بين السيشنات." data-en="You are ready to do assignments, review your mistakes, and hunt consistently between sessions.">مستعد تعمل واجبات، تراجع غلطاتك، وتلتزم بالـHunting والتطبيق بين السيشنات.</li>
+<li class="i18n" data-ar="هدفك تبقى Hunter مستقل يعرف يبني Workflow ويطوره، مش يفضل محتاج خطوات محفوظة." data-en="Your goal is to become an independent hunter who can build and evolve a process.">هدفك تبقى Hunter مستقل يعرف يبني Workflow ويطوره، مش يفضل محتاج خطوات محفوظة.</li>
+</ul>
+</article>
+<article class="fit-card bad tilt-card">
+<h3 class="i18n" data-ar="متدخلش الكامب لو..." data-en="Do not join if...">متدخلش الكامب لو...</h3>
+<ul class="fit-list">
+<li class="i18n" data-ar="مستني Payload سحري أو طريقة ثغرة واحدة تحفظها وتكررها في كل مكان." data-en="You want a magic payload or one bug recipe to repeat everywhere.">مستني Payload سحري أو طريقة ثغرة واحدة تحفظها وتكررها في كل مكان.</li>
+<li class="i18n" data-ar="داخل عشان Bounty مضمونة أو فلوس سريعة." data-en="You are joining for a guaranteed bounty or quick money.">داخل عشان Bounty مضمونة أو فلوس سريعة.</li>
+<li class="i18n" data-ar="مش ناوي تطبق أو تعمل واجبات خارج وقت السيشن." data-en="You are not willing to practice outside the live sessions.">مش ناوي تطبق أو تعمل واجبات خارج وقت السيشن.</li>
+<li class="i18n" data-ar="كل تركيزك تجمع Tools أكتر بدل ما تفهم إمتى وليه تستخدم كل أداة." data-en="You only care about collecting tools instead of understanding why and when to use them.">كل تركيزك تجمع Tools أكتر بدل ما تفهم إمتى وليه تستخدم كل أداة.</li>
+<li class="i18n" data-ar="مستني حد يعمل مكانك التفكير الصعب والاستمرار اللي المجال محتاجه." data-en="You want someone else to do the hard thinking and persistence for you.">مستني حد يعمل مكانك التفكير الصعب والاستمرار اللي المجال محتاجه.</li>
+</ul>
+</article>
+</div>
+</div>
+</section>
+<section id="curriculum" tabindex="-1">
+<div class="container">
+<div class="section-head reveal">
+<span class="section-num i18n" data-ar="06 / 6 أسابيع · 12 سيشن · قدرات واضحة" data-en="06 / 6 WEEKS · 12 SESSIONS · CLEAR CAPABILITIES">06 / 6 أسابيع · 12 سيشن · قدرات واضحة</span>
+<h2 class="i18n" data-ar="كل سيشن لها Core واضح وSupporting Topics ونتيجة عملية" data-en="Every session has a Core, Supporting topics and a clear Outcome">كل سيشن لها Core واضح وSupporting Topics ونتيجة عملية</h2>
+<p class="i18n" data-ar="الفكرة مش نحشر أسماء ثغرات كتير في ساعتين. كل سيشن لها مهارة أساسية بنتعمق فيها، Supporting Topics تكمل الصورة، وOutcome لازم تقدر تعمله بنفسك." data-en="The point is not to cram vulnerability names into two hours. Each session has one core capability we go deep on, supporting material that gives it context, and an outcome you should be able to demonstrate yourself.">الفكرة مش نحشر أسماء ثغرات كتير في ساعتين. كل سيشن لها مهارة أساسية بنتعمق فيها، Supporting Topics تكمل الصورة، وOutcome لازم تقدر تعمله بنفسك.</p>
+</div>
+<div class="week-stack reveal">
+<article class="week-block">
+<div class="week-head"><div class="week-num">WEEK 01 · DEVELOP YOUR ENVIRONMENT &amp; READ REQUESTS</div><div class="week-deliverable"><b>Deliverable: A controlled setup + a way to understand any request</b><span class="i18n" data-ar="تطور بيئة شغلك وتتعلم تقرأ أي Request تقابلك في سياق الـApplication Flow، مش تحفظ شكل Request وخلاص." data-en="Develop your working environment and learn how to read any request in the context of the application flow rather than memorizing request shapes.">تطور بيئة شغلك وتتعلم تقرأ أي Request تقابلك في سياق الـApplication Flow، مش تحفظ شكل Request وخلاص.</span></div></div>
+<div class="week-sessions">
+<div class="outcome-session"><div class="s-week">SESSION 01</div><h3>Develop Your Hunting Environment</h3><p class="session-core i18n" data-ar="CORE تطوير Workflow الشغل بحيث الاعتراض والتعديل وإعادة الإرسال والتوثيق يبقوا طبيعيين وسريعين." data-en="CORE: Develop a working environment where intercepting, editing, replaying and documenting requests becomes fast and natural.">CORE تطوير Workflow الشغل بحيث الاعتراض والتعديل وإعادة الإرسال والتوثيق يبقوا طبيعيين وسريعين.</p><p class="session-support i18n" data-ar="SUPPORTING Burp setup · Proxy · Certificates · Browser setup · Notes workflow." data-en="SUPPORTING: Burp setup · Proxy · Certificates · Browser setup · Notes workflow.">SUPPORTING Burp setup · Proxy · Certificates · Browser setup · Notes workflow.</p><div class="session-outcome"><b>OUTCOME</b><span class="i18n" data-ar="بيئتك جاهزة وتعرف تمسك Request وتعدلها وتقارن النتائج بثقة." data-en="OUTCOME: Your environment is ready and you can intercept, edit and compare requests confidently.">بيئتك جاهزة وتعرف تمسك Request وتعدلها وتقارن النتائج بثقة.</span></div></div>
+<div class="outcome-session"><div class="s-week">SESSION 02</div><h3>Understand Any Request You Meet</h3><p class="session-core i18n" data-ar="CORE تفهم أي Request تقابلك: جاي منين، بيحمل State إزاي، وإيه علاقته بالهوية والصلاحيات." data-en="CORE: Understand any request you meet: where it came from, how it carries state, and how it relates to identity and authorization.">CORE تفهم أي Request تقابلك: جاي منين، بيحمل State إزاي، وإيه علاقته بالهوية والصلاحيات.</p><p class="session-support i18n" data-ar="SUPPORTING Headers · Cookies · Parameters · Sessions · JWT introduction." data-en="SUPPORTING: Headers · Cookies · Parameters · Sessions · JWT introduction.">SUPPORTING Headers · Cookies · Parameters · Sessions · JWT introduction.</p><div class="session-outcome"><b>OUTCOME</b><span class="i18n" data-ar="تعرف تميّز إيه User-controlled وإيه Identity/State/Authorization context." data-en="OUTCOME: You can distinguish user-controlled input from identity, state and authorization context.">تعرف تميّز إيه User-controlled وإيه Identity/State/Authorization context.</span></div></div>
+</div>
+</article>
+<article class="week-block">
+<div class="week-head"><div class="week-num">WEEK 02 · MAP &amp; AUTHORIZE</div><div class="week-deliverable"><b>Deliverable: Build an Attack Surface and Authorization Model</b><span class="i18n" data-ar="تحول Target لخريطة مرتبة، ثم تفهم مين يقدر يعمل إيه على أي Object." data-en="Turn a target into a prioritized map, then understand who can do what to which object.">تحول Target لخريطة مرتبة، ثم تفهم مين يقدر يعمل إيه على أي Object.</span></div></div>
+<div class="week-sessions">
+<div class="outcome-session"><div class="s-week">SESSION 03</div><h3>Turn a Target into an Attack Surface</h3><p class="session-core i18n" data-ar="CORE Recon بهدف الـPrioritization، مش جمع Data بلا نهاية." data-en="CORE: Recon for prioritization, not endless data collection.">CORE Recon بهدف الـPrioritization، مش جمع Data بلا نهاية.</p><p class="session-support i18n" data-ar="SUPPORTING Subdomains · URLs · JavaScript · Parameters · Leaks · Fuzzing." data-en="SUPPORTING: Subdomains · URLs · JavaScript · Parameters · Leaks · Fuzzing.">SUPPORTING Subdomains · URLs · JavaScript · Parameters · Leaks · Fuzzing.</p><div class="session-outcome"><b>OUTCOME</b><span class="i18n" data-ar="تطلع Target Map نظيفة وتعرف إيه يستاهل Manual Testing الأول." data-en="OUTCOME: You can produce a clean target map and know what deserves manual testing first.">تطلع Target Map نظيفة وتعرف إيه يستاهل Manual Testing الأول.</span></div></div>
+<div class="outcome-session"><div class="s-week">SESSION 04</div><h3>Model Authorization Before You Test It</h3><p class="session-core i18n" data-ar="CORE Authorization · Object ownership · IDOR/BOLA reasoning." data-en="CORE: Authorization · Object ownership · IDOR/BOLA reasoning.">CORE Authorization · Object ownership · IDOR/BOLA reasoning.</p><p class="session-support i18n" data-ar="SUPPORTING AuthN context · Sessions · JWT · Roles · Horizontal/Vertical access." data-en="SUPPORTING: AuthN context · Sessions · JWT · Roles · Horizontal/Vertical access.">SUPPORTING AuthN context · Sessions · JWT · Roles · Horizontal/Vertical access.</p><div class="session-outcome"><b>OUTCOME</b><span class="i18n" data-ar="تبني Authorization Checklist وRole/Object Matrix بدل تجربة IDs عشوائيًا." data-en="OUTCOME: You can build an authorization checklist and a role/object matrix instead of guessing IDs.">تبني Authorization Checklist وRole/Object Matrix بدل تجربة IDs عشوائيًا.</span></div></div>
+</div>
+</article>
+<article class="week-block">
+<div class="week-head"><div class="week-num">WEEK 03 · ABUSE WORKFLOWS</div><div class="week-deliverable"><b>Deliverable: Convert workflows into attack hypotheses</b><span class="i18n" data-ar="تبدأ تسأل التطبيق مفترض إيه وإزاي ممكن تكسر الافتراض، بدل سؤال “أنهي Payload؟”." data-en="Stop asking only “which payload?” and start extracting attack hypotheses from the assumptions inside workflows.">تبدأ تسأل التطبيق مفترض إيه وإزاي ممكن تكسر الافتراض، بدل سؤال “أنهي Payload؟”.</span></div></div>
+<div class="week-sessions">
+<div class="outcome-session"><div class="s-week">SESSION 05</div><h3>Read Business Workflows Like an Attacker</h3><p class="session-core i18n" data-ar="CORE Business Logic reasoning والـTrust assumptions." data-en="CORE: Business-logic reasoning and trust assumptions.">CORE Business Logic reasoning والـTrust assumptions.</p><p class="session-support i18n" data-ar="SUPPORTING State transitions · Abuse cases · Concurrency · Race-condition testing." data-en="SUPPORTING: State transitions · Abuse cases · Concurrency · Race-condition testing.">SUPPORTING State transitions · Abuse cases · Concurrency · Race-condition testing.</p><div class="session-outcome"><b>OUTCOME</b><span class="i18n" data-ar="ترسم Workflow وتحدد الافتراضات وتطلع منها اختبارات Logic/Race منطقية." data-en="OUTCOME: You can diagram a workflow, identify assumptions and derive logic/race tests from them.">ترسم Workflow وتحدد الافتراضات وتطلع منها اختبارات Logic/Race منطقية.</span></div></div>
+<div class="outcome-session"><div class="s-week">SESSION 06</div><h3>Test the Complete Account Lifecycle</h3><p class="session-core i18n" data-ar="CORE فهم Authentication/Recovery كـFlow متكامل." data-en="CORE: Understand authentication and recovery as one connected flow.">CORE فهم Authentication/Recovery كـFlow متكامل.</p><p class="session-support i18n" data-ar="SUPPORTING Login · Password reset · 2FA · OAuth · Cache behavior." data-en="SUPPORTING: Login · Password reset · 2FA · OAuth · Cache behavior.">SUPPORTING Login · Password reset · 2FA · OAuth · Cache behavior.</p><div class="session-outcome"><b>OUTCOME</b><span class="i18n" data-ar="تختبر Account Flows كنظام مترابط بدل Endpoints منفصلة." data-en="OUTCOME: You can test account flows as a complete system rather than isolated endpoints.">تختبر Account Flows كنظام مترابط بدل Endpoints منفصلة.</span></div></div>
+</div>
+</article>
+<article class="week-block">
+<div class="week-head"><div class="week-num">WEEK 04 · API TESTING &amp; YOUR METHODOLOGY</div><div class="week-deliverable"><b>Deliverable: Test an API and build your own Methodology</b><span class="i18n" data-ar="تفهم الـAPI نفسها أولًا، وبعدها تبني خطوات اختبار تناسب تصميمها وسلوكها." data-en="Understand an API first, then build testing steps that fit how that API is actually designed.">تفهم الـAPI نفسها أولًا، وبعدها تبني خطوات اختبار تناسب تصميمها وسلوكها.</span></div></div>
+<div class="week-sessions">
+<div class="outcome-session"><div class="s-week">SESSION 07</div><h3>Map and Test an Unfamiliar API</h3><p class="session-core i18n" data-ar="CORE API discovery · Authorization model · Systematic testing." data-en="CORE: API discovery · Authorization model · Systematic testing.">CORE API discovery · Authorization model · Systematic testing.</p><p class="session-support i18n" data-ar="SUPPORTING REST · GraphQL · Schemas · Endpoints · Parameters · Introspection/Batching where relevant." data-en="SUPPORTING: REST · GraphQL · Schemas · Endpoints · Parameters · Introspection/Batching where relevant.">SUPPORTING REST · GraphQL · Schemas · Endpoints · Parameters · Introspection/Batching where relevant.</p><div class="session-outcome"><b>OUTCOME</b><span class="i18n" data-ar="تمسك API جديدة، تعمل Mapping، وتحدد نقاط الـAuthorization/Data exposure اللي تستاهل اختبار." data-en="OUTCOME: You can map an unfamiliar API and prioritize authorization/data-exposure testing.">تمسك API جديدة، تعمل Mapping، وتحدد نقاط الـAuthorization/Data exposure اللي تستاهل اختبار.</span></div></div>
+<div class="outcome-session"><div class="s-week">SESSION 08</div><h3>Write the Methodology You Will Actually Use</h3><p class="session-core i18n" data-ar="CORE تحويل فهمك للـTarget إلى Workflow قابلة للتكرار والتعديل." data-en="CORE: Turn your understanding of the target into a repeatable, editable workflow.">CORE تحويل فهمك للـTarget إلى Workflow قابلة للتكرار والتعديل.</p><p class="session-support i18n" data-ar="SUPPORTING Scope reading · Recon · Prioritization · Manual testing · Notes · Decision points." data-en="SUPPORTING: Scope reading · Recon · Prioritization · Manual testing · Notes · Decision points.">SUPPORTING Scope reading · Recon · Prioritization · Manual testing · Notes · Decision points.</p><div class="session-outcome"><b>OUTCOME</b><span class="i18n" data-ar="تطلع بـMethodology مكتوبة End-to-End وتعرف إمتى تغيرها بدل ما تمشي عليها بشكل أعمى." data-en="OUTCOME: You leave with an end-to-end methodology and know when to change it instead of following it blindly.">تطلع بـMethodology مكتوبة End-to-End وتعرف إمتى تغيرها بدل ما تمشي عليها بشكل أعمى.</span></div></div>
+</div>
+</article>
+<article class="week-block">
+<div class="week-head"><div class="week-num">WEEK 05 · AI &amp; AUTOMATION WITH CONTROL</div><div class="week-deliverable"><b>Deliverable: Build an assisted workflow without outsourcing your thinking</b><span class="i18n" data-ar="تستخدم AI والأتمتة كرافعة، مش كبديل لفهمك وتحليلك." data-en="Use AI and automation as leverage without outsourcing your reasoning and validation.">تستخدم AI والأتمتة كرافعة، مش كبديل لفهمك وتحليلك.</span></div></div>
+<div class="week-sessions">
+<div class="outcome-session"><div class="s-week">SESSION 09</div><h3>Install, Connect and Control an AI Assistant</h3><p class="session-core i18n" data-ar="CORE نجيب AI Assistant عملي، نثبته، ونربطه بالـWorkflow والأدوات اللي بتستخدمها." data-en="CORE: Install a practical AI assistant and connect it to your hunting workflow and tools.">CORE نجيب AI Assistant عملي، نثبته، ونربطه بالـWorkflow والأدوات اللي بتستخدمها.</p><p class="session-support i18n" data-ar="SUPPORTING Tool integration · Recon triage · Code/JS understanding · Hypothesis support · Notes · Validation · Privacy/OPSEC · إمتى تستخدمه وإمتى ما تبعتش له بيانات حساسة أو تثق في ناتجه." data-en="SUPPORTING: Tool integration · Recon triage · Code/JS understanding · Hypothesis support · Notes · Validation · privacy/OPSEC · when to use it, when not to send sensitive data, and when not to trust its output.">SUPPORTING Tool integration · Recon triage · Code/JS understanding · Hypothesis support · Notes · Validation · Privacy/OPSEC · إمتى تستخدمه وإمتى ما تبعتش له بيانات حساسة أو تثق في ناتجه.</p><div class="session-outcome"><b>OUTCOME</b><span class="i18n" data-ar="تقدر تدخل AI في شغلك بشكل مسؤول، وتعرف إمتى يسرعك وإمتى لازم توقفه وتعمل Validation بنفسك." data-en="OUTCOME: You can use AI responsibly and know when it speeds you up versus when you must validate independently.">تقدر تدخل AI في شغلك بشكل مسؤول، وتعرف إمتى يسرعك وإمتى لازم توقفه وتعمل Validation بنفسك.</span></div></div>
+<div class="outcome-session"><div class="s-week">SESSION 10</div><h3>Automate Bottlenecks, Not Everything</h3><p class="session-core i18n" data-ar="CORE تحديد الشغل المتكرر اللي فعلًا يستاهل Automation." data-en="CORE: Identify repetitive work that genuinely deserves automation.">CORE تحديد الشغل المتكرر اللي فعلًا يستاهل Automation.</p><p class="session-support i18n" data-ar="SUPPORTING Small scripts · Chaining tools · Filtering noise · Inputs/outputs · Failure handling." data-en="SUPPORTING: Small scripts · Chaining tools · Filtering noise · Inputs/outputs · Failure handling.">SUPPORTING Small scripts · Chaining tools · Filtering noise · Inputs/outputs · Failure handling.</p><div class="session-outcome"><b>OUTCOME</b><span class="i18n" data-ar="تحدد Bottleneck وتبني له Tool/Workflow صغيرة بدل تجميع Tools من غير سبب." data-en="OUTCOME: You can identify a bottleneck and build a small tool/workflow to solve it instead of collecting tools blindly.">تحدد Bottleneck وتبني له Tool/Workflow صغيرة بدل تجميع Tools من غير سبب.</span></div></div>
+</div>
+</article>
+<article class="week-block">
+<div class="week-head"><div class="week-num">WEEK 06 · FULL AUTHORIZED HUNT</div><div class="week-deliverable"><b>Deliverable: Run and communicate a complete authorized hunt</b><span class="i18n" data-ar="تطبق المنهجية على Target داخل Bug Bounty Program وبالالتزام بالـScope والـProgram Rules." data-en="Apply your methodology on an authorized bug bounty target and communicate what you found professionally.">تطبق المنهجية على Target داخل Bug Bounty Program وبالالتزام بالـScope والـProgram Rules.</span></div></div>
+<div class="week-sessions">
+<div class="outcome-session"><div class="s-week">SESSION 11</div><h3>Execute Your Methodology on an Authorized Live Target</h3><p class="session-core i18n" data-ar="CORE اتخاذ القرار الحقيقي وسط Scope حقيقي وDead Ends ووقت محدود." data-en="CORE: Make real decisions inside a real scope with dead ends and limited time.">CORE اتخاذ القرار الحقيقي وسط Scope حقيقي وDead Ends ووقت محدود.</p><p class="session-support i18n" data-ar="SUPPORTING Prioritization · Hypotheses · Evidence discipline · Program rules · Safe testing." data-en="SUPPORTING: Prioritization · Hypotheses · Evidence discipline · Program rules · Safe testing.">SUPPORTING Prioritization · Hypotheses · Evidence discipline · Program rules · Safe testing.</p><div class="session-outcome"><b>OUTCOME</b><span class="i18n" data-ar="تعرف تكمل لما الـTarget الحقيقي ميبقاش شبه Lab، من غير ما تخرج عن الـScope أو تختبر بشكل غير مسؤول." data-en="OUTCOME: You can continue when a real target does not look like a lab, without leaving scope or testing irresponsibly.">تعرف تكمل لما الـTarget الحقيقي ميبقاش شبه Lab، من غير ما تخرج عن الـScope أو تختبر بشكل غير مسؤول.</span></div></div>
+<div class="outcome-session"><div class="s-week">SESSION 12</div><h3>Turn the Hunt into a Professional Finding</h3><p class="session-core i18n" data-ar="CORE Reporting والتواصل الفني الواضح." data-en="CORE: Professional reporting and technical communication.">CORE Reporting والتواصل الفني الواضح.</p><p class="session-support i18n" data-ar="SUPPORTING Reproducible steps · Evidence · Impact framing · Team presentation · Triage-friendly writing." data-en="SUPPORTING: Reproducible steps · Evidence · Impact framing · Team presentation · Triage-friendly writing.">SUPPORTING Reproducible steps · Evidence · Impact framing · Team presentation · Triage-friendly writing.</p><div class="session-outcome"><b>OUTCOME</b><span class="i18n" data-ar="تحول Issue متحققة إلى Report احترافي وتعرض تفكير فريقك من غير تضخيم Impact لم تثبته." data-en="OUTCOME: You can turn a validated issue into a clear professional report without inflating impact you did not prove.">تحول Issue متحققة إلى Report احترافي وتعرض تفكير فريقك من غير تضخيم Impact لم تثبته.</span></div></div>
+</div>
+</article>
+</div><div class="capstone-note reveal"><b class="i18n" data-ar="CAPSTONE HUNT · فريقك مسؤول عن الرحلة كاملة" data-en="CAPSTONE HUNT · Your team owns the full process">CAPSTONE HUNT · فريقك مسؤول عن الرحلة كاملة</b><p class="i18n" data-ar="كل فريق يبدأ من Scope مصرح به، يعمل Plan، ينفّذ الاختبارات، يوثق الـEvidence والـDead Ends، وبعدها يقدم اللي وصل له. ولو النتيجة No Valid Finding، ده مش فشل: هتقدم What We Tested + ليه اختبرناه + إيه اللي استبعدناه + إيه اللي اتعلمناه." data-en="Each team starts from an authorized scope, builds a plan, executes the tests, documents evidence and dead ends, then presents the result. If the outcome is No Valid Finding, that is not failure: you present what you tested, why you tested it, what you ruled out and what you learned.">كل فريق يبدأ من Scope مصرح به، يعمل Plan، ينفّذ الاختبارات، يوثق الـEvidence والـDead Ends، وبعدها يقدم اللي وصل له. ولو النتيجة No Valid Finding، ده مش فشل: هتقدم What We Tested + ليه اختبرناه + إيه اللي استبعدناه + إيه اللي اتعلمناه.</p></div>
+</div>
+</section>
+<section id="radar-section" tabindex="-1">
+<div class="container">
+<div class="section-head reveal">
+<span class="section-num">07 / INTERACTIVE CURRICULUM MAP</span>
+<h2 class="i18n" data-ar="رادار من السيشنات الفعلية" data-en="An Interactive Map of the Actual Sessions">رادار من السيشنات الفعلية</h2>
+<p class="i18n" data-ar="الرادار هنا مش قائمة ثغرات عشوائية؛ كل Node مربوطة بسيشن فعلية وتوضح الـCore والـOutcome اللي هنبنيهم." data-en="This radar is not a random vulnerability showcase. Every node maps to a real session and shows the Core capability and outcome we build.">الرادار هنا مش قائمة ثغرات عشوائية؛ كل Node مربوطة بسيشن فعلية وتوضح الـCore والـOutcome اللي هنبنيهم.</p>
+</div>
+<div class="radar-box reveal tilt-card">
+<div class="radar-layout">
+<div class="radar-viewport" id="radarViewport">
+<canvas class="radar-canvas" id="radarCanvas"></canvas>
+<div aria-hidden="true" class="radar-center-hub">
+<svg viewbox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-14c-3.31 0-7 2.69-7 6s3.69 6 7 6 7-2.69 7-6-3.69-6-7-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"></path></svg>
+</div>
+<div aria-label="Session 02 Web Request Context" aria-pressed="true" class="radar-target-node active radar-pos-1" data-node="0" role="button" tabindex="0">
+<span class="node-ping"></span> <span class="mono">Request Context</span>
+</div>
+<div aria-label="Session 03 Attack Surface" aria-pressed="false" class="radar-target-node radar-pos-2" data-node="1" role="button" tabindex="0">
+<span class="node-ping"></span> <span class="mono">Attack Surface</span>
+</div>
+<div aria-label="Session 04 Authorization Model" aria-pressed="false" class="radar-target-node radar-pos-3" data-node="2" role="button" tabindex="0">
+<span class="node-ping"></span> <span class="mono">Authorization</span>
+</div>
+<div aria-label="Session 05 and 06 Workflow Reasoning" aria-pressed="false" class="radar-target-node radar-pos-4" data-node="3" role="button" tabindex="0">
+<span class="node-ping"></span> <span class="mono">Workflow Logic</span>
+</div>
+<div aria-label="Session 07 and 08 API Methodology" aria-pressed="false" class="radar-target-node radar-pos-5" data-node="4" role="button" tabindex="0">
+<span class="node-ping"></span> <span class="mono">API Methodology</span>
+</div>
+</div>
+<div class="radar-details-pane" id="radarPane">
+<div>
+<span class="r-badge" id="radarBadge">SESSION 02 // REQUEST CONTEXT</span>
+<div class="r-title" id="radarTitle">Read the Request in Context</div>
+<p id="radarDesc">تفهم HTTP والـState والهوية والـSessions بحيث تعرف إيه اللي تحت تحكمك وإيه اللي يحدد صلاحيتك داخل الـFlow.</p>
+</div>
+<div class="radar-detail-meta">
+<div class="mono radar-core-label" id="radarVuln">CORE: Request / Response · State · Identity context</div>
+<div class="mono radar-curriculum-label" id="radarModule">CURRICULUM: WEEK 01 · SESSION 02</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section><section class="outcomes-section" id="outcomes-section" tabindex="-1"><div class="container"><div class="section-head reveal"><span class="section-num i18n" data-ar="08 / هتطلع بإيه في إيدك؟" data-en="08 / WHAT YOU LEAVE WITH">08 / هتطلع بإيه في إيدك؟</span><h2 class="i18n" data-ar="في نهاية الـMentorship هتطلع بحاجات تستخدمها فعلًا" data-en="By the end, you'll leave with assets you can actually use">في نهاية الـMentorship هتطلع بحاجات تستخدمها فعلًا</h2><p class="i18n" data-ar="مش مجرد Topics خلصناها؛ الهدف إن يبقى عندك Outputs مكتوبة وقابلة للتطوير تستخدمها بعد الكامب على أي Target." data-en="Not just topics you completed. The goal is to leave with written, reusable outputs you can keep improving on future targets.">مش مجرد Topics خلصناها؛ الهدف إن يبقى عندك Outputs مكتوبة وقابلة للتطوير تستخدمها بعد الكامب على أي Target.</p></div><div class="leave-with-grid reveal"><div class="leave-with-card tilt-card"><span>01</span><strong>Personal Hunting Methodology</strong><small class="i18n" data-ar="Methodology خاصة بيك End-to-End وتعرف إمتى تعدلها." data-en="Your own end-to-end hunting methodology and the judgment to adapt it.">Methodology خاصة بيك End-to-End وتعرف إمتى تعدلها.</small></div><div class="leave-with-card tilt-card"><span>02</span><strong>Authorization Checklist</strong><small class="i18n" data-ar="Role/Object Matrix وChecklist للاختبار بدل تغيير IDs عشوائيًا." data-en="A role/object matrix and authorization checklist instead of random ID swapping.">Role/Object Matrix وChecklist للاختبار بدل تغيير IDs عشوائيًا.</small></div><div class="leave-with-card tilt-card"><span>03</span><strong>Recon Prioritization Workflow</strong><small class="i18n" data-ar="Workflow تنظف الـAttack Surface وتحدد إيه يستاهل Manual Testing." data-en="A recon prioritization workflow that turns attack surface into manual-testing priorities.">Workflow تنظف الـAttack Surface وتحدد إيه يستاهل Manual Testing.</small></div><div class="leave-with-card tilt-card"><span>04</span><strong>API Testing Checklist</strong><small class="i18n" data-ar="طريقة Mapping واختبار API جديدة بشكل منظم." data-en="A repeatable way to map and test unfamiliar APIs.">طريقة Mapping واختبار API جديدة بشكل منظم.</small></div><div class="leave-with-card tilt-card"><span>05</span><strong>AI-assisted Workflow</strong><small class="i18n" data-ar="Workflow تستخدم فيه AI بمسؤولية مع Validation وPrivacy/OPSEC." data-en="An AI-assisted workflow with validation and privacy/OPSEC boundaries.">Workflow تستخدم فيه AI بمسؤولية مع Validation وPrivacy/OPSEC.</small></div><div class="leave-with-card tilt-card"><span>06</span><strong>Practical Automation</strong><small class="i18n" data-ar="Tool أو Workflow صغيرة تعالج Bottleneck حقيقي في شغلك." data-en="A small tool or workflow that solves a real bottleneck in your process.">Tool أو Workflow صغيرة تعالج Bottleneck حقيقي في شغلك.</small></div><div class="leave-with-card tilt-card"><span>07</span><strong>Reporting Framework</strong><small class="i18n" data-ar="قالب تفكير للـEvidence والـImpact وReproduction يخلي Report واضح للـTriage." data-en="A reporting framework for evidence, impact and reproducible triage-friendly writing.">قالب تفكير للـEvidence والـImpact وReproduction يخلي Report واضح للـTriage.</small></div><div class="leave-with-card tilt-card"><span>08</span><strong>Capstone Hunt Record</strong><small class="i18n" data-ar="Plan + Tests + Evidence + Dead Ends + Findings أو No Valid Finding مع What We Tested." data-en="A capstone hunt record: plan, tests, evidence, dead ends and findings — or a defensible No Valid Finding result.">Plan + Tests + Evidence + Dead Ends + Findings أو No Valid Finding مع What We Tested.</small></div></div></div></section>
+<section id="execution" tabindex="-1">
+<div class="container">
+<div class="schedule-box reveal tilt-card">
+<div class="section-head schedule-head"><span class="section-num">09 / SCHEDULE &amp; EXECUTION</span><h2 class="i18n" data-ar="المواعيد وتفاصيل التنفيذ" data-en="Schedule &amp; Execution">المواعيد وتفاصيل التنفيذ</h2></div>
+<div class="schedule-grid">
+<div class="schedule-item"><div class="sch-label i18n" data-ar="تاريخ البداية" data-en="Start date">تاريخ البداية</div><div class="sch-value i18n" data-ar="الأحد 6 سبتمبر 2026" data-en="Sunday, September 6, 2026">الأحد 6 سبتمبر 2026</div></div>
+<div class="schedule-item"><div class="sch-label i18n" data-ar="مواعيد السيشنات" data-en="Live session schedule">مواعيد السيشنات</div><div class="sch-value i18n" data-ar="الأحد والأربعاء · 9:00–11:00 مساءً بتوقيت مصر" data-en="Sunday &amp; Wednesday · 9:00–11:00 PM Cairo time">الأحد والأربعاء · 9:00–11:00 مساءً بتوقيت مصر</div></div>
+<div class="schedule-item"><div class="sch-label i18n" data-ar="مدة الـ1:1" data-en="1-on-1 duration">مدة الـ1:1</div><div class="sch-value i18n" data-ar="20–30 دقيقة لكل طالب" data-en="20–30 minutes per student">20–30 دقيقة لكل طالب</div></div>
+<div class="schedule-item"><div class="sch-label i18n" data-ar="مدة السيشن" data-en="Session length">مدة السيشن</div><div class="sch-value i18n" data-ar="ساعتان لكل سيشن · 24+ ساعة Live خلال 6 أسابيع" data-en="2 hours per session · 24+ live hours across 6 weeks">ساعتان لكل سيشن · 24+ ساعة Live خلال 6 أسابيع</div></div>
+<div class="schedule-item"><div class="sch-label i18n" data-ar="الوقت المتوقع أسبوعيًا" data-en="Expected weekly workload">الوقت المتوقع أسبوعيًا</div><div class="sch-value i18n" data-ar="4 ساعات Live + 4–6 ساعات تطبيق/واجبات حسب مستواك" data-en="4 live hours + 4–6 hours of practice/assignments depending on your level">4 ساعات Live + 4–6 ساعات تطبيق/واجبات حسب مستواك</div></div>
+<div class="schedule-item"><div class="sch-label i18n" data-ar="Support Window" data-en="Support window">Support Window</div><div class="sch-value i18n" data-ar="يوميًا من 5:00 لـ7:00 مساءً" data-en="Daily from 5:00–7:00 PM">يوميًا من 5:00 لـ7:00 مساءً</div></div><div class="schedule-item"><div class="sch-label i18n" data-ar="التسجيلات" data-en="Recordings">التسجيلات</div><div class="sch-value i18n" data-ar="خاصة بطلاب الدفعة للمراجعة وغير متاحة للعامة" data-en="Private to enrolled students for review; not public">خاصة بطلاب الدفعة للمراجعة وغير متاحة للعامة</div></div>
+</div>
+<div class="schedule-note i18n" data-ar="السيشنات الأحد والأربعاء من 9 لـ11 مساءً، والـSupport Window الجماعي يوميًا من 5 لـ7 مساءً. غير كده فيه 1:1 فردية بعد كل سيشنين لمدة 20–30 دقيقة، ووقت تطبيق متوقع 4–6 ساعات أسبوعيًا حسب مستواك." data-en="Live sessions run Sunday and Wednesday from 9–11 PM. The cohort support window runs daily from 5–7 PM. Personal 1-on-1 calls happen after every two sessions for 20–30 minutes, plus an expected 4–6 hours of weekly practice depending on your level.">السيشنات الأحد والأربعاء من 9 لـ11 مساءً، والـSupport Window الجماعي يوميًا من 5 لـ7 مساءً. غير كده فيه 1:1 فردية بعد كل سيشنين لمدة 20–30 دقيقة، ووقت تطبيق متوقع 4–6 ساعات أسبوعيًا حسب مستواك.</div>
+</div>
+<div class="gold-card-legal reveal tilt-card legal-experience" id="legalExperience">
+<div class="legal-copy"><span class="gold-tag">BONUS · LEGAL AWARENESS</span><h3 class="i18n" data-ar="محاضرة خاصة عن قانون الجرائم الإلكترونية المصري رقم 175 لسنة 2018" data-en="A special session on Egypt's Cybercrime Law No. 175/2018">محاضرة خاصة عن قانون الجرائم الإلكترونية المصري رقم 175 لسنة 2018</h3><p class="i18n" data-ar="وعي عملي بالتصريح والـScope وSafe Harbor وResponsible Disclosure والالتزام بقواعد البرنامج قبل أي اختبار. الجزء ده للتوعية العامة ومش استشارة قانونية فردية." data-en="Practical awareness of authorization, scope, Safe Harbor, Responsible Disclosure and program rules before any testing. This is general awareness, not individual legal advice.">وعي عملي بالتصريح والـScope وSafe Harbor وResponsible Disclosure والالتزام بقواعد البرنامج قبل أي اختبار. الجزء ده للتوعية العامة ومش استشارة قانونية فردية.</p></div>
+<div aria-label="ميزان العدالة التفاعلي" class="justice-scales rest-left" data-aria-ar="ميزان العدالة التفاعلي" data-aria-en="Interactive scales of justice" id="justiceScales" tabindex="0">
+<div class="justice-aura aura-one"></div><div class="justice-aura aura-two"></div><div class="justice-glow"></div>
+<span class="justice-spark spark-1"></span><span class="justice-spark spark-2"></span><span class="justice-spark spark-3"></span><span class="justice-spark spark-4"></span>
+<div class="justice-finial"><span>◆</span></div><div class="justice-post"></div><div class="justice-beam-wrap"><div class="justice-beam"><span class="justice-beam-shine"></span><span class="justice-chain chain-left"></span><span class="justice-chain chain-right"></span><span class="justice-pan pan-left"><i></i></span><span class="justice-pan pan-right"><i></i></span></div></div><div class="justice-center-orb"></div><div class="justice-base"></div><div class="justice-floor-glow"></div>
+</div>
+</div>
+</div>
+</section>
+<section id="badge-preview-section" tabindex="-1">
+<div class="container">
+<div class="section-head reveal">
+<span class="section-num">10 / TAKE A SEAT CARD</span>
+<h2 class="i18n" data-ar="اعمل Take a Seat Card باسمك" data-en="Create Your Take a Seat Card">اعمل Take a Seat Card باسمك</h2>
+<p class="i18n" data-ar="دي بطاقة تفاعلية للتجربة والمشاركة، مش إثبات قبول. القبول الحقيقي بيتم بعد الانترفيو فقط." data-en="A playful Take a Seat card you can preview and share. It is not proof of acceptance; real acceptance happens only after the interview.">دي بطاقة تفاعلية للتجربة والمشاركة، مش إثبات قبول. القبول الحقيقي بيتم بعد الانترفيو فقط.</p>
+</div>
+<div class="holo-box reveal tilt-card">
+<div class="holo-layout">
+<div>
+<div class="holo-input-group">
+<label class="i18n" data-ar="ادخل اسمك الكامل لتوليد البطاقة" data-en="Enter Your Full Name">ادخل اسمك الكامل لتوليد البطاقة</label>
+<input aria-label="اكتب اسمك على شارة القبول" autocapitalize="words" autocomplete="off" class="holo-input" data-aria-ar="اكتب اسمك على الكارت" data-aria-en="Enter your name on the camp card" data-placeholder-ar="مثال: اسمك بالكامل" data-placeholder-en="e.g. Your Full Name" id="holoNameInput" maxlength="28" placeholder="مثال: اسمك بالكامل" spellcheck="false" type="text"/>
+</div>
+<div class="holo-actions">
+<button class="btn-primary holo-download-btn" id="downloadHoloBtn" type="button">
+<span class="i18n" data-ar="Download Camp Card" data-en="Download Camp Card">Download Camp Card</span>
+</button>
+<button class="btn-secondary holo-share-btn" id="shareHoloBtn" type="button">
+<span class="i18n" data-ar="Share On WhatsApp/Story" data-en="Share On WhatsApp/Story">Share On WhatsApp/Story</span>
+</button>
+</div>
+</div>
+<div class="holo-card-wrap">
+<div class="holo-card" id="holoCard">
+<div class="holo-card-top">
+<div class="holo-card-logo">
+<span class="holo-logo-icon">
+<svg fill="none" height="38" viewbox="0 0 48 48" width="38" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#0C0C0C" height="46" rx="10" stroke="#333" stroke-width="1.5" width="46" x="1" y="1"></rect>
+<path d="M6 14H42M6 34H42M14 6V42M34 6V42" stroke="#1a1a1a" stroke-dasharray="2 2" stroke-width="0.8"></path>
+<path d="M12 12H23C26.866 12 30 15.134 30 19C30 22.3 27.7 25.1 24.6 25.8L30 36H23.8L19 26.5H17.5V36H12V12ZM17.5 21.5H22.5C23.88 21.5 25 20.38 25 19C25 17.62 23.88 16.5 22.5 16.5H17.5V21.5Z" fill="#F2F2F0"></path>
+<path d="M22 22L27.5 36H33.5L40 16H34.5L30.5 29L26.5 16H23.5L22 22Z" fill="#F97316"></path>
+<circle cx="39" cy="9" fill="#F97316" r="1.5"></circle>
+</svg>
+</span>
+</div>
+<div class="holo-card-seal" id="holoCardSeal">TAKE A SEAT</div>
+</div>
+<div class="holo-card-body">
+<div class="holo-card-label">rv<span class="accent-x">_</span>u camp</div>
+<div class="holo-card-sublabel">from bug hunter to bug hunter</div>
+<div class="holo-card-name" id="holoCardName">اكتب اسمك هنا</div>
+</div>
+<div class="holo-card-bottom">
+<div class="sig-name">Ramez Medhat</div>
+<div class="holo-card-date" id="holoCardDate">ISSUED: 24 AUG 2026</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="contact" tabindex="-1">
+<div class="container">
+<div class="section-head reveal contact-section-head">
+<span class="section-num i18n" data-ar="11 / أول دفعة أونلاين · التقديم والقرار" data-en="11 / ONLINE COHORT 01 · APPLICATION &amp; DECISION">11 / أول دفعة أونلاين · التقديم والقرار</span>
+<h2 class="i18n" data-ar="التقديم يبدأ بفهم النظام، مش بالدفع" data-en="Application Starts with Understanding the System — Not Payment">التقديم يبدأ بفهم النظام، مش بالدفع</h2>
+</div>
+<div class="personal-note reveal">
+<span class="personal-note-kicker i18n" data-ar="بيني وبينك قبل ما تدفع" data-en="Between you and me before you pay">بيني وبينك قبل ما تدفع</span>
+<h3 class="i18n" data-ar="أنا مش هبيع لك وعد بباونتي — وهقولك ليه." data-en="I won't sell you a guaranteed bounty — and here's why.">أنا مش هبيع لك وعد بباونتي — وهقولك ليه.</h3>
+<p class="i18n" data-ar="ممكن تلاقي Bug برنامج يكافئها بـ300 أو 400 دولار، ونفس النوع في برنامج تاني يتقيّم بـ1000 دولار. وممكن تعمل تقرير شايفه Valid جدًا ويطلع Duplicate أو Informative أو من غير مكافأة. محدش يقدر يضمن لك رقم، أو توقيت، أو إن كل مجهود هيتكافأ." data-en="A bug might be rewarded at $300–$400 in one program and the same class of issue might be valued around $1,000 in another. A report that looks completely valid can still be a duplicate, informative, or unpaid. Nobody can guarantee a number, a timeline, or that every effort will be rewarded.">ممكن تلاقي Bug برنامج يكافئها بـ300 أو 400 دولار، ونفس النوع في برنامج تاني يتقيّم بـ1000 دولار. وممكن تعمل تقرير شايفه Valid جدًا ويطلع Duplicate أو Informative أو من غير مكافأة. محدش يقدر يضمن لك رقم، أو توقيت، أو إن كل مجهود هيتكافأ.</p>
+<p class="i18n" data-ar="اللي أقدر أقوله لك بمنتهى الأمانة: الاستمرار، الفهم، والاجتهاد هما اللي بيدوك فرصة حقيقية على المدى الطويل. وأنا شخصيًا مؤمن إن ربنا بيبارك الاجتهاد، وإنك تشتغل لأنك عايز تتعلم وتبني نفسك وتكمل — مش لأنك مستني نتيجة سريعة من أول تقرير." data-en="What I can tell you with complete honesty is that consistency, understanding and effort are what give you a real long-term chance. I personally believe God blesses sincere effort, and that you should work to learn, build yourself and keep going — not only because you expect quick money from the first report.">اللي أقدر أقوله لك بمنتهى الأمانة: الاستمرار، الفهم، والاجتهاد هما اللي بيدوك فرصة حقيقية على المدى الطويل. وأنا شخصيًا مؤمن إن ربنا بيبارك الاجتهاد، وإنك تشتغل لأنك عايز تتعلم وتبني نفسك وتكمل — مش لأنك مستني نتيجة سريعة من أول تقرير.</p>
+<p class="i18n" data-ar="لو إنت شخص داخل علشان فلوس سريعة، ولو اتظلمت مرة أو جالك Duplicate مرتين هتستسلم وتحس إن المجال خلص، فالأفضل متدخلش الكامب. هدفي مش آخد فلوسك؛ هدفي أدلك على اللي محتاجه فعلًا، وأقولك بصراحة لو الكامب مناسب ليك أو لأ. مفيش حد كامل، وأنا كمان مش مثالي، لكن نسعى كلنا لهدفنا ونحسن شغلنا خطوة بخطوة والثقة بربنا العامل الأكيد في الطريق." data-en="If you are joining only for fast money, and one rejection or two duplicates will make you quit, this camp is probably not for you. My goal is not simply to take your money; it is to point you toward what you actually need and tell you honestly whether the camp fits you. Nobody is perfect, including me, but we all keep improving and pursuing our goals while trusting God through the process.">لو إنت شخص داخل علشان فلوس سريعة، ولو اتظلمت مرة أو جالك Duplicate مرتين هتستسلم وتحس إن المجال خلص، فالأفضل متدخلش الكامب. هدفي مش آخد فلوسك؛ هدفي أدلك على اللي محتاجه فعلًا، وأقولك بصراحة لو الكامب مناسب ليك أو لأ. مفيش حد كامل، وأنا كمان مش مثالي، لكن نسعى كلنا لهدفنا ونحسن شغلنا خطوة بخطوة والثقة بربنا العامل الأكيد في الطريق.</p>
+<div class="personal-note-bottom"><strong class="i18n" data-ar="الخلاصة" data-en="Bottom line">الخلاصة</strong><span class="i18n" data-ar="مفيش Bounty مضمونة. فيه Skill ممكن تبنيها، Methodology ممكن تطورها، واستمرار هو اللي يدي النتائج فرصة تحصل." data-en="No bounty is guaranteed. You can build skill, improve your methodology, and stay consistent enough to give results a real chance to happen.">مفيش Bounty مضمونة. فيه Skill ممكن تبنيها، Methodology ممكن تطورها، واستمرار هو اللي يدي النتائج فرصة تحصل.</span></div>
+</div>
+<div class="interview-criteria reveal" id="interview-criteria">
+<div class="section-head interview-head"><span class="section-num">INTERVIEW CRITERIA</span><h2 class="i18n" data-ar="الانترفيو بنبص فيه على إيه؟" data-en="What do I look for in the interview?">الانترفيو بنبص فيه على إيه؟</h2><p class="i18n" data-ar="مش مطلوب تكون خبير ولا تكون جبت Bounty قبل كده. الهدف نتأكد إن الأساس والتوقعات والوقت مناسبين للتجربة." data-en="You do not need to be an expert or have earned a bounty already. The goal is to make sure your foundation, expectations and available time fit the experience.">مش مطلوب تكون خبير ولا تكون جبت Bounty قبل كده. الهدف نتأكد إن الأساس والتوقعات والوقت مناسبين للتجربة.</p></div>
+<div class="criteria-grid">
+<div class="criteria-card"><b class="i18n" data-ar="01 · أساسيات" data-en="01 · Foundations">01 · أساسيات</b><span class="i18n" data-ar="Linux basics + Web fundamentals تكفي كبداية." data-en="Basic Linux + web fundamentals are enough to start.">Linux basics + Web fundamentals تكفي كبداية.</span></div>
+<div class="criteria-card"><b class="i18n" data-ar="02 · استعداد للتطبيق" data-en="02 · Ready to practice">02 · استعداد للتطبيق</b><span class="i18n" data-ar="عندك وقت للواجبات والـHunting بين السيشنات، مش حضور فقط." data-en="You have time for assignments and hunting between sessions — not attendance only.">عندك وقت للواجبات والـHunting بين السيشنات، مش حضور فقط.</span></div>
+<div class="criteria-card"><b class="i18n" data-ar="03 · التزام بالـScope" data-en="03 · Scope discipline">03 · التزام بالـScope</b><span class="i18n" data-ar="أي Live Testing بيكون على Targets مصرح بها وداخل Program Rules." data-en="Any live testing stays on authorized targets and follows program rules.">أي Live Testing بيكون على Targets مصرح بها وداخل Program Rules.</span></div>
+<div class="criteria-card"><b class="i18n" data-ar="04 · توقعات واقعية" data-en="04 · Realistic expectations">04 · توقعات واقعية</b><span class="i18n" data-ar="فاهم إن مفيش Bounty أو وظيفة مضمونة، وإن التقدم محتاج استمرار." data-en="You understand there is no guaranteed bounty or job and that progress requires consistency.">فاهم إن مفيش Bounty أو وظيفة مضمونة، وإن التقدم محتاج استمرار.</span></div>
+<div class="criteria-card"><b class="i18n" data-ar="05 · تواصل وReasoning" data-en="05 · Communication &amp; reasoning">05 · تواصل وReasoning</b><span class="i18n" data-ar="مستعد تسأل، تشرح اللي جربته، وتشارك طريقة تفكيرك حتى لو طلعت غلط." data-en="You are willing to ask questions, explain what you tried, and share your reasoning even when it turns out to be wrong.">مستعد تسأل، تشرح اللي جربته، وتشارك طريقة تفكيرك حتى لو طلعت غلط.</span></div></div>
+<div class="no-payment-note"><b class="i18n" data-ar="بعد الانترفيو هقولك القرار بصراحة: Accepted أو Not Yet." data-en="After the interview, I give you a direct decision: Accepted or Not Yet.">بعد الانترفيو هقولك القرار بصراحة: Accepted أو Not Yet.</b><span class="i18n" data-ar="لو محتاج تأسيس أكتر هقولك إيه اللي تراجعه؛ أحيانًا ممكن تلحق الدفعة الحالية لو ذاكرت جزء محدد بسرعة، بس هتبقى داخل بضغط أعلى، وأحيانًا الأفضل تستنى دفعة تانية. الهدف إن القرار يكون في مصلحتك مش مجرد إكمال العدد." data-en="If you need more foundation, I tell you exactly what to review. Sometimes you can still catch the current cohort by closing a specific gap quickly, but you will be under more pressure; other times waiting for a later cohort is the better call. The goal is fit, not filling seats.">لو محتاج تأسيس أكتر هقولك إيه اللي تراجعه؛ أحيانًا ممكن تلحق الدفعة الحالية لو ذاكرت جزء محدد بسرعة، بس هتبقى داخل بضغط أعلى، وأحيانًا الأفضل تستنى دفعة تانية. الهدف إن القرار يكون في مصلحتك مش مجرد إكمال العدد.</span></div>
+</div><div class="invest-box reveal tilt-card">
+<span class="inv-label i18n" data-ar="أول دفعة أونلاين · السعر الكامل للبرنامج" data-en="Online Cohort 01 · Full Program Price">أول دفعة أونلاين · السعر الكامل للبرنامج</span>
+<h3 class="i18n" data-ar="قدّم لانترفيو أول دفعة أونلاين" data-en="Apply for the Online Cohort 01 Interview">قدّم لانترفيو أول دفعة أونلاين</h3>
+<div class="invest-price-row">
+<span class="price-main i18n" data-ar="4,000 ج.م" data-en="4,000 EGP">4,000 ج.م</span>
+<span class="price-usd i18n" data-ar="(~80 دولار)" data-en="(~$80 USD)">(~80 دولار)</span>
+</div>
+<div class="invest-facts">
+<div class="invest-fact i18n" data-ar="6 أسابيع · +24 ساعة Live" data-en="6 weeks · 24H+ live sessions">6 أسابيع · +24 ساعة Live</div>
+<div class="invest-fact i18n" data-ar="انترفيو قبل القبول · لا دفع قبل القبول" data-en="Interview first · no payment before acceptance">انترفيو قبل القبول · لا دفع قبل القبول</div>
+<div class="invest-fact i18n" data-ar="12 طالب فقط · 4 فرق × 3" data-en="12 students max · 4 teams × 3">12 طالب فقط · 4 فرق × 3</div>
+</div>
+<div class="hero-ctas">
+<button class="btn-primary i18n" data-ar="قدّم للانترفيو" data-en="Apply for the Interview" data-open-application="" type="button">قدّم للانترفيو</button>
+</div>
+<div class="admission-flow"><div class="admission-step"><b>01 · APPLY</b><span class="i18n" data-ar="جاوب على 5 أسئلة قصيرة عن مستواك وهدفك." data-en="Answer 5 short questions about your level and goal.">جاوب على 5 أسئلة قصيرة عن مستواك وهدفك.</span></div><div class="admission-step"><b>02 · WHATSAPP</b><span class="i18n" data-ar="ابعت طلب التقديم المرتب على واتساب بضغطة واحدة." data-en="Send the structured application message on WhatsApp.">ابعت طلب التقديم المرتب على واتساب بضغطة واحدة.</span></div><div class="admission-step"><b>03 · INTERVIEW</b><span class="i18n" data-ar="نتكلم عن مستواك، وقتك، توقعاتك، وهل الـMentorship مناسب ليك." data-en="We review your level, available time, expectations and whether the mentorship fits you.">نتكلم عن مستواك، وقتك، توقعاتك، وهل الـMentorship مناسب ليك.</span></div><div class="admission-step"><b>04 · DECISION</b><span class="i18n" data-ar="هقولك بصراحة Accepted أو Not Yet، ولو محتاج تأسيس هقولك تراجع إيه." data-en="You get a direct Accepted or Not Yet decision, with specific foundation gaps to review if needed.">هقولك بصراحة Accepted أو Not Yet، ولو محتاج تأسيس هقولك تراجع إيه.</span></div><div class="admission-step"><b>05 · PAYMENT</b><span class="i18n" data-ar="الدفع فقط لو اتقبلت وإنت قررت تدخل؛ القبول مش بيلزمك تدفع." data-en="Payment happens only if you are accepted and choose to join; acceptance does not obligate you to pay.">الدفع فقط لو اتقبلت وإنت قررت تدخل؛ القبول مش بيلزمك تدفع.</span></div></div>
+</div>
+</div>
+</section>
+<section id="faq-section" tabindex="-1">
+<div class="container">
+<div class="section-head reveal">
+<span class="section-num i18n" data-ar="12 / الأسئلة الشائعة والإجابات" data-en="12 / FAQ &amp; DIRECT ANSWERS">12 / الأسئلة الشائعة والإجابات</span>
+<h2 class="i18n" data-ar="إجابات مباشرة قبل ما تقدّم" data-en="Direct Answers Before You Apply">إجابات مباشرة قبل ما تقدّم</h2>
+<p class="i18n" data-ar="دي أهم الأسئلة اللي غالبًا بتكون في دماغك قبل ما تقدّم، وإجاباتي عليها بشكل مباشر." data-en="Direct answers to the questions I usually get before someone applies.">دي أهم الأسئلة اللي غالبًا بتكون في دماغك قبل ما تقدّم، وإجاباتي عليها بشكل مباشر.</p>
+</div>
+<div class="faq-box reveal">
+<div class="faq-item">
+<button aria-expanded="false" class="faq-question" type="button">
+<span class="i18n" data-ar="هل الكامب محتاج خبرة كبيرة في البرمجة أو الاختراق؟" data-en="Do I need extensive programming or hacking experience?">هل الكامب محتاج خبرة كبيرة في البرمجة أو الاختراق؟</span>
+<span class="faq-icon">+</span>
+</button>
+<div class="faq-answer i18n" data-ar="لأ، مش محتاج تكون Senior Developer. هنبدأ من أساسيات الـWeb وHTTP اللي محتاجها فعلًا، وبعدها نبني واحدة واحدة على Requests وAPIs وAccess Control وAuthentication وLogic Testing. لو عندك أساسيات Linux وWeb بسيطة هتخلي التجربة أسهل عليك." data-en="No. You do not need to be a senior developer. I start from the web and HTTP foundations you actually need, then build toward requests, APIs, access control, authentication and logic testing step by step. Basic Linux and web familiarity will make the experience smoother.">لأ، مش محتاج تكون Senior Developer. هنبدأ من أساسيات الـWeb وHTTP اللي محتاجها فعلًا، وبعدها نبني واحدة واحدة على Requests وAPIs وAccess Control وAuthentication وLogic Testing. لو عندك أساسيات Linux وWeb بسيطة هتخلي التجربة أسهل عليك.</div>
+</div>
+<div class="faq-item">
+<button aria-expanded="false" class="faq-question" type="button">
+<span class="i18n" data-ar="تكلفة الكامب كام وطرق الدفع إيه؟" data-en="How much does the camp cost and how can I pay?">تكلفة الكامب كام وطرق الدفع إيه؟</span>
+<span class="faq-icon">+</span>
+</button>
+<div class="faq-answer i18n" data-ar="سعر أول دفعة أونلاين 4,000 ج.م (حوالي 80 دولار). السعر شامل 12 سيشن Live، Practice Track، تسجيلات خاصة للمراجعة، 1:1، Support Window يومي، الواجبات والـfeedback. الدفع بيكون فقط بعد الانترفيو والقبول ولو إنت قررت تدخل." data-en="Online Cohort 01 is 4,000 EGP total (about $80). It includes 12 live sessions, the practice track, private review recordings, 1-on-1 calls, the daily support window, assignments and feedback. You pay only after the interview, acceptance and your own decision to join.">سعر أول دفعة أونلاين 4,000 ج.م (حوالي 80 دولار). السعر شامل 12 سيشن Live، Practice Track، تسجيلات خاصة للمراجعة، 1:1، Support Window يومي، الواجبات والـfeedback. الدفع بيكون فقط بعد الانترفيو والقبول ولو إنت قررت تدخل.</div>
+</div>
+<div class="faq-item">
+<button aria-expanded="false" class="faq-question" type="button">
+<span class="i18n" data-ar="هل أنا لسه بهانت فعليًا لحد دلوقتي؟" data-en="Am I still actively hunting bug bounties today?">هل أنا لسه بهانت فعليًا لحد دلوقتي؟</span>
+<span class="faq-icon">+</span>
+</button>
+<div class="faq-answer i18n" data-ar="أيوه. أنا بهانت بشكل نشط من مارس 2023 على HackerOne وYesWeHack وبرامج خاصة، ولسه بهانت وأنا بقدّم الكامب. وده مهم بالنسبة لي لأن اللي بشرحه يفضل مرتبط بطريقة الشغل الحقيقية على Targets، مش يتحول لنظرية متكررة." data-en="Yes. I have been actively hunting since March 2023 across HackerOne, YesWeHack and private programs, and I still hunt while teaching. I want what I teach to stay connected to how real targets are approached, not become recycled theory.">أيوه. أنا بهانت بشكل نشط من مارس 2023 على HackerOne وYesWeHack وبرامج خاصة، ولسه بهانت وأنا بقدّم الكامب. وده مهم بالنسبة لي لأن اللي بشرحه يفضل مرتبط بطريقة الشغل الحقيقية على Targets، مش يتحول لنظرية متكررة.</div>
+</div>
+<div class="faq-item">
+<button aria-expanded="false" class="faq-question" type="button">
+<span class="i18n" data-ar="لو فاتتني سيشن لايف أعمل إيه؟" data-en="What if I miss a live session?">لو فاتتني سيشن لايف أعمل إيه؟</span>
+<span class="faq-icon">+</span>
+</button>
+<div class="faq-answer i18n" data-ar="السيشنات بتتسجل للمراجعة وبتكون متاحة لطلاب الدفعة فقط، ومش متاحة للعامة. لو فاتتك سيشن تقدر تراجع التسجيل وبعدها تستخدم المتابعة اليومية علشان تسأل عن النقاط اللي وقفت معاك." data-en="Sessions are recorded for review and are available only to enrolled cohort students, not publicly. If you miss a session, you can review the recording and use daily support to ask about anything you got stuck on.">السيشنات بتتسجل للمراجعة وبتكون متاحة لطلاب الدفعة فقط، ومش متاحة للعامة. لو فاتتك سيشن تقدر تراجع التسجيل وبعدها تستخدم المتابعة اليومية علشان تسأل عن النقاط اللي وقفت معاك.</div>
+</div>
+<div class="faq-item">
+<button aria-expanded="false" class="faq-question" type="button">
+<span class="i18n" data-ar="هل الكامب بيضمن إني أجيب باونتي؟" data-en="Does the camp guarantee that I will earn a bounty?">هل الكامب بيضمن إني أجيب باونتي؟</span>
+<span class="faq-icon">+</span>
+</button>
+<div class="faq-answer i18n" data-ar="لأ — وأنا أفضل أقولك ده بوضوح قبل ما تدفع. أقدر أساعدك تبني الأساس، الـMethodology، التحليل وطريقة التدريب؛ لكن مقدرش أضمن إن برنامج هيقبل Report أو يدفع Bounty. استمرارك وجودة شغلك هما اللي يحولوا الأساس ده لنتائج مع الوقت." data-en="No — and I would rather be clear about that before you pay. I can help you build the foundations, methodology, analysis and practice process; I cannot guarantee a program will accept a report or pay a bounty. Your consistency and the quality of your hunting are what turn the foundation into results over time.">لأ — وأنا أفضل أقولك ده بوضوح قبل ما تدفع. أقدر أساعدك تبني الأساس، الـMethodology، التحليل وطريقة التدريب؛ لكن مقدرش أضمن إن برنامج هيقبل Report أو يدفع Bounty. استمرارك وجودة شغلك هما اللي يحولوا الأساس ده لنتائج مع الوقت.</div>
+</div>
+<div class="faq-item"><button aria-expanded="false" class="faq-question" type="button"><span class="i18n" data-ar="التسجيلات هتكون متاحة لمين؟" data-en="Who can access the recordings?">التسجيلات هتكون متاحة لمين؟</span><span class="faq-icon">+</span></button><div class="faq-answer i18n" data-ar="التسجيلات خاصة بطلاب الدفعة المسجلين فقط وغير متاحة للعامة. الهدف منها مراجعة المحتوى بعد السيشن، ومش استخدامها كمحتوى عام أو إعادة نشره." data-en="Recordings are private to enrolled cohort students and are not public. They exist for reviewing the material after sessions and must not be republished.">التسجيلات خاصة بطلاب الدفعة المسجلين فقط وغير متاحة للعامة. الهدف منها مراجعة المحتوى بعد السيشن، ومش استخدامها كمحتوى عام أو إعادة نشره.</div></div><div class="faq-item"><button aria-expanded="false" class="faq-question" type="button"><span class="i18n" data-ar="هل الـLive Hunting قانوني ومصرح به؟" data-en="Is the live hunting authorized?">هل الـLive Hunting قانوني ومصرح به؟</span><span class="faq-icon">+</span></button><div class="faq-answer i18n" data-ar="أي Live Hunting أو Testing داخل الكامب بيكون على Target داخل Bug Bounty Program وبالالتزام بالـScope والـProgram Rules والتصريح المتاح. مفيش اختبار عشوائي على أنظمة خارج النطاق." data-en="Any live hunting or testing inside the camp is performed on targets inside Bug Bounty Programs and follows the available scope and program rules. There is no random testing on systems outside authorization.">أي Live Hunting أو Testing داخل الكامب بيكون على Target داخل Bug Bounty Program وبالالتزام بالـScope والـProgram Rules والتصريح المتاح. مفيش اختبار عشوائي على أنظمة خارج النطاق.</div></div><div class="faq-item"><button aria-expanded="false" class="faq-question" type="button"><span class="i18n" data-ar="هل القبول معناه إني لازم أدفع وأدخل؟" data-en="Does acceptance mean I have to pay and join?">هل القبول معناه إني لازم أدفع وأدخل؟</span><span class="faq-icon">+</span></button><div class="faq-answer i18n" data-ar="لأ. مفيش دفع قبل الانترفيو والقبول، وحتى بعد القبول ممكن تقرر إن التجربة مش مناسبة ليك ومتدخلش. الهدف من الانترفيو إن الصورة تبقى واضحة للطرفين قبل أي التزام مالي." data-en="No. There is no payment before the interview and acceptance, and even after acceptance you can decide the experience is not right for you. The interview is there so both sides understand the fit before any financial commitment.">لأ. مفيش دفع قبل الانترفيو والقبول، وحتى بعد القبول ممكن تقرر إن التجربة مش مناسبة ليك ومتدخلش. الهدف من الانترفيو إن الصورة تبقى واضحة للطرفين قبل أي التزام مالي.</div></div><div class="faq-item"><button aria-expanded="false" class="faq-question" type="button"><span class="i18n" data-ar="هحتاج أخصص وقت قد إيه أسبوعيًا؟" data-en="How much time should I expect to commit each week?">هحتاج أخصص وقت قد إيه أسبوعيًا؟</span><span class="faq-icon">+</span></button><div class="faq-answer i18n" data-ar="عندك 4 ساعات سيشنات Live أسبوعيًا: الأحد والأربعاء من 9 لـ11 مساءً، وفوقهم غالبًا 4–6 ساعات تطبيق وواجبات حسب مستواك. الـSupport Window والـ1:1 أدوات مساعدة فوق الوقت ده، فلو مش قادر تخصص وقت للتطبيق بين السيشنات هتستفيد أقل." data-en="You have 4 live-session hours each week: Sunday and Wednesday from 9–11 PM, plus roughly 4–6 hours of practice and assignments depending on your level. The support window and 1-on-1 calls sit on top of that, so if you cannot practice between sessions you will get less value.">عندك 4 ساعات سيشنات Live أسبوعيًا: الأحد والأربعاء من 9 لـ11 مساءً، وفوقهم غالبًا 4–6 ساعات تطبيق وواجبات حسب مستواك. الـSupport Window والـ1:1 أدوات مساعدة فوق الوقت ده، فلو مش قادر تخصص وقت للتطبيق بين السيشنات هتستفيد أقل.</div></div><div class="faq-item"><button aria-expanded="false" class="faq-question" type="button"><span class="i18n" data-ar="لو مستوايا أقل من المطلوب؟" data-en="What if my level is below the current cohort requirement?">لو مستوايا أقل من المطلوب؟</span><span class="faq-icon">+</span></button><div class="faq-answer i18n" data-ar="هقولك في الانترفيو بالظبط إيه اللي ناقصك. لو Gap صغيرة وممكن تلمّها بسرعة، ممكن أقولك تذاكر جزء محدد وتلحق الدفعة دي مع ضغط أعلى شوية. لو الأساس محتاج وقت أكتر، الأفضل أقولك تستنى دفعة لاحقة بدل ما تدخل وتتضغط من أول أسبوع." data-en="I will tell you exactly what foundation is missing. If the gap is small and realistic to close quickly, I may give you a focused study list so you can still join this cohort with a heavier first-week workload. If the foundation needs more time, I would rather recommend a later cohort.">هقولك في الانترفيو بالظبط إيه اللي ناقصك. لو Gap صغيرة وممكن تلمّها بسرعة، ممكن أقولك تذاكر جزء محدد وتلحق الدفعة دي مع ضغط أعلى شوية. لو الأساس محتاج وقت أكتر، الأفضل أقولك تستنى دفعة لاحقة بدل ما تدخل وتتضغط من أول أسبوع.</div></div><div class="faq-item"><button aria-expanded="false" class="faq-question" type="button"><span class="i18n" data-ar="هل لازم أكون جبت Bug أو Bounty قبل كده؟" data-en="Do I need to have found a bug or earned a bounty before?">هل لازم أكون جبت Bug أو Bounty قبل كده؟</span><span class="faq-icon">+</span></button><div class="faq-answer i18n" data-ar="لا. ده مش شرط للقبول. المهم يكون عندك أساسيات Linux والويب، استعداد تطبق، وتقدر تشرح اللي جربته وتتعلم من الغلط." data-en="No. It is not an admission requirement. What matters is basic Linux and web knowledge, willingness to practice, and the ability to explain what you tried and learn from mistakes.">لا. ده مش شرط للقبول. المهم يكون عندك أساسيات Linux والويب، استعداد تطبق، وتقدر تشرح اللي جربته وتتعلم من الغلط.</div></div></div>
+</div>
+</section>
+<footer id="pageFooter">
+<div class="container footer-inner">
+<div class="footer-brand">
+<span class="logo-icon footer-logo-icon">
+<svg class="rv-elite-svg" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<lineargradient id="blazeGradFooter" x1="0%" x2="100%" y1="0%" y2="100%"><stop offset="0%" stop-color="#FF8A00"></stop><stop offset="100%" stop-color="#E55300"></stop></lineargradient>
+<filter height="140%" id="cyberGlowFooter" width="140%" x="-20%" y="-20%"><fedropshadow dx="0" dy="2" flood-color="#F97316" flood-opacity="0.35" stddeviation="3"></fedropshadow></filter>
+</defs>
+<rect fill="#0C0C0C" height="46" rx="10" stroke="#222222" stroke-width="1.5" width="46" x="1" y="1"></rect>
+<path d="M6 14H42M6 34H42M14 6V42M34 6V42" stroke="#161616" stroke-dasharray="2 2" stroke-width="0.8"></path>
+<path d="M12 12H23C26.866 12 30 15.134 30 19C30 22.3 27.7 25.1 24.6 25.8L30 36H23.8L19 26.5H17.5V36H12V12ZM17.5 21.5H22.5C23.88 21.5 25 20.38 25 19C25 17.62 23.88 16.5 22.5 16.5H17.5V21.5Z" fill="#F2F2F0"></path>
+<path d="M22 22L27.5 36H33.5L40 16H34.5L30.5 29L26.5 16H23.5L22 22Z" fill="url(#blazeGradFooter)" filter="url(#cyberGlowFooter)"></path>
+<circle cx="39" cy="9" fill="#F97316" r="1.5"></circle>
+</svg>
+</span>
+<span class="logo-text footer-logo-text">rv_u<span class="blink">_</span></span>
+</div>
+<div class="footer-center mono" id="footerSignature">By: Ramez Medhat</div>
+<div class="footer-socials">
+<a aria-label="WhatsApp" class="social-badge-btn wa" href="https://wa.me/201280499854" rel="noopener noreferrer" target="_blank">
+<svg viewbox="0 0 24 24"><path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984 0 1.762.459 3.48 1.332 4.987l-1.416 5.174 5.295-1.389a9.948 9.948 0 004.773 1.218h.005c5.505 0 9.987-4.478 9.989-9.984 0-2.668-1.037-5.176-2.924-7.062a9.923 9.948 0 00-7.064-2.928zm5.82 14.28c-.244.685-1.417 1.309-1.96 1.365-.503.052-1.157.075-1.852-.148-.423-.135-.968-.313-1.673-.618-2.96-1.282-4.887-4.29-5.035-4.489-.148-.198-1.206-1.603-1.206-3.058 0-1.455.762-2.17 1.033-2.464.27-.294.59-.368.788-.368.197 0 .394.002.566.012.208.012.487-.079.761.59.295.712.984 2.404 1.07 2.576.086.173.144.375.029.613-.115.237-.173.385-.345.586-.172.2-.363.447-.518.6-.173.173-.353.361-.151.705.201.344.896 1.48 1.924 2.092 1.32.787 2.434 1.03 2.778 1.178.344.148.546.124.748-.108.201-.232.863-1.009 1.092-1.353.23-.344.46-.288.775-.172.316.115 2.001.944 2.346 1.116.345.173.575.259.661.403.086.145.086.837-.158 1.522z"></path></svg>
+</a>
+<a aria-label="LinkedIn" class="social-badge-btn li" href="https://www.linkedin.com/in/ramez-medhat-rvu/" rel="noopener noreferrer" target="_blank">
+<svg viewbox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.25V10.9H6.46M7.86 6.6a1.64 1.64 0 1 0 0 3.28 1.64 1.64 0 0 0 0-3.28Z"></path></svg>
+</a>
+</div>
+<div class="footer-trust-links"><a class="i18n" data-ar="معايير الانترفيو" data-en="Interview Criteria" href="#interview-criteria">معايير الانترفيو</a><a class="i18n" data-ar="الاختبار المصرح به" data-en="Authorized Testing" href="#legalExperience">الاختبار المصرح به</a><a class="i18n" data-ar="خصوصية التسجيلات" data-en="Recording Privacy" href="#included-section">خصوصية التسجيلات</a><a class="i18n" data-ar="الأسئلة وشروط المشاركة" data-en="FAQ &amp; Participation Terms" href="#faq-section">الأسئلة وشروط المشاركة</a></div></div>
+</footer>
+<div aria-hidden="true" aria-label="PoC evidence preview" aria-modal="true" class="poc-lightbox-modal" id="pocModal" role="dialog">
+<button aria-label="إغلاق معاينة الصورة" class="poc-modal-close" data-aria-ar="إغلاق معاينة الصورة" data-aria-en="Close image preview" id="pocModalClose" type="button">×</button>
+<div class="poc-modal-content">
+<img alt="Full PoC Evidence" class="poc-modal-img" decoding="async" id="pocModalImg"/>
+</div>
+</div>
+<div aria-hidden="true" class="apply-modal" id="applicationModal">
+<div aria-labelledby="applicationTitle" aria-modal="true" class="apply-dialog" role="dialog">
+<div class="apply-head">
+<div>
+<h2 class="i18n" data-ar="قدّم لانترفيو rv_u camp" data-en="Apply for the rv_u camp interview" id="applicationTitle">قدّم لانترفيو rv_u camp</h2>
+<p class="i18n" data-ar="تقديم مختصر · الدفعة الأولى · 12 طالب فقط" data-en="Short application · Cohort 01 · 12 students max">تقديم مختصر · أول دفعة أونلاين · 12 طالب فقط</p>
+</div>
+<button aria-label="إغلاق نموذج التقديم" class="apply-close" id="applicationClose" type="button">×</button>
+</div>
+<div class="apply-body">
+<form class="application-form" id="applicationForm">
+<div class="form-field">
+<label class="i18n" data-ar="اسمك" data-en="Your name" for="appName">اسمك</label>
+<input autocomplete="name" id="appName" maxlength="60" name="name" placeholder="مثال: أحمد محمد" required="" type="text"/>
+</div>
+<div class="form-field">
+<label class="i18n" data-ar="رقم واتساب" data-en="WhatsApp number" for="appWhatsApp">رقم واتساب</label>
+<input autocomplete="tel" id="appWhatsApp" inputmode="tel" maxlength="24" name="whatsapp" placeholder="+20 1xxxxxxxxx" required="" type="tel"/>
+</div>
+<div class="form-field">
+<label class="i18n" data-ar="مستواك الحالي" data-en="Current level" for="appLevel">مستواك الحالي</label>
+<select id="appLevel" name="level" required="">
+<option class="i18n" data-ar="اختار مستواك" data-en="Choose your level" disabled="" selected="" value="">اختار مستواك</option>
+<option class="i18n" data-ar="مبتدئ — أساسيات فقط" data-en="Beginner — fundamentals only" value="Beginner">مبتدئ — أساسيات فقط</option>
+<option class="i18n" data-ar="مبتدئ+ — ذاكرت Bugs/Labs" data-en="Beginner+ — studied bugs/labs" value="Beginner+">مبتدئ+ — ذاكرت Bugs/Labs</option>
+<option class="i18n" data-ar="Hunter فعلي — جرّبت Targets حقيقية" data-en="Active hunter — tried real targets" value="Active Hunter">Hunter فعلي — جرّبت Targets حقيقية</option>
+<option class="i18n" data-ar="متوسط — محتاج Methodology أقوى" data-en="Intermediate — need stronger methodology" value="Intermediate">متوسط — محتاج Methodology أقوى</option>
+</select>
+</div>
+<div class="form-field">
+<label class="i18n" data-ar="اشتغلت قبل كده على Live Targets؟" data-en="Have you hunted live targets before?" for="appLiveTargets">اشتغلت قبل كده على Live Targets؟</label>
+<select id="appLiveTargets" name="liveTargets" required="">
+<option class="i18n" data-ar="اختار" data-en="Choose" disabled="" selected="" value="">اختار</option>
+<option class="i18n" data-ar="أيوه" data-en="Yes" value="Yes">أيوه</option>
+<option class="i18n" data-ar="لأ" data-en="No" value="No">لأ</option>
+</select>
+</div>
+<div class="form-field full">
+<label class="i18n" data-ar="عاوز تخرج من الكامب بإيه؟" data-en="What do you want to achieve from the camp?" for="appGoal">عاوز تخرج من الكامب بإيه؟</label>
+<textarea id="appGoal" maxlength="500" name="goal" placeholder="اكتب هدفك باختصار: إيه اللي موقفك دلوقتي وإيه اللي عاوز توصله؟" required=""></textarea>
+</div>
+<div class="form-privacy i18n" data-ar="الخصوصية: الصفحة نفسها مش بتبعت إجاباتك لأي سيرفر. بعد ما تكمّل، هتشوف رسالة واتساب متجهزة ببياناتك وإنت اللي تختار تبعتها." data-en="Privacy: this page does not send your answers to a server. After you submit, you review a prepared WhatsApp message and choose whether to send it.">الخصوصية: الصفحة نفسها مش بتبعت إجاباتك لأي سيرفر. بعد ما تكمّل، هتشوف رسالة واتساب متجهزة ببياناتك وإنت اللي تختار تبعتها.</div>
+<button class="btn-primary application-submit i18n" data-ar="كمّل طلب التقديم" data-en="Continue Application" type="submit">كمّل طلب التقديم</button>
+</form>
+<div aria-live="polite" class="application-success" id="applicationSuccess">
+<div class="success-icon"><span aria-hidden="true">OK</span></div>
+<h3 class="i18n" data-ar="طلبك جاهز" data-en="Application ready">طلبك جاهز</h3>
+<p class="i18n" data-ar="آخر خطوة: ابعت الرسالة الجاهزة على واتساب. هراجع مستواك، ولو الكامب مناسب ليك هنحدد الانترفيو." data-en="Final step: send the prepared message on WhatsApp. I will review your level and, if the camp fits, we will arrange the interview.">آخر خطوة: ابعت الرسالة الجاهزة على واتساب. هراجع مستواك، ولو الكامب مناسب ليك هنحدد الانترفيو.</p>
+<div class="success-summary" id="applicationSummary"></div>
+<div class="success-actions">
+<a class="btn-primary i18n" data-ar="ابعت الطلب على واتساب" data-en="Send on WhatsApp" id="applicationWhatsApp" rel="noopener noreferrer" target="_blank">ابعت الطلب على واتساب</a>
+<button class="btn-secondary i18n" data-ar="عدّل الإجابات" data-en="Edit answers" id="applicationEdit" type="button">عدّل الإجابات</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div aria-hidden="true" class="mobile-apply-fab" id="mobileApplyFab">
+<button aria-label="Apply for Interview" class="mobile-apply-button" id="mobileApplyButton" type="button">
+<span class="mobile-apply-label">APPLY FOR INTERVIEW</span>
+</button>
+</div>
+<script defer="" src="./app.js"></script>
+</body>
+</html>
