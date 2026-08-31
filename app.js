@@ -1200,22 +1200,3 @@ Goal: ${goal}`;
   })();
 
 
-
-(function(){
-  const rewardValues = {
-    medium: { idor: '$300 - $400', logic: '$300 - $500', race: '$350 - $600', api: '$300 - $500' },
-    high: { idor: '$700 - $1.2K', logic: '$800 - $1.5K', race: '$900 - $1.8K', api: '$700 - $1.4K' },
-    critical: { idor: '$2K - $4K', logic: '$2.5K - $5K', race: '$3K - $6K', api: '$2K - $5K' }
-  };
-  const severityButtons = Array.from(document.querySelectorAll('.severity-btn'));
-  function setSeverity(level){
-    const values = rewardValues[level];
-    if (!values) return;
-    severityButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.severity === level));
-    Object.entries(values).forEach(([key,value]) => {
-      const target = document.querySelector(`[data-reward="${key}"]`);
-      if (target) { target.textContent = value; target.classList.remove('reward-pulse'); void target.offsetWidth; target.classList.add('reward-pulse'); }
-    });
-  }
-  severityButtons.forEach(btn => btn.addEventListener('click', () => setSeverity(btn.dataset.severity)));
-})();
