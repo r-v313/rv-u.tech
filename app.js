@@ -155,7 +155,8 @@ function escapeHTML(str) {
 
         for (const s of stars) {
           const introProgress = Math.min(1, Math.max(0, (now - introStartedAt) / introDuration));
-          const easedSpeed = 1.2 + (introProgress * introProgress * (3 - 2 * introProgress)) * 11.8;
+          const launch = Math.max(0, Math.min(1, (introProgress - 0.54) / 0.46));
+          const easedSpeed = 0.9 + Math.pow(launch, 2.35) * 31;
           s.z -= easedSpeed * frameScale;
           if (s.z <= 1) {
             s.z = w;
@@ -929,7 +930,7 @@ function escapeHTML(str) {
 
     resetDownloadBtn = function() {
       if (!downloadBtn) return;
-      setDownloadStatus('Download Camp Card', 'Download Camp Card');
+      setDownloadStatus('Download Your Card', 'Download Your Card');
       downloadBtn.disabled = false;
     };
     window.resetDownloadBtn = resetDownloadBtn;
