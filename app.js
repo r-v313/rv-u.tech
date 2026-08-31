@@ -1,3 +1,5 @@
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+window.scrollTo(0, 0);
 function escapeHTML(str) {
     if (typeof str !== 'string') return str;
     return str
@@ -24,11 +26,11 @@ function escapeHTML(str) {
 
     const displayLen = displayVal.length;
     if (displayLen > 24) {
-      cardName.style.fontSize = 'clamp(1.1rem, 3.2vw, 1.5rem)';
+      cardName.style.fontSize = 'clamp(.82rem, 2.2vw, 1.15rem)';
     } else if (displayLen > 18) {
-      cardName.style.fontSize = 'clamp(1.3rem, 4vw, 1.9rem)';
+      cardName.style.fontSize = 'clamp(1rem, 2.8vw, 1.45rem)';
     } else if (displayLen > 12) {
-      cardName.style.fontSize = 'clamp(1.5rem, 5vw, 2.2rem)';
+      cardName.style.fontSize = 'clamp(1.2rem, 3.5vw, 1.8rem)';
     } else {
       cardName.style.fontSize = '';
     }
@@ -70,18 +72,10 @@ function escapeHTML(str) {
       if (finished) return;
       finished = true;
       preloader.classList.add('hide');
-      if (fast) {
-        document.body.classList.remove('loading');
-        document.body.classList.add('intro-complete');
-        setTimeout(cleanupIntro, 360);
-      } else {
-        const elapsed = performance.now() - introStartedAt;
-        setTimeout(() => {
-          document.body.classList.remove('loading');
-          document.body.classList.add('intro-complete');
-          cleanupIntro();
-        }, Math.max(0, introDuration - elapsed));
-      }
+      document.body.classList.remove('loading');
+      document.body.classList.add('intro-complete');
+      window.scrollTo(0, 0);
+      setTimeout(cleanupIntro, fast ? 220 : 360);
     }
 
     const skipIntro = document.getElementById('skipIntro');
@@ -93,7 +87,7 @@ function escapeHTML(str) {
       const ctx = canvas.getContext('2d');
       let stars = [];
       let ambientStars = [];
-      let speed = 2.2;
+      let speed = 1.2;
       const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
       const starCount = window.innerWidth < 700 || coarsePointer ? 120 : 220;
       const ambientCount = window.innerWidth < 700 || coarsePointer ? 70 : 120;
@@ -145,7 +139,10 @@ function escapeHTML(str) {
         }
 
         for (const s of stars) {
-          s.z -= speed;
+          const introProgress = Math.min(1, Math.max(0, (performance.now() - introStartedAt) / introDuration));
+          const easedSpeed = 1.2 + (introProgress * introProgress * (3 - 2 * introProgress)) * 11.8;
+          speed = easedSpeed;
+          s.z -= easedSpeed;
           if (s.z <= 1) {
             s.z = w;
             s.x = (Math.random() - 0.5) * w * 2.6;
@@ -157,7 +154,7 @@ function escapeHTML(str) {
           if (px < 0 || px > w || py < 0 || py > h) continue;
           const factor = Math.max(0, 1 - s.z / w);
           const radius = Math.max(.42, s.size * factor * 1.7);
-          const prevK = 235 / Math.min(w, s.z + speed * 18);
+          const prevK = 235 / Math.min(w, s.z + easedSpeed * (12 + introProgress * 16));
           const prevX = s.x * prevK + cx;
           const prevY = s.y * prevK + cy;
           const alpha = Math.min(1, Math.max(.16, factor * 1.1 * s.brightness));
@@ -178,11 +175,11 @@ function escapeHTML(str) {
       resizeCanvas();
       window.addEventListener('resize', resizeCanvas, { passive: true });
       renderSpace();
-      setTimeout(() => { speed = 8.6; }, 650);
+
     }
 
     const elapsed = performance.now() - introStartedAt;
-    setTimeout(() => finishIntro(false), Math.max(0, introDuration - 350 - elapsed));
+    setTimeout(() => finishIntro(false), Math.max(0, introDuration - elapsed));
 
     function markFontsReady() {
       document.documentElement.classList.add('fonts-loaded');
@@ -488,7 +485,9 @@ function escapeHTML(str) {
   (function(){
     const supportsTilt = window.matchMedia('(hover: hover) and (pointer: fine)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!supportsTilt) return;
-    document.querySelectorAll('.tilt-card').forEach(card => {
+    const interactiveCards = document.querySelectorAll('.tilt-card, .hunt-loop-step, .schedule-item, .outcome-session, .faq-item');
+    interactiveCards.forEach(card => {
+      if (card.id === 'holoCard' || card.classList.contains('holo-box')) return;
       function handleMove(e) {
         if (card.classList.contains('exporting')) return;
         const rect = card.getBoundingClientRect();
@@ -496,11 +495,11 @@ function escapeHTML(str) {
         const y = e.clientY - rect.top;
         card.style.setProperty('--mouse-x', `${x}px`);
         card.style.setProperty('--mouse-y', `${y}px`);
-        const rotateX = -((y - rect.height / 2) / (rect.height / 2)) * 3;
-        const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 3;
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.015, 1.015, 1.015)`;
+        const rotateX = -((y - rect.height / 2) / (rect.height / 2)) * 4.2;
+        const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 4.2;
+        card.style.transform = `perspective(1050px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateZ(0) scale3d(1.012, 1.012, 1.012)`;
       }
-      function handleLeave() { card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)'; }
+      function handleLeave() { card.style.transform = 'perspective(1050px) rotateX(0deg) rotateY(0deg) translateZ(0) scale3d(1, 1, 1)'; }
       card.addEventListener('pointermove', handleMove, { passive: true });
       card.addEventListener('pointerleave', handleLeave);
     });
