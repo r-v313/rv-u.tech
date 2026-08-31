@@ -109,7 +109,6 @@
 <div class="hero-demo-panel">
 <div class="quote-box idor-intro">
 <h3 class="i18n" data-ar="شوف هل عندنا IDOR أو Broken Access Control فعلًا أم لا؟" data-en="Let us see whether this is actually IDOR or Broken Access Control">شوف هل عندنا IDOR أو Broken Access Control فعلًا أم لا؟</h3>
-<p class="i18n" data-ar="" data-en="We change the ID in the request and check whether the server returns data belonging to another account. If it does we do not stop at the changed number. We identify the object owner the role and the authorization that should exist before deciding whether this is truly IDOR or Broken Access Control."></p>
 </div>
 <div class="demo term"><div class="term-bar"><span class="term-dot on"></span><span class="term-dot"></span><span class="term-dot"></span><span class="demo-endpoint">GET /api/v1/invoices/<span class="id" id="endpointId">4471</span></span></div><div class="demo-body"><span class="demo-sim-tag"><span aria-hidden="true" class="dot"></span><span class="i18n" data-ar="محاكاة تفاعلية — من غير أي اتصال بسيرفر حقيقي" data-en="Interactive Simulation — no real server calls">محاكاة تفاعلية — من غير أي اتصال بسيرفر حقيقي</span></span><div class="demo-controls"><button aria-label="إنقاص المعرف" class="demo-step" id="decBtn" type="button">−</button><div class="demo-id mono" id="idDisplay">#4471</div><button aria-label="زيادة المعرف" class="demo-step" id="incBtn" type="button">+</button></div><div class="demo-status ok" id="statusEl">200 OK — تمام دي بيانات حسابك انت</div><div class="demo-json" id="jsonEl"></div><div class="demo-note i18n" data-ar="السيرفر رجع بيانات حساب تاني من غير ما يتأكد إن الـID ده بتاعك فعلًا ودي بالظبط الفكرة اللي هنتعلم نفكر فيها ونختبرها داخل الـMentorship Camp." data-en="The server returned another account's data without verifying that the ID belongs to you and this is exactly the kind of reasoning and testing we build inside the Mentorship Camp." id="noteEl">السيرفر رجع بيانات حساب تاني من غير ما يتأكد إن الـID ده بتاعك فعلًا ودي بالظبط الفكرة اللي هنتعلم نفكر فيها ونختبرها داخل الـMentorship Camp.</div></div></div>
 </div>
@@ -127,7 +126,7 @@
 <svg viewbox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"></path></svg>
 </div>
 <div>
-<h3 class="instructor-name">Ramez Medhat — rv_u</h3>
+<h3 class="instructor-name"><span class="instructor-main">Ramez Medhat</span><span class="instructor-separator"> — </span><span class="instructor-handle">rv_u</span></h3>
 <div class="instructor-role i18n" data-ar="Security Researcher · Bug Bounty Hunter · Mentorship Instructor" data-en="Security Researcher · Bug Bounty Hunter · Mentorship Instructor">Security Researcher · Bug Bounty Hunter · Mentorship Instructor</div>
 </div>
 </div>
@@ -553,7 +552,7 @@
 </div>
 <div class="holo-actions">
 <button class="btn-primary holo-download-btn" id="downloadHoloBtn" type="button">
-<span class="i18n" data-ar="نزّل كارتك" data-en="Download Your Camp Card">نزّل كارتك</span>
+<span class="i18n" data-ar="Download Your Card" data-en="Download Your Card">Download Your Card</span>
 </button>
 <button class="btn-secondary holo-share-btn" id="shareHoloBtn" type="button">
 <span class="i18n" data-ar="Share On WhatsApp/Story" data-en="Share On WhatsApp/Story">Share On WhatsApp/Story</span>
