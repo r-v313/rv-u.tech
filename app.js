@@ -41,165 +41,158 @@
     const content = document.querySelector('.preloader-content');
     if (!preloader) return;
 
+    const introStartedAt = performance.now();
+    const introDuration = 6000;
     const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let seenIntro = false;
+    let finished = false;
+    let animId = 0;
+    let resizeCanvas = null;
+
     try {
-      seenIntro = window.localStorage.getItem('rvuIntroSeenV3') === '1';
+      seenIntro = window.localStorage.getItem('rvuIntroSeenV4') === '1';
     } catch (_) {}
-    const introDuration = seenIntro ? 3000 : 6000;
 
-    function initPage() {
-      document.documentElement.classList.add('fonts-loaded');
+    if (seenIntro) preloader.classList.add('seen-before');
+    if (!seenIntro) {
+      try { window.localStorage.setItem('rvuIntroSeenV4', '1'); } catch (_) {}
+    }
 
-      if (reduceMotion) {
+    document.body.classList.add('loading');
+    if (content) content.classList.add('ready');
+
+    function cleanupIntro() {
+      if (animId) cancelAnimationFrame(animId);
+      if (resizeCanvas) window.removeEventListener('resize', resizeCanvas);
+      if (preloader.parentNode) preloader.parentNode.removeChild(preloader);
+    }
+
+    function finishIntro(fast) {
+      if (finished) return;
+      finished = true;
+      preloader.classList.add('hide');
+      if (fast) {
         document.body.classList.remove('loading');
-        if (preloader.parentNode) preloader.parentNode.removeChild(preloader);
-        return;
-      }
-
-      if (seenIntro) preloader.classList.add('short');
-      document.body.classList.add('loading');
-      if (!seenIntro) {
-        try { window.localStorage.setItem('rvuIntroSeenV3', '1'); } catch (_) {}
-      }
-      if (content) content.classList.add('ready');
-
-      if (canvas && canvas.getContext) {
-        const ctx = canvas.getContext('2d');
-        let stars = [];
-        let ambientStars = [];
-        let animId;
-        const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
-        const STAR_COUNT = window.innerWidth < 700 || coarsePointer ? 130 : 240;
-        const AMBIENT_COUNT = window.innerWidth < 700 || coarsePointer ? 95 : 170;
-        let speed = 1.2;
-
-        function resizeCanvas() {
-          const dpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 700 ? 1.5 : 2);
-          canvas.width = Math.round(window.innerWidth * dpr);
-          canvas.height = Math.round(window.innerHeight * dpr);
-          ctx.setTransform(1, 0, 0, 1, 0, 0);
-          ctx.scale(dpr, dpr);
-
-          stars = [];
-          ambientStars = [];
-          for (let i = 0; i < STAR_COUNT; i++) {
-            stars.push({
-              x: (Math.random() - 0.5) * window.innerWidth * 2.5,
-              y: (Math.random() - 0.5) * window.innerHeight * 2.5,
-              z: Math.random() * window.innerWidth,
-              size: Math.random() * 1.65 + 0.45,
-              brightness: Math.random() * 0.4 + 0.6,
-              isAccent: Math.random() > 0.95
-            });
-          }
-          for (let i = 0; i < AMBIENT_COUNT; i++) {
-            ambientStars.push({
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
-              size: Math.random() * 1.15 + 0.45,
-              alpha: Math.random() * 0.38 + 0.42,
-              phase: Math.random() * Math.PI * 2,
-              speed: Math.random() * 0.0018 + 0.0008
-            });
-          }
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        function renderSpace() {
-          const w = window.innerWidth;
-          const h = window.innerHeight;
-          if (w === 0 || h === 0) {
-            animId = requestAnimationFrame(renderSpace);
-            return;
-          }
-
-          ctx.fillStyle = 'rgba(7, 7, 7, 0.28)';
-          ctx.fillRect(0, 0, w, h);
-
-          const cx = w / 2;
-          const cy = h / 2;
-          const now = performance.now();
-
-          for (let i = 0; i < ambientStars.length; i++) {
-            const a = ambientStars[i];
-            const twinkle = 0.72 + Math.sin(now * a.speed + a.phase) * 0.28;
-            ctx.beginPath();
-            ctx.arc(a.x, a.y, a.size, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(.92, a.alpha * twinkle)})`;
-            ctx.fill();
-          }
-
-          for (let i = 0; i < stars.length; i++) {
-            const s = stars[i];
-            s.z -= speed;
-            if (s.z <= 0) {
-              s.z = w;
-              s.x = (Math.random() - 0.5) * w * 2.5;
-              s.y = (Math.random() - 0.5) * h * 2.5;
-            }
-
-            const k = 220 / s.z;
-            const px = s.x * k + cx;
-            const py = s.y * k + cy;
-
-            if (px >= 0 && px <= w && py >= 0 && py <= h) {
-              const factor = 1 - s.z / w;
-              const radius = Math.max(0.45, s.size * factor * 1.75);
-              ctx.beginPath();
-              ctx.arc(px, py, radius, 0, Math.PI * 2);
-              ctx.fillStyle = s.isAccent
-                ? `rgba(249, 115, 22, ${Math.min(1, factor * 0.88 * s.brightness)})`
-                : `rgba(255, 255, 255, ${Math.min(1, factor * 0.98 * s.brightness)})`;
-              ctx.fill();
-            }
-          }
-          animId = requestAnimationFrame(renderSpace);
-        }
-
-        renderSpace();
-
-        setTimeout(() => { speed = 3.2; }, 650);
-
-        setTimeout(() => {
-          preloader.classList.add('hide');
-          document.body.classList.remove('loading');
-
-          setTimeout(() => {
-            cancelAnimationFrame(animId);
-            window.removeEventListener('resize', resizeCanvas);
-            if (preloader.parentNode) preloader.parentNode.removeChild(preloader);
-          }, 1550);
-        }, introDuration);
+        document.body.classList.add('intro-complete');
+        setTimeout(cleanupIntro, 360);
       } else {
+        const elapsed = performance.now() - introStartedAt;
         setTimeout(() => {
-          preloader.classList.add('hide');
           document.body.classList.remove('loading');
-          if (preloader.parentNode) preloader.parentNode.removeChild(preloader);
-        }, introDuration);
+          document.body.classList.add('intro-complete');
+          cleanupIntro();
+        }, Math.max(0, introDuration - elapsed));
       }
     }
 
-    let pageInitialized = false;
-    function safeInit() {
-      if (pageInitialized) return;
-      pageInitialized = true;
-      initPage();
+    const skipIntro = document.getElementById('skipIntro');
+    if (seenIntro && skipIntro) {
+      skipIntro.addEventListener('click', () => finishIntro(true));
     }
 
-    const fallbackTimer = setTimeout(safeInit, 1200);
+    if (!reduceMotion && canvas && canvas.getContext) {
+      const ctx = canvas.getContext('2d');
+      let stars = [];
+      let ambientStars = [];
+      let speed = 2.2;
+      const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
+      const starCount = window.innerWidth < 700 || coarsePointer ? 120 : 220;
+      const ambientCount = window.innerWidth < 700 || coarsePointer ? 70 : 120;
 
-    if (document.fonts && document.fonts.load) {
-      Promise.all([
-        document.fonts.load('1em "Bebas Neue"'),
-        document.fonts.load('1em "Caveat"'),
-        document.fonts.load('1em "IBM Plex Sans"'),
-        document.fonts.load('1em "IBM Plex Mono"'),
-        document.fonts.load('1em "IBM Plex Sans Arabic"')
-      ]).then(() => { clearTimeout(fallbackTimer); safeInit(); }).catch(() => { clearTimeout(fallbackTimer); safeInit(); });
+      resizeCanvas = function () {
+        const dpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 700 ? 1.35 : 1.8);
+        canvas.width = Math.round(window.innerWidth * dpr);
+        canvas.height = Math.round(window.innerHeight * dpr);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.scale(dpr, dpr);
+        stars = [];
+        ambientStars = [];
+        for (let i = 0; i < starCount; i++) {
+          stars.push({
+            x: (Math.random() - 0.5) * window.innerWidth * 2.6,
+            y: (Math.random() - 0.5) * window.innerHeight * 2.6,
+            z: Math.max(1, Math.random() * window.innerWidth),
+            size: Math.random() * 1.5 + 0.45,
+            brightness: Math.random() * 0.38 + 0.62
+          });
+        }
+        for (let i = 0; i < ambientCount; i++) {
+          ambientStars.push({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+            size: Math.random() * 1.05 + 0.35,
+            alpha: Math.random() * 0.3 + 0.3,
+            phase: Math.random() * Math.PI * 2,
+            twinkleSpeed: Math.random() * 0.0016 + 0.0007
+          });
+        }
+      };
+
+      function renderSpace() {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        ctx.fillStyle = 'rgba(7, 7, 7, 0.30)';
+        ctx.fillRect(0, 0, w, h);
+        const cx = w / 2;
+        const cy = h / 2;
+        const now = performance.now();
+
+        for (const a of ambientStars) {
+          const twinkle = 0.72 + Math.sin(now * a.twinkleSpeed + a.phase) * 0.28;
+          ctx.beginPath();
+          ctx.arc(a.x, a.y, a.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(.78, a.alpha * twinkle)})`;
+          ctx.fill();
+        }
+
+        for (const s of stars) {
+          s.z -= speed;
+          if (s.z <= 1) {
+            s.z = w;
+            s.x = (Math.random() - 0.5) * w * 2.6;
+            s.y = (Math.random() - 0.5) * h * 2.6;
+          }
+          const k = 235 / s.z;
+          const px = s.x * k + cx;
+          const py = s.y * k + cy;
+          if (px < 0 || px > w || py < 0 || py > h) continue;
+          const factor = Math.max(0, 1 - s.z / w);
+          const radius = Math.max(.42, s.size * factor * 1.7);
+          const prevK = 235 / Math.min(w, s.z + speed * 18);
+          const prevX = s.x * prevK + cx;
+          const prevY = s.y * prevK + cy;
+          const alpha = Math.min(1, Math.max(.16, factor * 1.1 * s.brightness));
+          ctx.beginPath();
+          ctx.moveTo(prevX, prevY);
+          ctx.lineTo(px, py);
+          ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+          ctx.lineWidth = Math.max(.5, radius * .78);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(px, py, radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, alpha + .16)})`;
+          ctx.fill();
+        }
+        animId = requestAnimationFrame(renderSpace);
+      }
+
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas, { passive: true });
+      renderSpace();
+      setTimeout(() => { speed = 8.6; }, 650);
+    }
+
+    const elapsed = performance.now() - introStartedAt;
+    setTimeout(() => finishIntro(false), Math.max(0, introDuration - 350 - elapsed));
+
+    function markFontsReady() {
+      document.documentElement.classList.add('fonts-loaded');
+    }
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(markFontsReady).catch(markFontsReady);
+      setTimeout(markFontsReady, 1200);
     } else {
-      window.addEventListener('load', () => { clearTimeout(fallbackTimer); safeInit(); });
+      markFontsReady();
     }
   })();
 
@@ -504,8 +497,8 @@
         const y = e.clientY - rect.top;
         card.style.setProperty('--mouse-x', `${x}px`);
         card.style.setProperty('--mouse-y', `${y}px`);
-        const rotateX = -((y - rect.height / 2) / (rect.height / 2)) * 6;
-        const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 6;
+        const rotateX = -((y - rect.height / 2) / (rect.height / 2)) * 3;
+        const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 3;
         card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.015, 1.015, 1.015)`;
       }
       function handleLeave() { card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)'; }
@@ -728,10 +721,11 @@
         holoCard.style.setProperty('--shine-y', '0%');
       }
 
-      if (finePointer) {
-        holoCard.addEventListener('pointermove', (e) => updateCardTilt(e.clientX, e.clientY, 14, 1.018), { passive: true });
-        holoCard.addEventListener('pointerleave', resetCardTilt);
-      }
+      holoCard.addEventListener('pointermove', (e) => {
+        if (e.pointerType === 'touch') return;
+        updateCardTilt(e.clientX, e.clientY, 14, 1.018);
+      }, { passive: true });
+      holoCard.addEventListener('pointerleave', resetCardTilt);
 
       if (coarsePointer) {
         holoCard.addEventListener('pointerdown', (e) => {
@@ -1205,3 +1199,23 @@ Goal: ${goal}`;
     window.updateApplicationLanguage();
   })();
 
+
+
+(function(){
+  const rewardValues = {
+    medium: { idor: '$300 - $400', logic: '$300 - $500', race: '$350 - $600', api: '$300 - $500' },
+    high: { idor: '$700 - $1.2K', logic: '$800 - $1.5K', race: '$900 - $1.8K', api: '$700 - $1.4K' },
+    critical: { idor: '$2K - $4K', logic: '$2.5K - $5K', race: '$3K - $6K', api: '$2K - $5K' }
+  };
+  const severityButtons = Array.from(document.querySelectorAll('.severity-btn'));
+  function setSeverity(level){
+    const values = rewardValues[level];
+    if (!values) return;
+    severityButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.severity === level));
+    Object.entries(values).forEach(([key,value]) => {
+      const target = document.querySelector(`[data-reward="${key}"]`);
+      if (target) { target.textContent = value; target.classList.remove('reward-pulse'); void target.offsetWidth; target.classList.add('reward-pulse'); }
+    });
+  }
+  severityButtons.forEach(btn => btn.addEventListener('click', () => setSeverity(btn.dataset.severity)));
+})();
