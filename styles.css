@@ -231,27 +231,56 @@ footer{padding-block:40px;border-top:1px solid var(--border);background:#050505;
 .social-badge-btn.li:hover{border-color:#60a5fa;color:#ffffff;background:rgba(96, 165, 250, 0.12);box-shadow:0 6px 20px rgba(96, 165, 250, 0.25);}
 @media (max-width: 768px){.footer-inner{display:flex;flex-direction:column;text-align:center;gap:18px;justify-content:center;}
 .footer-brand, .footer-center, .footer-socials{justify-self:center;}}
-.preloader{position:fixed;inset:0;z-index:99999;background:radial-gradient(circle at 50% 50%, rgba(255,106,0,.10), transparent 26%), #020202;display:flex;align-items:center;justify-content:center;overflow:hidden;direction:ltr!important;}
-.preloader.hide{opacity:0;visibility:hidden;pointer-events:none;}
-.space-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1;}
-.preloader-content{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;pointer-events:none;opacity:0;will-change:transform, opacity;direction:ltr!important;}
-.preloader-content.ready{opacity:1;transition:opacity 0.4s ease;}
-.preloader-badge{width:76px;height:76px;margin-bottom:16px;margin-inline:auto;filter:drop-shadow(0 0 25px rgba(255, 106, 0, 0.45));will-change:transform, opacity, filter;}
-.preloader-content.ready .preloader-badge{animation:introBadgeCinematic 6s cubic-bezier(.16,1,.3,1) forwards;}
-.preloader-badge svg{width:100%;height:100%;display:block;}
-.preloader-logo{font-family:"Bebas Neue", sans-serif!important;font-weight:400;font-size:clamp(4.8rem, 18vw, 10rem);line-height:0.9;letter-spacing:0.03em;color:#f2f2f0;display:inline-flex;align-items:center;justify-content:center;gap:0;position:relative;direction:ltr!important;}
-.logo-part-rv{display:inline-block;will-change:transform, opacity, filter;}
-.preloader-content.ready .logo-part-rv{animation:introRvSequence 6s cubic-bezier(.16,1,.3,1) forwards;}
-.logo-part-u{display:inline-block;will-change:transform, opacity, filter;}
-.preloader-content.ready .logo-part-u{animation:introUSequence 6s cubic-bezier(.16,1,.3,1) forwards;}
-.preloader-logo .accent-dot{color:var(--accent, #ff6a00);}
-.preloader-sub{font-family:"IBM Plex Mono", monospace;font-size:clamp(0.68rem, 2vw, 0.88rem);letter-spacing:0.36em;color:var(--accent, #ff6a00);margin-top:16px;text-transform:uppercase;opacity:0.9;direction:ltr!important;will-change:opacity, transform;}
-.preloader-content.ready .preloader-sub{animation:introSubSequence 6s cubic-bezier(.16,1,.3,1) forwards;}
-@keyframes introRvSequence{0%{opacity:0;clip-path:inset(0 100% 0 0);transform:translateY(8px);filter:blur(5px);}10%{opacity:1;clip-path:inset(0 0 0 0);transform:translateY(0);filter:blur(0);}48%{opacity:1;transform:translateX(0) scale(1);filter:blur(0);}62%{opacity:1;transform:translateX(-26px) scale(1.03);filter:blur(0);}82%{opacity:.92;transform:translateX(-44px) scale(1.08);filter:blur(1px);}100%{opacity:0;transform:translateX(-70px) scale(1.2);filter:blur(9px);}}
-@keyframes introUSequence{0%,6%{opacity:0;clip-path:inset(0 100% 0 0);transform:translateY(8px);filter:blur(5px);}16%{opacity:1;clip-path:inset(0 0 0 0);transform:translateY(0);filter:blur(0);}48%{opacity:1;transform:translateX(0) scale(1);filter:blur(0);}62%{opacity:1;transform:translateX(26px) scale(1.03);filter:blur(0);}82%{opacity:.92;transform:translateX(44px) scale(1.08);filter:blur(1px);}100%{opacity:0;transform:translateX(70px) scale(1.2);filter:blur(9px);}}
-@keyframes introBadgeCinematic{0%,15%{opacity:0;transform:translateY(-10px) scale(.72);filter:drop-shadow(0 0 12px rgba(255,106,0,.12)) blur(5px);}28%{opacity:1;transform:translateY(0) scale(1);filter:drop-shadow(0 0 28px rgba(255,106,0,.65)) blur(0);}56%{opacity:1;transform:translateY(0) scale(1);filter:drop-shadow(0 0 32px rgba(255,106,0,.72));}72%{opacity:1;transform:translateY(0) scale(1.35);filter:drop-shadow(0 0 46px rgba(255,106,0,.85));}88%{opacity:1;transform:translateY(2px) scale(3.15);filter:drop-shadow(0 0 75px rgba(255,106,0,.72));}100%{opacity:0;transform:translateY(12px) scale(4.1);filter:drop-shadow(0 0 110px rgba(255,106,0,0)) blur(8px);}}
-@keyframes introSubSequence{0%,25%{opacity:0;transform:translateY(8px);letter-spacing:.42em;}38%{opacity:1;transform:translateY(0);letter-spacing:.28em;}68%{opacity:1;transform:translateY(0);letter-spacing:.3em;}88%{opacity:.75;transform:translateY(5px) scale(1.03);letter-spacing:.38em;}100%{opacity:0;transform:translateY(12px) scale(1.08);letter-spacing:.46em;filter:blur(5px);}}
-body.loading{overflow:hidden;}
+
+.preloader{position:fixed;inset:0;z-index:99999;background:radial-gradient(circle at 50% 50%,rgba(255,106,0,.075),transparent 32%),#020202;display:flex;align-items:center;justify-content:center;overflow:hidden;direction:ltr!important;transition:opacity .42s cubic-bezier(.4,0,.2,1),visibility .42s ease}
+.preloader.hide{opacity:0;visibility:hidden;pointer-events:none}
+.space-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+.preloader-content{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;pointer-events:none;direction:ltr!important;opacity:1;transform:translateZ(0)}
+.preloader-badge{width:72px;height:72px;margin-bottom:16px;margin-inline:auto;opacity:0;transform:translateY(10px) scale(.86);will-change:transform,opacity,filter;filter:drop-shadow(0 0 22px rgba(255,106,0,.34))}
+.preloader-badge svg{width:100%;height:100%;display:block;overflow:visible}
+.preloader-badge svg>rect,.preloader-grid-lines{display:none!important}
+.preloader-logo{font-family:"Bebas Neue",sans-serif!important;font-weight:400;font-size:clamp(4.7rem,10vw,7.4rem);line-height:.9;letter-spacing:.03em;color:#f5f3ef;display:inline-flex;align-items:center;justify-content:center;gap:0;position:relative;direction:ltr!important;overflow:visible}
+.logo-part-rv,.logo-part-u{display:inline-block;will-change:transform,opacity,filter;opacity:0;filter:blur(5px)}
+.preloader-logo .accent-dot{color:var(--accent,#ff6a00)}
+.preloader-sub{font-family:"IBM Plex Mono",monospace;font-size:clamp(.66rem,1.15vw,.82rem);letter-spacing:.28em;color:var(--accent,#ff6a00);margin-top:14px;text-transform:uppercase;direction:ltr!important;opacity:0;transform:translateY(8px);will-change:opacity,transform,filter;white-space:nowrap;border:0!important;outline:0!important;background:transparent!important;box-shadow:none!important}
+.preloader-content.ready .logo-part-rv{animation:introRvSmooth 6s linear forwards}
+.preloader-content.ready .logo-part-u{animation:introUSmooth 6s linear forwards}
+.preloader-content.ready .preloader-badge{animation:introBadgeSmooth 6s linear forwards}
+.preloader-content.ready .preloader-sub{animation:introSubSmooth 6s linear forwards}
+@keyframes introRvSmooth{
+0%{opacity:0;transform:translate3d(0,8px,0);filter:blur(5px)}
+8%{opacity:1;transform:translate3d(0,0,0);filter:blur(0)}
+36%{opacity:1;transform:translate3d(0,0,0);filter:blur(0)}
+58%{opacity:1;transform:translate3d(-92px,0,0);filter:blur(0)}
+67%{opacity:1;transform:translate3d(-142px,0,0);filter:blur(0)}
+76%{opacity:0;transform:translate3d(-205px,0,0);filter:blur(4px)}
+100%{opacity:0;transform:translate3d(-225px,0,0);filter:blur(7px)}
+}
+@keyframes introUSmooth{
+0%,5%{opacity:0;transform:translate3d(0,8px,0);filter:blur(5px)}
+13%{opacity:1;transform:translate3d(0,0,0);filter:blur(0)}
+36%{opacity:1;transform:translate3d(0,0,0);filter:blur(0)}
+58%{opacity:1;transform:translate3d(92px,0,0);filter:blur(0)}
+67%{opacity:1;transform:translate3d(142px,0,0);filter:blur(0)}
+76%{opacity:0;transform:translate3d(205px,0,0);filter:blur(4px)}
+100%{opacity:0;transform:translate3d(225px,0,0);filter:blur(7px)}
+}
+@keyframes introSubSmooth{
+0%,18%{opacity:0;transform:translate3d(0,8px,0);filter:blur(3px)}
+28%{opacity:1;transform:translate3d(0,0,0);filter:blur(0)}
+43%{opacity:1;transform:translate3d(0,0,0);filter:blur(0)}
+58%{opacity:.9;transform:translate3d(0,-2px,0);filter:blur(0)}
+70%{opacity:0;transform:translate3d(0,10px,0);filter:blur(5px)}
+100%{opacity:0;transform:translate3d(0,14px,0);filter:blur(8px)}
+}
+@keyframes introBadgeSmooth{
+0%,10%{opacity:0;transform:translate3d(0,10px,0) scale(.86);filter:drop-shadow(0 0 10px rgba(255,106,0,.08)) blur(4px)}
+22%{opacity:1;transform:translate3d(0,0,0) scale(1);filter:drop-shadow(0 0 24px rgba(255,106,0,.48)) blur(0)}
+48%{opacity:1;transform:translate3d(0,0,0) scale(1);filter:drop-shadow(0 0 28px rgba(255,106,0,.58)) blur(0)}
+82%{opacity:1;transform:translate3d(0,0,0) scale(3);filter:drop-shadow(0 0 62px rgba(255,106,0,.68)) blur(0)}
+92%{opacity:.9;transform:translate3d(0,0,0) scale(3.35);filter:drop-shadow(0 0 74px rgba(255,106,0,.42)) blur(1px)}
+100%{opacity:0;transform:translate3d(0,0,0) scale(3.62);filter:drop-shadow(0 0 80px rgba(255,106,0,0)) blur(7px)}
+}
 @media (prefers-reduced-motion: reduce){.reveal{opacity:1;transform:none;transition:none;}
 .hero > .eyebrow, .hero .brand-mark, .hero .hero-sub, .hero .hero-byline, .hero div.lead, .hero .quote-box,
     .hero .hero-ctas, .hero .stat-row, .hero .demo{animation:none;opacity:1;transform:none;}
@@ -667,7 +696,7 @@ html[dir="ltr"] .hunt-loop-step > small{direction:ltr!important;text-align:left!
 .faq-box{margin-top:26px;gap:10px;}
 .faq-question{padding:17px 20px;font-size:1rem;}
 .faq-answer{line-height:1.8;}
-.preloader{transition:opacity .35s cubic-bezier(.4,0,.2,1), visibility .35s ease;}
+
 .preloader-skip{position:absolute;inset-inline-end:28px;bottom:26px;z-index:9;display:none;border:1px solid rgba(255,255,255,.22);background:rgba(0,0,0,.35);color:#d8d8d3;padding:9px 16px;border-radius:5px;font-size:.78rem;backdrop-filter:blur(8px);}
 .preloader.seen-before .preloader-skip{display:block;}
 .preloader-skip:hover{border-color:var(--accent);color:var(--accent);}
@@ -1082,24 +1111,6 @@ html[dir="ltr"] .week-num{
   direction:ltr!important;
   text-align:left!important;
 }
-.preloader-grid-lines{
-  display:none!important;
-}
-.preloader-badge{
-  width:68px!important;
-  height:68px!important;
-  margin-bottom:14px!important;
-  filter:drop-shadow(0 0 22px rgba(255,106,0,.42))!important;
-}
-.preloader-logo{
-  font-size:clamp(4.6rem,10vw,7.2rem)!important;
-  letter-spacing:.025em!important;
-}
-.preloader-sub{
-  font-size:clamp(.66rem,1.15vw,.82rem)!important;
-  letter-spacing:.28em!important;
-  margin-top:14px!important;
-}
 .holo-card-name{
   font-size:clamp(1.45rem,2.8vw,2.15rem)!important;
   max-width:92%!important;
@@ -1142,17 +1153,9 @@ html[dir="ltr"] .week-num{
   }
 }
 @media(max-width:620px){
-  .preloader-badge{
-    width:62px!important;
-    height:62px!important;
-  }
-  .preloader-logo{
-    font-size:clamp(4.1rem,21vw,5.5rem)!important;
-  }
-  .preloader-sub{
-    font-size:.62rem!important;
-    letter-spacing:.2em!important;
-  }
+  .preloader-badge{width:62px;height:62px}
+  .preloader-logo{font-size:clamp(4.1rem,21vw,5.5rem)}
+  .preloader-sub{font-size:.62rem;letter-spacing:.2em}
   .holo-card{
     height:238px!important;
     min-height:238px!important;
