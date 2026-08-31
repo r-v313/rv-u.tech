@@ -721,10 +721,9 @@ function escapeHTML(str) {
       }
     }
 
-    const reduceCardMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
 
-    if (holoCard && !reduceCardMotion) {
+    if (holoCard) {
       let activeTouchPointer = null;
 
       function updateCardTilt(clientX, clientY, maxAngle, scale) {
@@ -755,7 +754,7 @@ function escapeHTML(str) {
       let hoverFrame = 0;
       let hoverX = 0;
       let hoverY = 0;
-      holoCard.addEventListener('pointermove', (e) => {
+      function handleCardHover(e) {
         if (e.pointerType === 'touch') return;
         hoverX = e.clientX;
         hoverY = e.clientY;
@@ -764,12 +763,16 @@ function escapeHTML(str) {
           hoverFrame = 0;
           updateCardTilt(hoverX, hoverY, 14, 1.018);
         });
-      }, { passive: true });
-      holoCard.addEventListener('pointerleave', (e) => {
+      }
+      function handleCardLeave(e) {
         if (hoverFrame) cancelAnimationFrame(hoverFrame);
         hoverFrame = 0;
         resetCardTilt(e);
-      });
+      }
+      holoCard.addEventListener('pointermove', handleCardHover, { passive: true });
+      holoCard.addEventListener('mousemove', handleCardHover, { passive: true });
+      holoCard.addEventListener('pointerleave', handleCardLeave);
+      holoCard.addEventListener('mouseleave', handleCardLeave);
 
       if (coarsePointer) {
         holoCard.addEventListener('pointerdown', (e) => {
@@ -1159,7 +1162,6 @@ function escapeHTML(str) {
         if (!form.reportValidity()) return;
 
         const name = document.getElementById('appName').value.trim();
-        const whatsapp = document.getElementById('appWhatsApp').value.trim();
         const levelSelect = document.getElementById('appLevel');
         const liveSelect = document.getElementById('appLiveTargets');
         const goal = document.getElementById('appGoal').value.trim();
@@ -1170,7 +1172,6 @@ function escapeHTML(str) {
         const messageAr = `طلب تقديم لانترفيو rv_u camp — أول دفعة أونلاين
 
 الاسم: ${name}
-رقم واتساب: ${whatsapp}
 المستوى الحالي: ${level}
 اشتغلت على Live Targets قبل كده؟ ${live}
 هدفي من الكامب: ${goal}
@@ -1179,7 +1180,6 @@ function escapeHTML(str) {
         const messageEn = `rv_u camp Interview Application — Online Cohort 01
 
 Name: ${name}
-WhatsApp: ${whatsapp}
 Current level: ${level}
 Hunted live targets before? ${live}
 Goal: ${goal}
@@ -1232,11 +1232,9 @@ Goal: ${goal}`;
     window.updateApplicationLanguage = function(){
       const isAr = window.RVU_LANG === 'ar';
       const name = document.getElementById('appName');
-      const phone = document.getElementById('appWhatsApp');
       const goal = document.getElementById('appGoal');
       const close = document.getElementById('applicationClose');
       if (name) name.placeholder = isAr ? 'مثال: أحمد محمد' : 'e.g. Ahmed Mohamed';
-      if (phone) phone.placeholder = '+20 1xxxxxxxxx';
       if (goal) goal.placeholder = isAr ? 'اكتب هدفك باختصار: إيه اللي موقفك دلوقتي وإيه اللي عاوز توصله؟' : 'Briefly describe what is blocking you now and what you want to achieve.';
       if (close) close.setAttribute('aria-label', isAr ? 'إغلاق نموذج التقديم' : 'Close application form');
     };
