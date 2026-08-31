@@ -1,8 +1,12 @@
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 function rvuForceTop() {
+  const root = document.documentElement;
+  const previousInlineBehavior = root.style.scrollBehavior;
+  root.style.scrollBehavior = 'auto';
   window.scrollTo(0, 0);
-  document.documentElement.scrollTop = 0;
+  root.scrollTop = 0;
   if (document.body) document.body.scrollTop = 0;
+  requestAnimationFrame(() => { root.style.scrollBehavior = previousInlineBehavior; });
 }
 rvuForceTop();
 window.addEventListener('pageshow', rvuForceTop, { once: true });
@@ -197,7 +201,7 @@ function escapeHTML(str) {
     }
 
     const elapsed = performance.now() - introStartedAt;
-    setTimeout(() => finishIntro(false), Math.max(0, introDuration - exitDuration - elapsed));
+    setTimeout(() => finishIntro(false), Math.max(0, introDuration - elapsed));
 
     function markFontsReady() {
       document.documentElement.classList.add('fonts-loaded');
@@ -501,8 +505,8 @@ function escapeHTML(str) {
   })();
 
   (function(){
-    const supportsTilt = window.matchMedia('(hover: hover) and (pointer: fine)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!supportsTilt) return;
+    const reduceTiltMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceTiltMotion) return;
     const interactiveCards = document.querySelectorAll('.tilt-card, .hunt-loop-step, .schedule-item, .outcome-session, .faq-item');
     interactiveCards.forEach(card => {
       if (card.id === 'holoCard' || card.classList.contains('holo-box')) return;
@@ -525,6 +529,7 @@ function escapeHTML(str) {
       }
 
       function handleMove(e) {
+        if (e.pointerType === 'touch') return;
         pointerX = e.clientX;
         pointerY = e.clientY;
         if (!frameId) frameId = requestAnimationFrame(applyTilt);
@@ -705,13 +710,6 @@ function escapeHTML(str) {
     const formattedDate = dayPadded + ' ' + monthNamesEn[now.getMonth()] + ' ' + now.getFullYear();
     if (holoCardDate) holoCardDate.textContent = 'ISSUED: ' + formattedDate;
 
-    function resetDownloadBtn() {
-      if (!downloadBtn) return;
-      downloadBtn.innerHTML = 'Download Camp Card';
-      downloadBtn.disabled = false;
-    }
-    window.resetDownloadBtn = resetDownloadBtn;
-
     if (nameInput) {
       nameInput.addEventListener('input', (e) => {
         if (typeof window.updateCardName === 'function') {
@@ -724,7 +722,6 @@ function escapeHTML(str) {
     }
 
     const reduceCardMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
 
     if (holoCard && !reduceCardMotion) {
@@ -755,26 +752,24 @@ function escapeHTML(str) {
         holoCard.style.setProperty('--shine-y', '0%');
       }
 
-      if (finePointer) {
-        let hoverFrame = 0;
-        let hoverX = 0;
-        let hoverY = 0;
-        holoCard.addEventListener('pointermove', (e) => {
-          if (e.pointerType === 'touch') return;
-          hoverX = e.clientX;
-          hoverY = e.clientY;
-          if (hoverFrame) return;
-          hoverFrame = requestAnimationFrame(() => {
-            hoverFrame = 0;
-            updateCardTilt(hoverX, hoverY, 14, 1.018);
-          });
-        }, { passive: true });
-        holoCard.addEventListener('pointerleave', (e) => {
-          if (hoverFrame) cancelAnimationFrame(hoverFrame);
+      let hoverFrame = 0;
+      let hoverX = 0;
+      let hoverY = 0;
+      holoCard.addEventListener('pointermove', (e) => {
+        if (e.pointerType === 'touch') return;
+        hoverX = e.clientX;
+        hoverY = e.clientY;
+        if (hoverFrame) return;
+        hoverFrame = requestAnimationFrame(() => {
           hoverFrame = 0;
-          resetCardTilt(e);
+          updateCardTilt(hoverX, hoverY, 14, 1.018);
         });
-      }
+      }, { passive: true });
+      holoCard.addEventListener('pointerleave', (e) => {
+        if (hoverFrame) cancelAnimationFrame(hoverFrame);
+        hoverFrame = 0;
+        resetCardTilt(e);
+      });
 
       if (coarsePointer) {
         holoCard.addEventListener('pointerdown', (e) => {
