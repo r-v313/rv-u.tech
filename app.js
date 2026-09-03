@@ -28,22 +28,30 @@ function escapeHTML(str) {
     const isAr = window.RVU_LANG === 'ar';
     const defaultText = isAr ? 'اكتب اسمك هنا' : 'PUT YOUR NAME';
     const displayVal = trimmed.length > 0 ? trimmed.toUpperCase() : defaultText;
-
+    
     cardName.textContent = displayVal;
     const hasArabic = /[\u0600-\u06FF]/.test(trimmed);
     cardName.style.direction = hasArabic ? 'rtl' : 'ltr';
     cardName.style.unicodeBidi = 'isolate';
     cardName.style.fontFamily = hasArabic ? "'IBM Plex Sans Arabic', sans-serif" : "'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif";
-    cardName.style.fontSize = '';
+
+    const displayLen = displayVal.length;
+    if (displayLen > 24) {
+      cardName.style.fontSize = 'clamp(.82rem, 2.2vw, 1.15rem)';
+    } else if (displayLen > 18) {
+      cardName.style.fontSize = 'clamp(1rem, 2.8vw, 1.45rem)';
+    } else if (displayLen > 12) {
+      cardName.style.fontSize = 'clamp(1.2rem, 3.5vw, 1.8rem)';
+    } else {
+      cardName.style.fontSize = '';
+    }
 
     requestAnimationFrame(() => {
-      if (!cardName.clientWidth) return;
-      let size = Math.min(parseFloat(getComputedStyle(cardName).fontSize) || 30, 34);
-      const minSize = cardName.clientWidth < 330 ? 12 : 14;
-      cardName.style.setProperty('font-size', `${size}px`, 'important');
-      while (cardName.scrollWidth > cardName.clientWidth && size > minSize) {
-        size -= 0.5;
-        cardName.style.setProperty('font-size', `${size}px`, 'important');
+      if (!cardName.clientWidth || cardName.scrollWidth <= cardName.clientWidth) return;
+      let size = parseFloat(getComputedStyle(cardName).fontSize) || 18;
+      while (cardName.scrollWidth > cardName.clientWidth && size > 11) {
+        size -= 1;
+        cardName.style.fontSize = `${size}px`;
       }
     });
   };
@@ -97,100 +105,135 @@ function escapeHTML(str) {
     }
 
     if (!reduceMotion && canvas && canvas.getContext) {
-      const ctx = canvas.getContext('2d');
+      const ctx = canvas.getContext('2d', { alpha: false });
       let stars = [];
-      let ambientStars = [];
+      let dust = [];
       let lastFrame = performance.now();
-      const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
-      const starCount = window.innerWidth < 700 || coarsePointer ? 120 : 220;
-      const ambientCount = window.innerWidth < 700 || coarsePointer ? 70 : 120;
+      const isSmall = window.innerWidth < 700;
+      const starCount = isSmall ? 165 : 285;
+      const dustCount = isSmall ? 70 : 115;
+
+      function seedStar(w, h, fresh) {
+        const angle = Math.random() * Math.PI * 2;
+        const spread = Math.pow(Math.random(), 0.72);
+        const maxRadius = Math.hypot(w, h) * 1.16;
+        const radius = maxRadius * spread;
+        const zMax = Math.max(w, h) * 1.18;
+        return {
+          x: Math.cos(angle) * radius,
+          y: Math.sin(angle) * radius,
+          z: fresh ? zMax * (0.74 + Math.random() * 0.26) : 8 + Math.random() * zMax,
+          size: 0.38 + Math.random() * 1.25,
+          brightness: 0.62 + Math.random() * 0.38,
+          warm: Math.random() < 0.085
+        };
+      }
 
       resizeCanvas = function () {
-        const dpr = Math.min(window.devicePixelRatio || 1, window.innerWidth < 700 ? 1.35 : 1.8);
-        canvas.width = Math.round(window.innerWidth * dpr);
-        canvas.height = Math.round(window.innerHeight * dpr);
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        const dpr = Math.min(window.devicePixelRatio || 1, isSmall ? 1.35 : 1.7);
+        canvas.width = Math.round(w * dpr);
+        canvas.height = Math.round(h * dpr);
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.scale(dpr, dpr);
-        stars = [];
-        ambientStars = [];
-        for (let i = 0; i < starCount; i++) {
-          stars.push({
-            x: (Math.random() - 0.5) * window.innerWidth * 2.6,
-            y: (Math.random() - 0.5) * window.innerHeight * 2.6,
-            z: Math.max(1, Math.random() * window.innerWidth),
-            size: Math.random() * 1.5 + 0.45,
-            brightness: Math.random() * 0.38 + 0.62
-          });
-        }
-        for (let i = 0; i < ambientCount; i++) {
-          ambientStars.push({
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
-            size: Math.random() * 1.05 + 0.35,
-            alpha: Math.random() * 0.3 + 0.3,
-            phase: Math.random() * Math.PI * 2,
-            twinkleSpeed: Math.random() * 0.0016 + 0.0007
-          });
-        }
+        stars = Array.from({ length: starCount }, () => seedStar(w, h, false));
+        dust = Array.from({ length: dustCount }, () => ({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          size: 0.28 + Math.random() * 0.72,
+          alpha: 0.12 + Math.random() * 0.33,
+          phase: Math.random() * Math.PI * 2,
+          pulse: 0.00065 + Math.random() * 0.00125
+        }));
       };
 
       function renderSpace() {
         const w = window.innerWidth;
         const h = window.innerHeight;
         const now = performance.now();
-        const frameScale = Math.min(2.5, Math.max(0.25, (now - lastFrame) / 16.6667));
+        const dt = Math.min(2.2, Math.max(0.35, (now - lastFrame) / 16.6667));
         lastFrame = now;
-        ctx.fillStyle = 'rgba(7, 7, 7, 0.30)';
-        ctx.fillRect(0, 0, w, h);
-        const cx = w / 2;
-        const cy = h / 2;
+        const progress = Math.min(1, Math.max(0, (now - introStartedAt) / introDuration));
+        const smooth = progress * progress * (3 - 2 * progress);
+        const burst = Math.max(0, (progress - 0.68) / 0.32);
+        const speed = 0.9 + smooth * 11.5 + burst * burst * 19;
+        const trailBoost = 10 + smooth * 18 + burst * 42;
+        const cx = w * 0.5;
+        const cy = h * 0.5;
+        const focal = Math.min(w, h) * (isSmall ? 0.56 : 0.63);
 
-        for (const a of ambientStars) {
-          const twinkle = 0.72 + Math.sin(now * a.twinkleSpeed + a.phase) * 0.28;
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = progress > 0.72 ? 'rgba(1,1,1,.26)' : 'rgba(1,1,1,.38)';
+        ctx.fillRect(0, 0, w, h);
+
+        for (const d of dust) {
+          const pulse = 0.64 + Math.sin(now * d.pulse + d.phase) * 0.36;
           ctx.beginPath();
-          ctx.arc(a.x, a.y, a.size, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(.78, a.alpha * twinkle)})`;
+          ctx.arc(d.x, d.y, d.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255,255,255,${d.alpha * pulse * (1 - progress * .45)})`;
           ctx.fill();
         }
 
-        for (const s of stars) {
-          const introProgress = Math.min(1, Math.max(0, (now - introStartedAt) / introDuration));
-          const launch = Math.max(0, Math.min(1, (introProgress - 0.54) / 0.46));
-          const easedSpeed = 0.9 + Math.pow(launch, 2.35) * 31;
-          s.z -= easedSpeed * frameScale;
+        ctx.globalCompositeOperation = 'lighter';
+        for (let i = 0; i < stars.length; i++) {
+          let s = stars[i];
+          const oldZ = s.z;
+          s.z -= speed * dt;
           if (s.z <= 1) {
-            s.z = w;
-            s.x = (Math.random() - 0.5) * w * 2.6;
-            s.y = (Math.random() - 0.5) * h * 2.6;
+            stars[i] = s = seedStar(w, h, true);
           }
-          const k = 235 / s.z;
+
+          const k = focal / s.z;
           const px = s.x * k + cx;
           const py = s.y * k + cy;
-          if (px < 0 || px > w || py < 0 || py > h) continue;
-          const factor = Math.max(0, 1 - s.z / w);
-          const radius = Math.max(.42, s.size * factor * 1.7);
-          const prevK = 235 / Math.min(w, s.z + easedSpeed * (12 + introProgress * 16));
+          const prevZ = Math.min(Math.max(w, h) * 1.18, oldZ + speed * trailBoost);
+          const prevK = focal / prevZ;
           const prevX = s.x * prevK + cx;
           const prevY = s.y * prevK + cy;
-          const alpha = Math.min(1, Math.max(.16, factor * 1.1 * s.brightness));
+          const depth = Math.min(1, Math.max(0, 1 - s.z / (Math.max(w, h) * 1.18)));
+
+          if (px < -80 || px > w + 80 || py < -80 || py > h + 80) {
+            stars[i] = seedStar(w, h, true);
+            continue;
+          }
+
+          const alpha = Math.min(1, (0.13 + depth * 0.9) * s.brightness);
+          const lineWidth = Math.max(0.45, s.size * (0.42 + depth * 1.65));
+          const color = s.warm ? `rgba(255,132,46,${alpha * .82})` : `rgba(255,255,255,${alpha})`;
+
           ctx.beginPath();
           ctx.moveTo(prevX, prevY);
           ctx.lineTo(px, py);
-          ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
-          ctx.lineWidth = Math.max(.5, radius * .78);
+          ctx.strokeStyle = color;
+          ctx.lineWidth = lineWidth;
           ctx.stroke();
+
           ctx.beginPath();
-          ctx.arc(px, py, radius, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, alpha + .16)})`;
+          ctx.arc(px, py, Math.max(.35, lineWidth * .58), 0, Math.PI * 2);
+          ctx.fillStyle = s.warm ? `rgba(255,150,72,${Math.min(1,alpha+.12)})` : `rgba(255,255,255,${Math.min(1,alpha+.16)})`;
           ctx.fill();
         }
+        ctx.globalCompositeOperation = 'source-over';
+
+        if (progress > .78) {
+          const flash = Math.sin(Math.min(1, (progress - .78) / .22) * Math.PI) * .075;
+          if (flash > 0) {
+            const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.min(w, h) * .52);
+            g.addColorStop(0, `rgba(255,112,18,${flash})`);
+            g.addColorStop(.25, `rgba(255,106,0,${flash * .38})`);
+            g.addColorStop(1, 'rgba(255,106,0,0)');
+            ctx.fillStyle = g;
+            ctx.fillRect(0, 0, w, h);
+          }
+        }
+
         animId = requestAnimationFrame(renderSpace);
       }
 
       resizeCanvas();
       window.addEventListener('resize', resizeCanvas, { passive: true });
       renderSpace();
-
     }
 
     const elapsed = performance.now() - introStartedAt;
@@ -698,12 +741,9 @@ function escapeHTML(str) {
     const holoCardDate = document.getElementById('holoCardDate');
 
     const now = new Date();
-    const formattedDate = new Intl.DateTimeFormat('en-GB', {
-      timeZone: 'Africa/Cairo',
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric'
-    }).format(now).toUpperCase();
+    const monthNamesEn = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+    const dayPadded = String(now.getDate()).padStart(2, '0');
+    const formattedDate = dayPadded + ' ' + monthNamesEn[now.getMonth()] + ' ' + now.getFullYear();
     if (holoCardDate) holoCardDate.textContent = 'ISSUED: ' + formattedDate;
 
     if (nameInput) {
@@ -930,7 +970,7 @@ function escapeHTML(str) {
 
     resetDownloadBtn = function() {
       if (!downloadBtn) return;
-      setDownloadStatus('Download Your Card', 'Download Your Card');
+      setDownloadStatus('Download Camp Card', 'Download Camp Card');
       downloadBtn.disabled = false;
     };
     window.resetDownloadBtn = resetDownloadBtn;
