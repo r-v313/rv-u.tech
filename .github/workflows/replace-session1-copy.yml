@@ -1,0 +1,48 @@
+name: Replace Session 1 Copy
+
+on:
+  push:
+    paths:
+      - '.github/workflows/replace-session1-copy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  replace:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Replace Session 1 description
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          old = "هنبدأ من طريقة تفكيرك قبل أي Tool أو Payload وهنخليك تبص للـTarget بعقلية الـHunter اللي بيعرف يوصل لثغرات خطيرة: تفهم السيستم كأنك جزء من الشركة مش مجرد زائر عليه وتبص لكل Feature كأنك إنت اللي عامل الموقع وتسأل ليه اتعملت بالشكل ده وإيه الـAssumptions والـTrust اللي المطور بنى عليها وإيه اللي ممكن يحصل لو غيرت الـFlow أو كسرت الافتراض ده. الهدف إنك تطلع Tests من فهمك للسيستم بدل ما يبقى كل تفكيرك أحط الـbait ده وأشوف هيحصل إيه وخلاص."
+          new = "هنبدأ من طريقة التفكير قبل أي Tool أو Payload. تفهم الـTarget والـFeatures والـTrust والـAssumptions اللي السيستم مبني عليها. والهدف إنك تطلع Tests من فهمك للـFlow بدل التجربة العشوائية بالـPayloads."
+          count = s.count(old)
+          if count == 0:
+              raise SystemExit('Expected Session 1 text not found; refusing to modify index.html')
+          p.write_text(s.replace(old, new), encoding='utf-8')
+          print(f'Replaced {count} occurrence(s)')
+          PY
+
+      - name: Commit change
+        shell: bash
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "No change needed"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Shorten Session 1 description"
+          git push
