@@ -1,0 +1,31 @@
+name: Compact outcomes patch
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/patch-outcomes-compact.yml'
+      - 'scripts/patch_outcomes_compact.py'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - run: python scripts/patch_outcomes_compact.py
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html overrides.css
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "Simplify outcomes and remove navbar LinkedIn"
+          git push
