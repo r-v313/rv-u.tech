@@ -1,0 +1,54 @@
+name: Fix navbar profile frame
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-nav-profile-frame.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Keep profile inside navbar and add hover zoom
+        shell: bash
+        run: |
+          cat >> overrides.css <<'EOF'
+
+/* nav-profile-frame-v2 */
+.nav-profile-link{
+  width:76px!important;
+  height:76px!important;
+  left:10px!important;
+  top:50%!important;
+  padding:3px!important;
+  transform:translateY(-50%) scale(1)!important;
+  box-shadow:0 0 0 2px rgba(7,7,7,.95),0 6px 18px rgba(0,0,0,.42),0 0 18px rgba(249,115,22,.12)!important;
+  transition:transform .22s ease,box-shadow .22s ease!important;
+}
+.nav-profile-link:hover{
+  transform:translateY(-50%) scale(1.08)!important;
+  box-shadow:0 0 0 2px rgba(7,7,7,.95),0 8px 22px rgba(0,0,0,.5),0 0 24px rgba(249,115,22,.22)!important;
+}
+.nav-actions{margin-left:92px!important}
+@media(max-width:700px){
+  .nav-profile-link{width:58px!important;height:58px!important;left:8px!important;padding:3px!important}
+  .nav-profile-link:hover{transform:translateY(-50%) scale(1.06)!important}
+  .nav-actions{margin-left:68px!important}
+}
+@media(max-width:420px){
+  .nav-profile-link{width:50px!important;height:50px!important;left:6px!important}
+  .nav-actions{margin-left:58px!important}
+}
+EOF
+      - name: Commit patch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add overrides.css
+          git diff --cached --quiet || git commit -m "Keep navbar profile inside frame and add hover zoom"
+          git push
