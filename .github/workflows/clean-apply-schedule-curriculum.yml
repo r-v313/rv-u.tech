@@ -100,3 +100,5 @@ jobs:
           git add index.html overrides.css
           git commit -m "Clean application flow and restyle schedule curriculum"
           git push origin main
+
+# trigger
