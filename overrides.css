@@ -145,14 +145,37 @@ html[dir="ltr"] #curriculum .outcome-session{
   text-wrap:balance!important;
 }
 
-/* English navbar: mirror profile photo so it never covers the logo */
-html[dir="ltr"] .nav-profile-link{
-  left:auto!important;
-  right:10px!important;
+/* navbar-language-flow-v8: profile participates in the flex row, so it mirrors with language */
+html[dir="rtl"] .nav-links{
+  direction:rtl!important;
+  flex-direction:row!important;
 }
-html[dir="ltr"] .nav-actions{
+html[dir="ltr"] .nav-links{
+  direction:ltr!important;
+  flex-direction:row!important;
+}
+.nav-actions{
   margin-left:0!important;
-  margin-right:92px!important;
+  margin-right:0!important;
+  direction:inherit!important;
+}
+.nav-actions .nav-profile-link{
+  position:relative!important;
+  left:auto!important;
+  right:auto!important;
+  top:auto!important;
+  inset:auto!important;
+  display:block!important;
+  flex:0 0 76px!important;
+  width:76px!important;
+  height:76px!important;
+  margin:0!important;
+  align-self:center!important;
+  transform:scale(1)!important;
+  z-index:20!important;
+}
+.nav-actions .nav-profile-link:hover{
+  transform:scale(1.08)!important;
 }
 
 @media(max-width:820px){
@@ -179,11 +202,13 @@ html[dir="ltr"] .nav-actions{
 }
 
 @media(max-width:700px){
-  html[dir="ltr"] .nav-profile-link{
-    right:8px!important;
+  .nav-actions .nav-profile-link{
+    flex-basis:58px!important;
+    width:58px!important;
+    height:58px!important;
   }
-  html[dir="ltr"] .nav-actions{
-    margin-right:68px!important;
+  .nav-actions .nav-profile-link:hover{
+    transform:scale(1.06)!important;
   }
 }
 
@@ -194,10 +219,9 @@ html[dir="ltr"] .nav-actions{
 }
 
 @media(max-width:420px){
-  html[dir="ltr"] .nav-profile-link{
-    right:6px!important;
-  }
-  html[dir="ltr"] .nav-actions{
-    margin-right:58px!important;
+  .nav-actions .nav-profile-link{
+    flex-basis:50px!important;
+    width:50px!important;
+    height:50px!important;
   }
 }
