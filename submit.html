@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src https://formspree.io; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+<title>Submitting application | rv_u camp</title>
+<style>
+html,body{height:100%;margin:0;background:#070707;color:#f2f2f0;font-family:Arial,sans-serif}body{display:grid;place-items:center}.box{width:min(92vw,520px);padding:34px;border:1px solid #292929;border-radius:18px;background:#0c0c0c;text-align:center;box-shadow:0 18px 70px rgba(0,0,0,.45)}.dot{width:11px;height:11px;border-radius:50%;background:#f97316;margin:0 auto 18px;box-shadow:0 0 20px rgba(249,115,22,.65);animation:p 1s ease-in-out infinite alternate}h1{font-size:22px;margin:0 0 10px}p{margin:0;color:#aaa;line-height:1.7;font-size:14px}@keyframes p{to{opacity:.25;transform:scale(.8)}}
+</style>
+</head>
+<body>
+<main class="box">
+<div class="dot"></div>
+<h1 id="title">جارٍ حفظ طلبك</h1>
+<p id="copy">متقفلش الصفحة، هترجع للموقع تلقائيًا بعد تأكيد الاستلام.</p>
+</main>
+<script>
+(function(){
+  'use strict';
+  var STORAGE_KEY='rvuApplicationPendingV1';
+  var STATUS_KEY='rvuApplicationStatusV1';
+  var ERROR_KEY='rvuApplicationErrorV1';
+  var ENDPOINT='https://formspree.io/f/xoeqykpq';
+  var raw=null,payload=null;
+  try{raw=sessionStorage.getItem(STORAGE_KEY);payload=raw?JSON.parse(raw):null;}catch(_){}
+  if(!payload){location.replace('./');return;}
+  if(payload.language==='en'){
+    document.documentElement.lang='en';document.documentElement.dir='ltr';
+    document.getElementById('title').textContent='Saving your application';
+    document.getElementById('copy').textContent='Keep this page open. You will return automatically after the submission is confirmed.';
+  }
+  function back(status,error){
+    try{
+      sessionStorage.setItem(STATUS_KEY,status);
+      if(error)sessionStorage.setItem(ERROR_KEY,String(error).slice(0,500));
+      else sessionStorage.removeItem(ERROR_KEY);
+    }catch(_){}
+    var target;
+    try{target=new URL(payload.return_url||'./',location.href);}catch(_){target=new URL('./',location.href);}
+    target.searchParams.set('rvu_application',status);
+    location.replace(target.href);
+  }
+  var fd=new FormData();
+  ['submission_id','name','whatsapp','level','level_display','liveTargets','live_targets_display','goal','language','page_url','referrer','submitted_at','utm_source','utm_medium','utm_campaign','utm_content','utm_term','li_fat_id'].forEach(function(k){fd.append(k,payload[k]||'');});
+  fd.append('_subject','New RVU Camp Application — '+(payload.name||'Applicant'));
+  var controller=new AbortController();
+  var timer=setTimeout(function(){controller.abort();},15000);
+  fetch(ENDPOINT,{method:'POST',body:fd,headers:{Accept:'application/json'},signal:controller.signal})
+    .then(function(response){
+      clearTimeout(timer);
+      if(!response.ok){throw new Error('Formspree HTTP '+response.status);}
+      return response.json().catch(function(){return {};});
+    })
+    .then(function(){back('success','');})
+    .catch(function(err){clearTimeout(timer);back('error',err&&err.message?err.message:'submission failed');});
+})();
+</script>
+</body>
+</html>
