@@ -44,7 +44,7 @@ html,body{height:100%;margin:0;background:#070707;color:#f2f2f0;font-family:Aria
     location.replace(target.href);
   }
   var fd=new FormData();
-  ['submission_id','name','whatsapp','level','level_display','liveTargets','live_targets_display','goal','language','page_url','referrer','submitted_at','utm_source','utm_medium','utm_campaign','utm_content','utm_term','li_fat_id'].forEach(function(k){fd.append(k,payload[k]||'');});
+  ['submission_id','name','level','level_display','liveTargets','live_targets_display','goal','language','page_url','referrer','submitted_at','utm_source','utm_medium','utm_campaign','utm_content','utm_term','li_fat_id'].forEach(function(k){fd.append(k,payload[k]||'');});
   fd.append('_subject','New RVU Camp Application — '+(payload.name||'Applicant'));
   var controller=new AbortController();
   var timer=setTimeout(function(){controller.abort();},15000);
