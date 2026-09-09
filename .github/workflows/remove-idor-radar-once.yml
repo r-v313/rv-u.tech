@@ -1,0 +1,95 @@
+name: Remove IDOR and Radar Once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/remove-idor-radar-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  remove-sections:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Remove only IDOR demo and radar section
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          path = Path('index.html')
+          text = path.read_text(encoding='utf-8')
+
+          def remove_balanced(source, marker, tag):
+              start = source.find(marker)
+              if start == -1:
+                  raise SystemExit(f'Marker not found: {marker}')
+              token_re = re.compile(rf'<(/?){tag}\b[^>]*>', re.I)
+              depth = 0
+              end = None
+              for m in token_re.finditer(source, start):
+                  if m.group(1):
+                      depth -= 1
+                      if depth == 0:
+                          end = m.end()
+                          break
+                  else:
+                      depth += 1
+              if end is None:
+                  raise SystemExit(f'Could not find matching </{tag}> for {marker}')
+              return source[:start] + source[end:]
+
+          text = remove_balanced(text, '<div class="hero-demo-panel">', 'div')
+          text = remove_balanced(text, '<section id="radar-section"', 'section')
+
+          forbidden = [
+              '<div class="hero-demo-panel">',
+              'id="endpointId"',
+              'id="idDisplay"',
+              'id="radar-section"',
+              'id="radarCanvas"',
+              'class="radar-box',
+          ]
+          remaining = [item for item in forbidden if item in text]
+          if remaining:
+              raise SystemExit(f'Removal incomplete: {remaining}')
+
+          path.write_text(text, encoding='utf-8')
+
+      - name: Verify no unrelated structural markers were removed
+        shell: python
+        run: |
+          from pathlib import Path
+          text = Path('index.html').read_text(encoding='utf-8')
+          required = [
+              'id="preloader"',
+              'id="about"',
+              'id="previous-camps"',
+              'id="included-section"',
+              'id="hunt-loop"',
+              'id="outcomes-section"',
+              'id="curriculum"',
+              'id="legal-bonus-section"',
+              'id="execution"',
+              'id="badge-preview-section"',
+              'id="contact"',
+              'id="faq-section"',
+          ]
+          missing = [item for item in required if item not in text]
+          if missing:
+              raise SystemExit(f'Unexpected missing sections: {missing}')
+
+      - name: Commit change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --check
+          git commit -m "Remove IDOR demo and radar sections"
+          git push origin main
