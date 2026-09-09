@@ -1,0 +1,38 @@
+name: Compact hero and history patch
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/patch-compact-hero-history.yml'
+      - 'scripts/patch_compact_hero_history.py'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Apply requested edits
+        run: python scripts/patch_compact_hero_history.py
+
+      - name: Commit patched index
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if git diff --cached --quiet; then
+            echo "No index changes to commit"
+            exit 0
+          fi
+          git commit -m "Shorten hero and merge camp history"
+          git push
