@@ -24,3 +24,50 @@ Live Targets: ${live}
 Level: ${level}
 Live Targets: ${live}
 Goal: ${goal}`;}if(waLink){const whatsappUrl=new URL('https://wa.me/201280499854');whatsappUrl.searchParams.set('text',message);waLink.href=whatsappUrl.href;waLink.rel='noopener noreferrer';}form.style.display='none';if(success)success.classList.add('show');});}if(editBtn){editBtn.addEventListener('click',function(){if(success)success.classList.remove('show');if(form)form.style.display='grid';const first=document.getElementById('appName');if(first)first.focus();});}function updateMobileApplyFab(){if(!mobileApplyFab)return;const heroRect=hero?hero.getBoundingClientRect():null;const contactSection=document.getElementById('contact');const contactRect=contactSection?contactSection.getBoundingClientRect():null;const heroVisible=heroRect&&heroRect.bottom>110;const contactVisible=contactRect&&contactRect.top<window.innerHeight*0.92&&contactRect.bottom>0;const shouldShow=!heroVisible&&!contactVisible&&!document.body.classList.contains('application-open');mobileApplyFab.classList.toggle('show',shouldShow);mobileApplyFab.setAttribute('aria-hidden',shouldShow?'false':'true');mobileApplyFab.inert=!shouldShow;}updateMobileApplyFab();window.addEventListener('scroll',updateMobileApplyFab,{passive:true});window.addEventListener('resize',updateMobileApplyFab,{passive:true});window.updateApplicationLanguage=function(){const isAr=window.RVU_LANG==='ar';const name=document.getElementById('appName');const goal=document.getElementById('appGoal');const close=document.getElementById('applicationClose');if(name)name.placeholder=isAr?'مثال: أحمد محمد':'e.g. Ahmed Mohamed';if(goal)goal.placeholder=isAr?'اكتب هدفك باختصار: إيه اللي موقفك دلوقتي وإيه اللي عاوز توصله؟':'Briefly describe what is blocking you now and what you want to achieve.';if(close)close.setAttribute('aria-label',isAr?'إغلاق نموذج التقديم':'Close application form');};window.updateApplicationLanguage();})();
+
+/* curriculum-accordion-v1 */
+(()=>{
+  const initCurriculumAccordion=()=>{
+    const blocks=Array.from(document.querySelectorAll('#curriculum .week-block'));
+    if(!blocks.length)return;
+    blocks.forEach((block,index)=>{
+      if(block.dataset.accordionReady==='1')return;
+      block.dataset.accordionReady='1';
+      block.classList.remove('is-open');
+      const head=block.querySelector('.week-head');
+      const sessions=block.querySelector('.week-sessions');
+      if(!head||!sessions)return;
+      const panelId=`week-panel-${index+1}`;
+      sessions.id=panelId;
+      const button=document.createElement('button');
+      button.type='button';
+      button.className='week-accordion-toggle';
+      button.setAttribute('aria-expanded','false');
+      button.setAttribute('aria-controls',panelId);
+      button.setAttribute('aria-label',document.documentElement.lang==='en'?'Open week details':'افتح تفاصيل الأسبوع');
+      const triangle=document.createElement('span');
+      triangle.className='week-triangle';
+      triangle.setAttribute('aria-hidden','true');
+      button.appendChild(triangle);
+      head.appendChild(button);
+      button.addEventListener('click',()=>{
+        const shouldOpen=!block.classList.contains('is-open');
+        blocks.forEach(other=>{
+          other.classList.remove('is-open');
+          const otherBtn=other.querySelector('.week-accordion-toggle');
+          if(otherBtn){
+            otherBtn.setAttribute('aria-expanded','false');
+            otherBtn.setAttribute('aria-label',document.documentElement.lang==='en'?'Open week details':'افتح تفاصيل الأسبوع');
+          }
+        });
+        if(shouldOpen){
+          block.classList.add('is-open');
+          button.setAttribute('aria-expanded','true');
+          button.setAttribute('aria-label',document.documentElement.lang==='en'?'Close week details':'اقفل تفاصيل الأسبوع');
+        }
+      });
+    });
+  };
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initCurriculumAccordion,{once:true});
+  else initCurriculumAccordion();
+})();
