@@ -1,0 +1,51 @@
+name: Final Production Cleanup
+
+on:
+  push:
+    paths:
+      - '.github/workflows/final-production-cleanup.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: github.event.head_commit.message == 'Run final production cleanup'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Clean production source
+        run: python .github/scripts/final_production_cleanup.py
+      - name: Validate JavaScript
+        run: node --check app.js
+      - name: Validate production invariants
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          html = Path('index.html').read_text(encoding='utf-8')
+          js = Path('app.js').read_text(encoding='utf-8')
+          css = Path('styles.css').read_text(encoding='utf-8')
+          assert '<!--' not in html and '-->' not in html
+          assert '/*' not in js and '*/' not in js
+          assert '/*' not in css and '*/' not in css
+          assert 'radarCanvas' not in js
+          assert 'baseId=4471' not in js
+          assert 'week-accordion-toggle' not in js
+          assert './overrides.css' not in html
+          assert './profile.webp' in html and './favicon.svg' in html
+          assert css.count('{') == css.count('}')
+          assert Path('profile.webp').read_bytes()[:4] == b'RIFF'
+          assert b'<svg' in Path('favicon.svg').read_bytes()[:200]
+          print('All production invariants passed.')
+          PY
+      - name: Commit final production cleanup
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm overrides.css overrides-base.css
+          git rm .github/scripts/final_production_cleanup.py .github/workflows/final-production-cleanup.yml
+          git add index.html app.js styles.css profile.webp favicon.svg
+          git diff --cached --stat
+          git diff --cached --quiet && exit 1
+          git commit -m "Finalize production code cleanup"
+          git push
