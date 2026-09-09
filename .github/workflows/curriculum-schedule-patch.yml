@@ -1,0 +1,140 @@
+name: Curriculum and schedule patch
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/curriculum-schedule-patch.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Apply schedule pills and curriculum accordion
+        shell: python
+        run: |
+          from pathlib import Path
+
+          css_path = Path('overrides.css')
+          js_path = Path('app.js')
+
+          css = css_path.read_text(encoding='utf-8')
+          css_marker = '/* schedule-pills-curriculum-accordion-v1 */'
+          css_patch = r'''
+
+/* schedule-pills-curriculum-accordion-v1 */
+.schedule-box{padding:26px 28px!important}
+.schedule-box .schedule-head{margin-bottom:18px!important}
+.schedule-box .schedule-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important}
+.schedule-box .schedule-item{min-width:0!important;min-height:76px!important;padding:12px 18px!important;border:1px solid rgba(255,255,255,.12)!important;border-radius:999px!important;background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.018))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:3px!important;transition:transform .2s ease,border-color .2s ease,background .2s ease!important}
+.schedule-box .schedule-item:hover{transform:translateY(-2px);border-color:rgba(249,115,22,.38)!important;background:linear-gradient(135deg,rgba(249,115,22,.07),rgba(255,255,255,.02))!important}
+.schedule-box .sch-label{font-size:.68rem!important;letter-spacing:.04em!important;color:#8f8982!important;margin:0!important}
+.schedule-box .sch-value{font-size:.88rem!important;line-height:1.45!important;color:#f3eee9!important;margin:0!important;font-weight:700!important}
+
+.week-block{position:relative;overflow:hidden;transition:border-color .22s ease,background .22s ease,box-shadow .22s ease!important}
+.week-block .week-head{display:flex!important;align-items:center!important;gap:14px!important;justify-content:space-between!important}
+.week-block .week-num{flex:1;min-width:0}
+.week-accordion-toggle{width:42px;height:42px;flex:0 0 42px;border-radius:50%;border:1px solid rgba(249,115,22,.34);background:radial-gradient(circle at 50% 45%,rgba(249,115,22,.18),rgba(249,115,22,.035) 68%,transparent 70%);display:grid;place-items:center;cursor:pointer;box-shadow:0 0 16px rgba(249,115,22,.09),inset 0 1px 0 rgba(255,255,255,.06);transition:transform .22s ease,border-color .22s ease,background .22s ease,box-shadow .22s ease}
+.week-accordion-toggle:hover{transform:scale(1.07);border-color:rgba(249,115,22,.75);background:radial-gradient(circle at 50% 45%,rgba(249,115,22,.29),rgba(249,115,22,.06) 68%,transparent 70%);box-shadow:0 0 24px rgba(249,115,22,.18),inset 0 1px 0 rgba(255,255,255,.08)}
+.week-accordion-toggle:focus-visible{outline:2px solid #f97316;outline-offset:3px}
+.week-accordion-toggle .week-triangle{width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;border-right:11px solid #ff9b4a;filter:drop-shadow(0 0 5px rgba(249,115,22,.55));transform:rotate(0deg);transition:transform .25s ease,filter .22s ease}
+[dir="ltr"] .week-accordion-toggle .week-triangle{border-right:0;border-left:11px solid #ff9b4a}
+.week-block.is-open .week-accordion-toggle .week-triangle{transform:rotate(-90deg)}
+[dir="ltr"] .week-block.is-open .week-accordion-toggle .week-triangle{transform:rotate(90deg)}
+.week-block.is-open{border-color:rgba(249,115,22,.3)!important;box-shadow:0 10px 34px rgba(0,0,0,.24),0 0 0 1px rgba(249,115,22,.035) inset!important}
+.week-block:not(.is-open) .week-sessions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;padding-top:12px!important}
+.week-block:not(.is-open) .outcome-session{min-width:0!important;padding:12px 14px!important;border:1px solid rgba(255,255,255,.09)!important;border-radius:999px!important;background:rgba(255,255,255,.018)!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;min-height:54px!important}
+.week-block:not(.is-open) .outcome-session>:not(h3){display:none!important}
+.week-block:not(.is-open) .outcome-session h3{margin:0!important;font-size:.88rem!important;line-height:1.45!important;color:#ddd7d0!important;font-weight:700!important}
+.week-block.is-open .week-sessions{display:grid!important}
+
+@media(max-width:900px){
+  .schedule-box .schedule-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:620px){
+  .schedule-box{padding:20px 14px!important}
+  .schedule-box .schedule-grid{grid-template-columns:1fr!important;gap:9px!important}
+  .schedule-box .schedule-item{min-height:64px!important;padding:10px 15px!important}
+  .schedule-box .sch-label{font-size:.64rem!important}
+  .schedule-box .sch-value{font-size:.82rem!important}
+  .week-block .week-head{gap:10px!important}
+  .week-accordion-toggle{width:38px;height:38px;flex-basis:38px}
+  .week-block:not(.is-open) .week-sessions{grid-template-columns:1fr!important;gap:8px!important;padding-top:10px!important}
+  .week-block:not(.is-open) .outcome-session{min-height:50px!important;padding:10px 13px!important}
+  .week-block:not(.is-open) .outcome-session h3{font-size:.82rem!important}
+}
+'''
+          if css_marker not in css:
+              css_path.write_text(css + css_patch, encoding='utf-8')
+
+          js = js_path.read_text(encoding='utf-8')
+          js_marker = '/* curriculum-accordion-v1 */'
+          js_patch = r'''
+
+/* curriculum-accordion-v1 */
+(()=>{
+  const initCurriculumAccordion=()=>{
+    const blocks=Array.from(document.querySelectorAll('#curriculum .week-block'));
+    if(!blocks.length)return;
+    blocks.forEach((block,index)=>{
+      if(block.dataset.accordionReady==='1')return;
+      block.dataset.accordionReady='1';
+      block.classList.remove('is-open');
+      const head=block.querySelector('.week-head');
+      const sessions=block.querySelector('.week-sessions');
+      if(!head||!sessions)return;
+      const panelId=`week-panel-${index+1}`;
+      sessions.id=panelId;
+      const button=document.createElement('button');
+      button.type='button';
+      button.className='week-accordion-toggle';
+      button.setAttribute('aria-expanded','false');
+      button.setAttribute('aria-controls',panelId);
+      button.setAttribute('aria-label',document.documentElement.lang==='en'?'Open week details':'افتح تفاصيل الأسبوع');
+      const triangle=document.createElement('span');
+      triangle.className='week-triangle';
+      triangle.setAttribute('aria-hidden','true');
+      button.appendChild(triangle);
+      head.appendChild(button);
+      button.addEventListener('click',()=>{
+        const shouldOpen=!block.classList.contains('is-open');
+        blocks.forEach(other=>{
+          other.classList.remove('is-open');
+          const otherBtn=other.querySelector('.week-accordion-toggle');
+          if(otherBtn){
+            otherBtn.setAttribute('aria-expanded','false');
+            otherBtn.setAttribute('aria-label',document.documentElement.lang==='en'?'Open week details':'افتح تفاصيل الأسبوع');
+          }
+        });
+        if(shouldOpen){
+          block.classList.add('is-open');
+          button.setAttribute('aria-expanded','true');
+          button.setAttribute('aria-label',document.documentElement.lang==='en'?'Close week details':'اقفل تفاصيل الأسبوع');
+        }
+      });
+    });
+  };
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initCurriculumAccordion,{once:true});
+  else initCurriculumAccordion();
+})();
+'''
+          if js_marker not in js:
+              js_path.write_text(js + js_patch, encoding='utf-8')
+      - name: Commit changes
+        run: |
+          if git diff --quiet -- overrides.css app.js; then
+            echo "No changes needed"
+            exit 0
+          fi
+          git config user.name "r-v313"
+          git config user.email "ramezmedhat@std.mans.edu.eg"
+          git add overrides.css app.js
+          git commit -m "Make schedule pills and curriculum accordion"
+          git push origin main
