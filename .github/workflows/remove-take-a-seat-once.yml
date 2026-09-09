@@ -42,128 +42,87 @@ jobs:
                   raise SystemExit(f'Could not find matching </{tag}> for {marker}')
               return source[:start] + source[end:]
 
-          def find_matching_brace(text, open_idx):
-              depth = 0
-              quote = None
-              escape = False
-              line_comment = False
-              block_comment = False
-              i = open_idx
-              while i < len(text):
-                  c = text[i]
-                  n = text[i+1] if i + 1 < len(text) else ''
-                  if line_comment:
-                      if c == '\n': line_comment = False
-                      i += 1
-                      continue
-                  if block_comment:
-                      if c == '*' and n == '/':
-                          block_comment = False
-                          i += 2
-                          continue
-                      i += 1
-                      continue
-                  if quote:
-                      if escape:
-                          escape = False
-                      elif c == '\\':
-                          escape = True
-                      elif c == quote:
-                          quote = None
-                      i += 1
-                      continue
-                  if c == '/' and n == '/':
-                      line_comment = True
-                      i += 2
-                      continue
-                  if c == '/' and n == '*':
-                      block_comment = True
-                      i += 2
-                      continue
-                  if c in ('\'', '"', '`'):
-                      quote = c
-                      i += 1
-                      continue
-                  if c == '{':
-                      depth += 1
-                  elif c == '}':
-                      depth -= 1
-                      if depth == 0:
-                          return i
-                  i += 1
-              raise SystemExit('Matching JS brace not found')
-
-          def remove_js_function_assignment(source, marker):
-              start = source.find(marker)
+          def remove_between(source, start_marker, next_marker, include_next=False):
+              start = source.find(start_marker)
               if start == -1:
-                  raise SystemExit(f'JS function marker not found: {marker}')
-              open_idx = source.find('{', start)
-              close_idx = find_matching_brace(source, open_idx)
-              end = close_idx + 1
-              if end < len(source) and source[end] == ';':
-                  end += 1
+                  raise SystemExit(f'Start marker not found: {start_marker}')
+              end = source.find(next_marker, start + len(start_marker))
+              if end == -1:
+                  raise SystemExit(f'End marker not found after: {start_marker}')
+              if include_next:
+                  end += len(next_marker)
               return source[:start] + source[end:]
 
-          def remove_js_iife(source, marker):
+          def remove_card_iife(source):
+              marker = "(function(){const nameInput=document.getElementById('holoNameInput');"
               start = source.find(marker)
               if start == -1:
-                  raise SystemExit(f'JS IIFE marker not found: {marker}')
-              open_idx = source.find('{', start)
-              close_idx = find_matching_brace(source, open_idx)
-              tail = source[close_idx+1:close_idx+12]
-              m = re.match(r'\s*\)\s*\(\s*\)\s*;', tail)
-              if not m:
-                  raise SystemExit(f'Unexpected IIFE ending near: {tail!r}')
-              end = close_idx + 1 + m.end()
-              return source[:start] + source[end:]
+                  raise SystemExit('Take a Seat IIFE marker not found')
+              boundary = source.find('})();(function(){', start)
+              if boundary == -1:
+                  raise SystemExit('Could not locate end of Take a Seat IIFE')
+              return source[:start] + source[boundary + len('})();'):]
 
           index_path = Path('index.html')
           js_path = Path('app.js')
           css_path = Path('styles.css')
 
+          # HTML: remove the entire Take a Seat section.
           html = index_path.read_text(encoding='utf-8')
           html = remove_balanced_html(html, '<section id="badge-preview-section"', 'section')
           index_path.write_text(html, encoding='utf-8')
 
+          # JS: remove all card-only behavior and the small shared hooks that referenced it.
           js = js_path.read_text(encoding='utf-8')
-          js = remove_js_function_assignment(js, 'window.updateCardName=function(val){')
-          js = remove_js_iife(js, "(function(){const nameInput=document.getElementById('holoNameInput');")
+          js = remove_between(
+              js,
+              'window.updateCardName=function(val){',
+              "(function(){const preloader=document.getElementById('preloader');"
+          )
+          js = remove_card_iife(js)
+
+          js = js.replace(
+              "const nameInput=document.getElementById('holoNameInput');if(typeof window.updateCardName==='function'){window.updateCardName(nameInput?nameInput.value:'');}",
+              ''
+          )
+          js = js.replace("if(typeof window.resetDownloadBtn==='function')window.resetDownloadBtn();", '')
+          js = js.replace("if(card.id==='holoCard'||card.classList.contains('holo-box'))return;", '')
           js_path.write_text(js, encoding='utf-8')
 
+          # CSS: remove every card-specific rule, including responsive rules and holo keyframes.
           css = css_path.read_text(encoding='utf-8')
 
-          target_tokens = (
-              'holo-', '#holo', 'badge-preview-section', '.sig-name',
-              'holoCard', 'holoName', 'holoFloat', 'holoShine', 'holoGlow'
+          simple_rule = re.compile(
+              r'[^{}]*(?:holo|badge-preview-section|sig-name)[^{}]*\{[^{}]*\}',
+              re.I
           )
+          previous = None
+          while previous != css:
+              previous = css
+              css = simple_rule.sub('', css)
 
-          def strip_css_blocks(text):
-              out = []
-              i = 0
-              while i < len(text):
-                  brace = text.find('{', i)
-                  if brace == -1:
-                      out.append(text[i:])
-                      break
-                  prelude_start = max(text.rfind('}', i, brace), text.rfind(';', i, brace)) + 1
-                  out.append(text[i:prelude_start])
-                  prelude = text[prelude_start:brace]
-                  close = find_matching_brace(text, brace)
-                  body = text[brace+1:close]
-                  low = prelude.lower()
-                  if any(tok.lower() in low for tok in target_tokens):
-                      i = close + 1
-                      continue
-                  if prelude.lstrip().startswith('@media') or prelude.lstrip().startswith('@supports') or prelude.lstrip().startswith('@layer'):
-                      cleaned = strip_css_blocks(body)
-                      if cleaned.strip():
-                          out.append(prelude + '{' + cleaned + '}')
+          def remove_named_keyframes(text):
+              pattern = re.compile(r'@(?:-webkit-)?keyframes\s+[^\s{]*holo[^\s{]*\s*\{', re.I)
+              while True:
+                  m = pattern.search(text)
+                  if not m:
+                      return text
+                  open_idx = text.find('{', m.start())
+                  depth = 0
+                  i = open_idx
+                  while i < len(text):
+                      if text[i] == '{':
+                          depth += 1
+                      elif text[i] == '}':
+                          depth -= 1
+                          if depth == 0:
+                              text = text[:m.start()] + text[i+1:]
+                              break
+                      i += 1
                   else:
-                      out.append(prelude + '{' + body + '}')
-                  i = close + 1
-              return ''.join(out)
+                      raise SystemExit('Unclosed holo keyframes block')
 
-          css = strip_css_blocks(css)
+          css = remove_named_keyframes(css)
           css_path.write_text(css, encoding='utf-8')
 
       - name: Verify card code is completely gone
@@ -177,43 +136,35 @@ jobs:
               'styles.css': Path('styles.css').read_text(encoding='utf-8'),
           }
 
-          forbidden = [
-              'badge-preview-section',
-              'holoNameInput',
-              'downloadHoloBtn',
-              'shareHoloBtn',
-              'holoCard',
-              'holo-card',
-              'holo-input',
-              'holo-actions',
-              'updateCardName',
-              'renderCampCardCanvas',
-              'TAKE A SEAT',
-              'Take a Seat',
-              'Download Your Card',
-              'Share On WhatsApp/Story',
-              'MENTORSHIP PASS',
-          ]
+          forbidden_by_file = {
+              'index.html': [
+                  'badge-preview-section', 'holoNameInput', 'downloadHoloBtn',
+                  'shareHoloBtn', 'holoCard', 'Take a Seat', 'TAKE A SEAT',
+                  'Download Your Card', 'Share On WhatsApp/Story'
+              ],
+              'app.js': [
+                  'holo', 'updateCardName', 'resetDownloadBtn', 'renderCampCardCanvas',
+                  'TAKE A SEAT', 'Take a Seat', 'MENTORSHIP PASS', 'Download Camp Card'
+              ],
+              'styles.css': [
+                  'holo', 'badge-preview-section', 'sig-name'
+              ],
+          }
+
           leftovers = []
-          for name, text in files.items():
-              for token in forbidden:
-                  if token in text:
+          for name, tokens in forbidden_by_file.items():
+              text = files[name]
+              for token in tokens:
+                  if token.lower() in text.lower():
                       leftovers.append(f'{name}: {token}')
           if leftovers:
               raise SystemExit('Card remnants found: ' + ', '.join(leftovers))
 
           required_html = [
-              'id="preloader"',
-              'id="about"',
-              'id="previous-camps"',
-              'id="included-section"',
-              'id="hunt-loop"',
-              'id="outcomes-section"',
-              'id="curriculum"',
-              'id="legal-bonus-section"',
-              'id="execution"',
-              'id="contact"',
-              'id="faq-section"',
+              'id="preloader"', 'id="about"', 'id="previous-camps"',
+              'id="included-section"', 'id="hunt-loop"', 'id="outcomes-section"',
+              'id="curriculum"', 'id="legal-bonus-section"', 'id="execution"',
+              'id="contact"', 'id="faq-section"'
           ]
           missing = [x for x in required_html if x not in files['index.html']]
           if missing:
@@ -221,7 +172,7 @@ jobs:
 
           required_js = [
               "document.getElementById('preloader')",
-              "document.getElementById('applicationModal')",
+              "document.getElementById('applicationModal')"
           ]
           missing_js = [x for x in required_js if x not in files['app.js']]
           if missing_js:
