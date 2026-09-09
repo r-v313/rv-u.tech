@@ -1,0 +1,26 @@
+name: Fix navbar language and profile flow
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-nav-language.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.event.head_commit.message == 'Run navbar language fix'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch navbar
+        run: python .github/scripts/fix_nav_language.py
+      - name: Commit navbar fix
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Fix Arabic navbar and profile position"
+          git push
