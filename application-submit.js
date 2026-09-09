@@ -21,35 +21,6 @@
   }
   function safeJson(raw){try{return JSON.parse(raw);}catch(_){return null;}}
 
-  // Add WhatsApp number to the existing form without changing the site's visual system.
-  if(!document.getElementById('appWhatsApp')){
-    const nameInput=document.getElementById('appName');
-    const nameField=nameInput&&nameInput.closest('.form-field');
-    if(nameField){
-      const field=document.createElement('div');
-      field.className='form-field';
-      const label=document.createElement('label');
-      label.className='i18n';
-      label.htmlFor='appWhatsApp';
-      label.dataset.ar='رقم واتساب';
-      label.dataset.en='WhatsApp number';
-      label.textContent='رقم واتساب';
-      const input=document.createElement('input');
-      input.id='appWhatsApp';
-      input.name='whatsapp';
-      input.type='tel';
-      input.inputMode='tel';
-      input.autocomplete='tel';
-      input.maxLength=20;
-      input.required=true;
-      input.placeholder='مثال: +20 10 1234 5678';
-      input.dataset.placeholderAr='مثال: +20 10 1234 5678';
-      input.dataset.placeholderEn='e.g. +20 10 1234 5678';
-      field.append(label,input);
-      nameField.insertAdjacentElement('afterend',field);
-    }
-  }
-
   const privacy=form.querySelector('.form-privacy');
   setLocalized(
     privacy,
@@ -76,7 +47,6 @@
     );
   }
 
-  // Keep the FAQ consistent with the new server-side application flow.
   const faqItems=document.querySelectorAll('#faq-section .faq-item');
   if(faqItems.length){
     const lastAnswer=faqItems[faqItems.length-1].querySelector('.faq-answer');
@@ -115,7 +85,6 @@
 
   function getPayload(){
     const name=document.getElementById('appName').value.trim();
-    const whatsapp=document.getElementById('appWhatsApp').value.trim();
     const levelSelect=document.getElementById('appLevel');
     const liveSelect=document.getElementById('appLiveTargets');
     const goal=document.getElementById('appGoal').value.trim();
@@ -125,7 +94,6 @@
     return {
       submission_id:newId(),
       name:name,
-      whatsapp:whatsapp,
       level:levelSelect.value,
       level_display:selectedText(levelSelect),
       liveTargets:liveSelect.value,
@@ -145,7 +113,6 @@
     };
   }
 
-  // Capture phase prevents the legacy local-only WhatsApp submit handler from firing.
   form.addEventListener('submit',function(e){
     e.preventDefault();
     e.stopImmediatePropagation();
@@ -169,12 +136,10 @@
 
   function restoreFields(payload){
     const name=document.getElementById('appName');
-    const whatsapp=document.getElementById('appWhatsApp');
     const level=document.getElementById('appLevel');
     const live=document.getElementById('appLiveTargets');
     const goal=document.getElementById('appGoal');
     if(name)name.value=payload.name||'';
-    if(whatsapp)whatsapp.value=payload.whatsapp||'';
     if(level)level.value=payload.level||'';
     if(live)live.value=payload.liveTargets||'';
     if(goal)goal.value=payload.goal||'';
@@ -183,8 +148,8 @@
   function buildWhatsApp(payload){
     const isArabic=payload.language==='ar';
     return isArabic
-      ?`طلب تقديم لانترفيو rv_u camp — أول دفعة أونلاين\n\nالاسم: ${payload.name}\nواتساب: ${payload.whatsapp}\nالمستوى الحالي: ${payload.level_display}\nاشتغلت على Live Targets قبل كده؟ ${payload.live_targets_display}\nهدفي من الكامب: ${payload.goal}\n\nفاهم إن التقديم لا يعني قبول تلقائي، وإن مفيش باونتي مضمونة، والنتائج تعتمد على الاجتهاد والاستمرار.`
-      :`rv_u camp Interview Application — Online Cohort 01\n\nName: ${payload.name}\nWhatsApp: ${payload.whatsapp}\nCurrent level: ${payload.level_display}\nHunted live targets before? ${payload.live_targets_display}\nGoal: ${payload.goal}\n\nI understand that applying does not guarantee acceptance or a bounty, and that results depend on consistent practice and effort.`;
+      ?`طلب تقديم لانترفيو rv_u camp — أول دفعة أونلاين\n\nالاسم: ${payload.name}\nالمستوى الحالي: ${payload.level_display}\nاشتغلت على Live Targets قبل كده؟ ${payload.live_targets_display}\nهدفي من الكامب: ${payload.goal}\n\nفاهم إن التقديم لا يعني قبول تلقائي، وإن مفيش باونتي مضمونة، والنتائج تعتمد على الاجتهاد والاستمرار.`
+      :`rv_u camp Interview Application — Online Cohort 01\n\nName: ${payload.name}\nCurrent level: ${payload.level_display}\nHunted live targets before? ${payload.live_targets_display}\nGoal: ${payload.goal}\n\nI understand that applying does not guarantee acceptance or a bounty, and that results depend on consistent practice and effort.`;
   }
 
   function openModal(){
@@ -230,7 +195,6 @@
     }catch(_){}
     if(!status||!payload)return;
 
-    // Returning from submit.html should not replay the full intro animation.
     const skip=document.getElementById('skipIntro');
     if(skip&&typeof skip.click==='function')skip.click();
     restoreFields(payload);
@@ -244,8 +208,8 @@
       const isArabic=payload.language==='ar';
       if(summary){
         summary.textContent=isArabic
-          ?`الاسم: ${payload.name}\nواتساب: ${payload.whatsapp}\nالمستوى: ${payload.level_display}\nLive Targets: ${payload.live_targets_display}\nالهدف: ${payload.goal}`
-          :`Name: ${payload.name}\nWhatsApp: ${payload.whatsapp}\nLevel: ${payload.level_display}\nLive Targets: ${payload.live_targets_display}\nGoal: ${payload.goal}`;
+          ?`الاسم: ${payload.name}\nالمستوى: ${payload.level_display}\nLive Targets: ${payload.live_targets_display}\nالهدف: ${payload.goal}`
+          :`Name: ${payload.name}\nLevel: ${payload.level_display}\nLive Targets: ${payload.live_targets_display}\nGoal: ${payload.goal}`;
       }
       const wa=document.getElementById('applicationWhatsApp');
       if(wa){
