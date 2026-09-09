@@ -52,3 +52,4 @@ EOF
           git add overrides.css
           git diff --cached --quiet || git commit -m "Keep navbar profile inside frame and add hover zoom"
           git push
+# trigger
