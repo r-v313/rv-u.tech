@@ -1,0 +1,237 @@
+name: Remove Take a Seat Once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/remove-take-a-seat-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  remove-take-a-seat:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Remove Take a Seat HTML JS and CSS
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          def remove_balanced_html(source, marker, tag):
+              start = source.find(marker)
+              if start == -1:
+                  raise SystemExit(f'HTML marker not found: {marker}')
+              token_re = re.compile(rf'<(/?){tag}\b[^>]*>', re.I)
+              depth = 0
+              end = None
+              for m in token_re.finditer(source, start):
+                  if m.group(1):
+                      depth -= 1
+                      if depth == 0:
+                          end = m.end()
+                          break
+                  else:
+                      depth += 1
+              if end is None:
+                  raise SystemExit(f'Could not find matching </{tag}> for {marker}')
+              return source[:start] + source[end:]
+
+          def find_matching_brace(text, open_idx):
+              depth = 0
+              quote = None
+              escape = False
+              line_comment = False
+              block_comment = False
+              i = open_idx
+              while i < len(text):
+                  c = text[i]
+                  n = text[i+1] if i + 1 < len(text) else ''
+                  if line_comment:
+                      if c == '\n': line_comment = False
+                      i += 1
+                      continue
+                  if block_comment:
+                      if c == '*' and n == '/':
+                          block_comment = False
+                          i += 2
+                          continue
+                      i += 1
+                      continue
+                  if quote:
+                      if escape:
+                          escape = False
+                      elif c == '\\':
+                          escape = True
+                      elif c == quote:
+                          quote = None
+                      i += 1
+                      continue
+                  if c == '/' and n == '/':
+                      line_comment = True
+                      i += 2
+                      continue
+                  if c == '/' and n == '*':
+                      block_comment = True
+                      i += 2
+                      continue
+                  if c in ('\'', '"', '`'):
+                      quote = c
+                      i += 1
+                      continue
+                  if c == '{':
+                      depth += 1
+                  elif c == '}':
+                      depth -= 1
+                      if depth == 0:
+                          return i
+                  i += 1
+              raise SystemExit('Matching JS brace not found')
+
+          def remove_js_function_assignment(source, marker):
+              start = source.find(marker)
+              if start == -1:
+                  raise SystemExit(f'JS function marker not found: {marker}')
+              open_idx = source.find('{', start)
+              close_idx = find_matching_brace(source, open_idx)
+              end = close_idx + 1
+              if end < len(source) and source[end] == ';':
+                  end += 1
+              return source[:start] + source[end:]
+
+          def remove_js_iife(source, marker):
+              start = source.find(marker)
+              if start == -1:
+                  raise SystemExit(f'JS IIFE marker not found: {marker}')
+              open_idx = source.find('{', start)
+              close_idx = find_matching_brace(source, open_idx)
+              tail = source[close_idx+1:close_idx+12]
+              m = re.match(r'\s*\)\s*\(\s*\)\s*;', tail)
+              if not m:
+                  raise SystemExit(f'Unexpected IIFE ending near: {tail!r}')
+              end = close_idx + 1 + m.end()
+              return source[:start] + source[end:]
+
+          index_path = Path('index.html')
+          js_path = Path('app.js')
+          css_path = Path('styles.css')
+
+          html = index_path.read_text(encoding='utf-8')
+          html = remove_balanced_html(html, '<section id="badge-preview-section"', 'section')
+          index_path.write_text(html, encoding='utf-8')
+
+          js = js_path.read_text(encoding='utf-8')
+          js = remove_js_function_assignment(js, 'window.updateCardName=function(val){')
+          js = remove_js_iife(js, "(function(){const nameInput=document.getElementById('holoNameInput');")
+          js_path.write_text(js, encoding='utf-8')
+
+          css = css_path.read_text(encoding='utf-8')
+
+          target_tokens = (
+              'holo-', '#holo', 'badge-preview-section', '.sig-name',
+              'holoCard', 'holoName', 'holoFloat', 'holoShine', 'holoGlow'
+          )
+
+          def strip_css_blocks(text):
+              out = []
+              i = 0
+              while i < len(text):
+                  brace = text.find('{', i)
+                  if brace == -1:
+                      out.append(text[i:])
+                      break
+                  prelude_start = max(text.rfind('}', i, brace), text.rfind(';', i, brace)) + 1
+                  out.append(text[i:prelude_start])
+                  prelude = text[prelude_start:brace]
+                  close = find_matching_brace(text, brace)
+                  body = text[brace+1:close]
+                  low = prelude.lower()
+                  if any(tok.lower() in low for tok in target_tokens):
+                      i = close + 1
+                      continue
+                  if prelude.lstrip().startswith('@media') or prelude.lstrip().startswith('@supports') or prelude.lstrip().startswith('@layer'):
+                      cleaned = strip_css_blocks(body)
+                      if cleaned.strip():
+                          out.append(prelude + '{' + cleaned + '}')
+                  else:
+                      out.append(prelude + '{' + body + '}')
+                  i = close + 1
+              return ''.join(out)
+
+          css = strip_css_blocks(css)
+          css_path.write_text(css, encoding='utf-8')
+
+      - name: Verify card code is completely gone
+        shell: python
+        run: |
+          from pathlib import Path
+
+          files = {
+              'index.html': Path('index.html').read_text(encoding='utf-8'),
+              'app.js': Path('app.js').read_text(encoding='utf-8'),
+              'styles.css': Path('styles.css').read_text(encoding='utf-8'),
+          }
+
+          forbidden = [
+              'badge-preview-section',
+              'holoNameInput',
+              'downloadHoloBtn',
+              'shareHoloBtn',
+              'holoCard',
+              'holo-card',
+              'holo-input',
+              'holo-actions',
+              'updateCardName',
+              'renderCampCardCanvas',
+              'TAKE A SEAT',
+              'Take a Seat',
+              'Download Your Card',
+              'Share On WhatsApp/Story',
+              'MENTORSHIP PASS',
+          ]
+          leftovers = []
+          for name, text in files.items():
+              for token in forbidden:
+                  if token in text:
+                      leftovers.append(f'{name}: {token}')
+          if leftovers:
+              raise SystemExit('Card remnants found: ' + ', '.join(leftovers))
+
+          required_html = [
+              'id="preloader"',
+              'id="about"',
+              'id="previous-camps"',
+              'id="included-section"',
+              'id="hunt-loop"',
+              'id="outcomes-section"',
+              'id="curriculum"',
+              'id="legal-bonus-section"',
+              'id="execution"',
+              'id="contact"',
+              'id="faq-section"',
+          ]
+          missing = [x for x in required_html if x not in files['index.html']]
+          if missing:
+              raise SystemExit('Unexpected missing site sections: ' + ', '.join(missing))
+
+          required_js = [
+              "document.getElementById('preloader')",
+              "document.getElementById('applicationModal')",
+          ]
+          missing_js = [x for x in required_js if x not in files['app.js']]
+          if missing_js:
+              raise SystemExit('Unexpected missing JS: ' + ', '.join(missing_js))
+
+      - name: Commit change
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html app.js styles.css
+          git diff --cached --check
+          git commit -m "Remove Take a Seat card and all related code"
+          git push origin main
