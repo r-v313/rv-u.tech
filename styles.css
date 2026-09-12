@@ -4839,3 +4839,71 @@ html[dir="ltr"] .nav-links {
     font-size: 0.75rem;
   }
 }
+
+/* Offer and native content layout — September 2026. */
+.reveal { opacity: 1; transform: none; }
+[hidden] { display: none !important; }
+.hero.offer-hero { display: block; min-height: 0; padding: 112px 0 48px; }
+.hero.offer-hero .offer-content { display: block; width: min(100% - 40px, 1000px); max-width: 1000px; margin-inline: auto; text-align: center; }
+.offer-brand { color: var(--accent); font: 600 .9rem var(--body); letter-spacing: .09em; margin-bottom: 24px; direction: ltr; }
+.offer-hero h1 { max-width: 930px; margin: 0 auto 22px; font: 700 clamp(2rem, 4.7vw, 3.6rem)/1.45 var(--body); color: var(--text); text-wrap: balance; }
+.offer-description { max-width: 770px; margin: 0 auto 24px; font-size: 1.12rem; line-height: 1.95; color: var(--text-muted); }
+.offer-facts { font-weight: 600; line-height: 2; color: #ffab72; }
+.offer-schedule { margin-top: 10px; line-height: 1.9; }
+.offer-hero .hero-ctas { margin: 26px 0 16px; justify-content: center; }
+.offer-hero .hero-apply-note { font-size: .88rem; line-height: 1.9; }
+.trust-strip { margin-top: 35px; padding-top: 24px; border-top: 1px solid var(--border); font-size: .92rem; }
+.trust-strip a { display: inline-block; margin-top: 8px; color: #ffab72; text-decoration: underline; text-underline-offset: 5px; }
+.support-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px; }
+.support-card { padding: 26px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg-card); }
+.support-card h3 { margin-bottom: 10px; color: #ffab72; font-size: 1.15rem; }
+.support-card p { color: var(--text-muted); line-height: 1.9; }
+.recordings-note { margin-top: 24px; padding: 18px; border-inline-start: 3px solid var(--accent); background: var(--bg-card); }
+#about .hunt-proof-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 20px; }
+#about .proof-card-started, #about .proof-card-camps { min-width: 0; height: auto; grid-column: auto; padding: 24px; }
+#about .proof-combined-part { padding: 0; border: 0; }
+#about .journey-story { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border); }
+#about .journey-story h3 { font-size: 1.15rem; line-height: 1.7; }
+#about .journey-story p { font-size: 1rem; line-height: 1.9; }
+#about .offline-camp-lines { display: grid; grid-template-columns: 1fr; gap: 10px; }
+#fit-section > .container + .container { margin-top: 28px; }
+.fit-card.readiness { border-color: var(--border); }
+.fit-card.readiness h3 { color: #ffab72; }
+.fit-card.readiness li::before { content: '✓'; color: #ffab72; }
+#curriculum details.curriculum-week { display: block; padding: 0; overflow: hidden; }
+#curriculum details.curriculum-week > summary.week-head { display: flex !important; align-items: center; justify-content: space-between; gap: 15px; padding: 23px !important; margin: 0 !important; cursor: pointer; list-style: none; }
+#curriculum details.curriculum-week > summary::-webkit-details-marker { display: none; }
+#curriculum .week-toggle { flex-shrink: 0; font-size: .8rem; color: #ffab72; }
+#curriculum .week-toggle::after { content: ' +'; }
+#curriculum details[open] .week-toggle::after { content: ' −'; }
+#curriculum details:not([open]) > .week-sessions { display: none !important; }
+#curriculum details[open] > .week-sessions { padding: 0 20px 20px; }
+#execution .schedule-grid { grid-template-columns: repeat(3,minmax(0,1fr)) !important; }
+.phone-row { display: grid; grid-template-columns: minmax(120px,.85fr) minmax(0,1.25fr); gap: 10px; direction: ltr; }
+.phone-row input, .phone-row select { min-width: 0; width: 100%; }
+.form-error { grid-column: 1/-1; color: #ffb49a; }
+#apply-final { text-align: center; }
+#apply-final .section-head { text-align: center; }
+#apply-final p { margin-bottom: 22px; color: var(--text-muted); }
+summary:focus-visible, a:focus-visible, button:focus-visible { outline: 2px solid #ffb477; outline-offset: 5px; }
+@media (max-width: 760px) {
+  .hero.offer-hero { padding-top: 98px; }
+  .hero.offer-hero .offer-content { width: calc(100% - 32px); }
+  .offer-description { font-size: 1rem; }
+  .offer-facts { font-size: .93rem; }
+  .support-grid, #about .hunt-proof-grid { grid-template-columns: 1fr; }
+  #execution .schedule-grid { grid-template-columns: repeat(2,minmax(0,1fr)) !important; }
+  #curriculum details.curriculum-week > summary.week-head { padding: 18px !important; }
+}
+@media (max-width: 480px) {
+  .offer-hero .hero-ctas { flex-direction: column; }
+  .offer-hero .hero-ctas > * { width: 100%; }
+  #execution .schedule-grid { grid-template-columns: 1fr !important; }
+  .phone-row { grid-template-columns: 1fr; }
+  #curriculum .week-head .week-topic { font-size: 1rem !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+#execution .sch-label { font-size: .85rem !important; }
+#execution .sch-value { font-size: 1rem !important; line-height: 1.8; }
