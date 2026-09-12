@@ -19,7 +19,8 @@
 
 .hero.offer-hero::before,
 .hero.offer-hero::after,
-.hero.offer-hero .offer-content::before {
+.hero.offer-hero .offer-content::before,
+.hero.offer-hero .offer-content::after {
   position: absolute;
   left: 50%;
   z-index: 1;
@@ -65,13 +66,35 @@
   text-align: center !important;
 }
 
+/* Signature-style author credit, slightly lower than before. */
 .hero.offer-hero .offer-content::before {
   content: "By Ramez Medhat";
-  top: clamp(390px, 59svh, 600px);
+  top: clamp(430px, 64svh, 650px);
   color: #fff3e8;
-  font-family: "IBM Plex Sans", sans-serif;
-  font-size: clamp(.95rem, 1.4vw, 1.25rem);
+  font-family: "Caveat", cursive;
+  font-size: clamp(1.55rem, 2.2vw, 2.05rem);
   font-weight: 700;
+  line-height: 1;
+  letter-spacing: .015em;
+  text-shadow: 0 4px 18px rgba(255, 106, 0, .18);
+}
+
+/* Small signature flourish below the name. */
+.hero.offer-hero .offer-content::after {
+  content: "";
+  top: clamp(470px, 69svh, 700px);
+  width: clamp(120px, 10vw, 175px);
+  height: 13px;
+  border-bottom: 2px solid rgba(255, 121, 20, .92);
+  border-radius: 0 0 58% 42%;
+  transform: translateX(-50%) rotate(-2.5deg) skewX(-15deg);
+  box-shadow: 0 5px 12px -7px rgba(255, 106, 0, .8);
+  opacity: .9;
+}
+
+/* Give the MENTORSHIP label and heading a little more breathing room. */
+#mentorship .section-head .section-num {
+  margin-bottom: 20px !important;
 }
 
 /* Keep the current offer copy exactly as the second stage. */
@@ -100,12 +123,20 @@
     font-size: clamp(3.2rem, 16vw, 5.2rem);
   }
   .hero.offer-hero .offer-content::before {
-    top: clamp(335px, 57svh, 490px);
-    font-size: .98rem;
+    top: clamp(360px, 61svh, 520px);
+    font-size: clamp(1.4rem, 6vw, 1.8rem);
+  }
+  .hero.offer-hero .offer-content::after {
+    top: clamp(398px, 66svh, 565px);
+    width: 112px;
+    height: 11px;
   }
   .hero.offer-hero .offer-content {
     width: min(100% - 32px, 1000px) !important;
     padding-top: calc(var(--rvu-brand-stage-height) + 52px) !important;
+  }
+  #mentorship .section-head .section-num {
+    margin-bottom: 16px !important;
   }
 }
 
@@ -120,14 +151,19 @@
     font-size: clamp(2.85rem, 14vw, 3.8rem);
   }
   .hero.offer-hero .offer-content::before {
-    top: clamp(315px, 55svh, 430px);
+    top: clamp(335px, 59svh, 455px);
+  }
+  .hero.offer-hero .offer-content::after {
+    top: clamp(372px, 64svh, 500px);
+    width: 98px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .hero.offer-hero::before,
   .hero.offer-hero::after,
-  .hero.offer-hero .offer-content::before {
+  .hero.offer-hero .offer-content::before,
+  .hero.offer-hero .offer-content::after {
     animation: none !important;
     transition: none !important;
   }
