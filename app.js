@@ -41,14 +41,24 @@
     startPart.appendChild(journeyStory);
   }
 
+  function skipIntroImmediately() {
+    const skip = document.getElementById("skipIntro");
+    if (skip) skip.click();
+  }
+
   async function bootstrap() {
     try {
+      // app-core attaches the safe skip handler when this flag exists.
+      // Triggering it immediately prevents the six-second intro from blocking
+      // first meaningful content for ad and mobile traffic.
       localStorage.setItem("rvuIntroSeenV5", "1");
     } catch (_) {}
 
     try {
       await loadScript("./application-submit.js");
       await loadScript("./app-core.js");
+      skipIntroImmediately();
+      await loadScript("./campaign-fixes.js");
       restructureAboutSection();
     } catch (error) {
       console.error(error);
