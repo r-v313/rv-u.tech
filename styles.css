@@ -102,18 +102,18 @@
   margin-top: 42px !important;
 }
 
-/* Make the three offline-camp stat boxes roughly twice as substantial. */
+/* Offline-camp stat boxes reduced by 30% from the enlarged version. */
 .proof-card-camps .offline-camp-lines {
-  gap: 16px !important;
-  margin-top: 22px !important;
+  gap: 11px !important;
+  margin-top: 15px !important;
 }
 
 .proof-card-camps .offline-camp-line {
-  min-height: 94px !important;
-  padding: 20px 22px !important;
-  font-size: 1.48rem !important;
+  min-height: 66px !important;
+  padding: 14px 15px !important;
+  font-size: 1.04rem !important;
   line-height: 1.5 !important;
-  border-radius: 12px !important;
+  border-radius: 8px !important;
   display: flex !important;
   align-items: center;
   justify-content: center;
@@ -165,9 +165,9 @@
     margin-top: 30px !important;
   }
   .proof-card-camps .offline-camp-line {
-    min-height: 78px !important;
-    padding: 16px 14px !important;
-    font-size: 1.18rem !important;
+    min-height: 55px !important;
+    padding: 11px 10px !important;
+    font-size: .83rem !important;
   }
 }
 
@@ -192,8 +192,8 @@
     margin-top: 26px !important;
   }
   .proof-card-camps .offline-camp-line {
-    min-height: 72px !important;
-    font-size: 1.02rem !important;
+    min-height: 50px !important;
+    font-size: .72rem !important;
   }
 }
 
