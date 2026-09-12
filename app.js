@@ -12,19 +12,33 @@
     });
   }
 
-  function patchExperienceStart() {
-    const huntingTitle = document.querySelector(".proof-title-orange");
-    const huntingCopy = huntingTitle?.nextElementSibling;
+  function restructureAboutSection() {
+    const journeyStory = document.querySelector(".journey-story");
+    const combinedCard = document.querySelector(".proof-card-combined");
+    const combinedParts = combinedCard?.querySelectorAll(".proof-combined-part");
 
-    if (!huntingTitle || !huntingCopy) return;
+    if (!journeyStory || !combinedCard || !combinedParts || combinedParts.length < 2) return;
 
-    const ar = "بدأت رحلتي في الـBug Bounty سنة 2022 ومن وقتها بهانت بشكل فعلي على Targets حقيقية وقدمت تقارير أمنية بمستويات خطورة مختلفة على برامج Bug Bounty عامة وخاصة.";
-    const en = "I started my Bug Bounty journey in 2022 and have since hunted on real targets and submitted security reports at different severity levels across public and private Bug Bounty programs.";
+    const startPart = combinedParts[0];
+    const practicalPart = combinedParts[1];
+    const startTitle = startPart.querySelector(".proof-title-orange");
+    const startCopy = startPart.querySelector("p");
 
-    huntingTitle.textContent = "BUG BOUNTY SINCE 2022";
-    huntingCopy.dataset.ar = ar;
-    huntingCopy.dataset.en = en;
-    huntingCopy.textContent = document.documentElement.lang === "en" ? en : ar;
+    const arStart = "بدأت رحلتي في الـBug Bounty سنة 2022 ومن وقتها بهانت بشكل فعلي على Targets حقيقية وقدمت تقارير أمنية بمستويات خطورة مختلفة على برامج Bug Bounty عامة وخاصة.";
+    const enStart = "I started my Bug Bounty journey in 2022 and have since hunted on real targets and submitted security reports at different severity levels across public and private Bug Bounty programs.";
+
+    if (startTitle) startTitle.textContent = "STARTED IN 2022";
+
+    if (startCopy) {
+      startCopy.dataset.ar = arStart;
+      startCopy.dataset.en = enStart;
+      startCopy.textContent = document.documentElement.lang === "en" ? enStart : arStart;
+    }
+
+    practicalPart.remove();
+
+    journeyStory.classList.remove("reveal");
+    startPart.appendChild(journeyStory);
   }
 
   async function bootstrap() {
@@ -35,7 +49,7 @@
     try {
       await loadScript("./application-submit.js");
       await loadScript("./app-core.js");
-      patchExperienceStart();
+      restructureAboutSection();
     } catch (error) {
       console.error(error);
     }
