@@ -97,6 +97,29 @@
   margin-bottom: 20px !important;
 }
 
+/* Push the four weekly-follow-up cards slightly farther below their heading. */
+#mentorship .support-grid {
+  margin-top: 42px !important;
+}
+
+/* Make the three offline-camp stat boxes roughly twice as substantial. */
+.proof-card-camps .offline-camp-lines {
+  gap: 16px !important;
+  margin-top: 22px !important;
+}
+
+.proof-card-camps .offline-camp-line {
+  min-height: 94px !important;
+  padding: 20px 22px !important;
+  font-size: 1.48rem !important;
+  line-height: 1.5 !important;
+  border-radius: 12px !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
 /* Keep the current offer copy exactly as the second stage. */
 .hero.offer-hero .offer-brand {
   margin-top: 0 !important;
@@ -138,6 +161,14 @@
   #mentorship .section-head .section-num {
     margin-bottom: 16px !important;
   }
+  #mentorship .support-grid {
+    margin-top: 30px !important;
+  }
+  .proof-card-camps .offline-camp-line {
+    min-height: 78px !important;
+    padding: 16px 14px !important;
+    font-size: 1.18rem !important;
+  }
 }
 
 @media (max-width: 520px) {
@@ -156,6 +187,13 @@
   .hero.offer-hero .offer-content::after {
     top: clamp(372px, 64svh, 500px);
     width: 98px;
+  }
+  #mentorship .support-grid {
+    margin-top: 26px !important;
+  }
+  .proof-card-camps .offline-camp-line {
+    min-height: 72px !important;
+    font-size: 1.02rem !important;
   }
 }
 
