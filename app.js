@@ -145,6 +145,11 @@
     }
   }
 
+  function skipIntroImmediately() {
+    const skip = document.getElementById("skipIntro");
+    if (skip) skip.click();
+  }
+
   async function bootstrap() {
     try {
       localStorage.setItem("rvuIntroSeenV5", "1");
@@ -153,6 +158,8 @@
     try {
       await loadScript("./application-submit.js");
       await loadScript("./app-core.js");
+      skipIntroImmediately();
+      await loadScript("./campaign-fixes.js");
       restructureAboutSection();
     } catch (error) {
       console.error(error);
