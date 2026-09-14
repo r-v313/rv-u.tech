@@ -66,6 +66,9 @@ function rvuTrackClarity(eventName) {
           lang === "ar" ? el.dataset.ariaAr : el.dataset.ariaEn,
         );
       });
+    document.querySelectorAll("[data-alt-ar][data-alt-en]").forEach((el) => {
+      el.alt = lang === "ar" ? el.dataset.altAr : el.dataset.altEn;
+    });
     if (toggleBtn) {
       toggleBtn.textContent = lang === "ar" ? "EN" : "AR";
       toggleBtn.setAttribute(
@@ -223,7 +226,7 @@ if (burger && navLinks) {
     installImageFallback(img);
     card.setAttribute("role", "button");
     card.setAttribute("tabindex", "0");
-    card.setAttribute("aria-label", `Open ${img ? img.alt : "PoC evidence"}`);
+    card.setAttribute("aria-label", window.RVU_LANG === "ar" ? card.dataset.ariaAr : card.dataset.ariaEn);
     const open = () => openModal(img);
     card.addEventListener("click", open);
     card.addEventListener("keydown", (e) => {
@@ -235,14 +238,12 @@ if (burger && navLinks) {
   });
   function openModal(sourceImg) {
     if (!modal || !modalImg || !sourceImg) return;
-    const displayedSrc = sourceImg.currentSrc || sourceImg.src;
+    const displayedSrc = sourceImg.dataset.fullSrc || sourceImg.currentSrc || sourceImg.src;
     modalImg.classList.toggle(
       "poc-fallback",
       sourceImg.classList.contains("poc-fallback"),
     );
-    modalImg.alt = sourceImg.alt
-      ? `${sourceImg.alt} — Full Evidence`
-      : "Full PoC Evidence";
+    modalImg.alt = sourceImg.alt || "PoC evidence";
     lastPocTrigger = document.activeElement;
     modalImg.src = displayedSrc;
     modal.classList.add("show");
@@ -273,6 +274,38 @@ if (burger && navLinks) {
       modalClose.focus({ preventScroll: true });
     }
   });
+})();
+(function () {
+  const gallery = document.getElementById("pocGallery");
+  if (!gallery) return;
+  const cards = Array.from(gallery.querySelectorAll(".poc-card-item"));
+  const controls = Array.from(document.querySelectorAll("[data-gallery-index]"));
+  let frame = 0;
+  function updateCurrent() {
+    frame = 0;
+    const edge = gallery.getBoundingClientRect().left;
+    let current = 0;
+    let distance = Infinity;
+    cards.forEach((card, index) => {
+      const offset = Math.abs(card.getBoundingClientRect().left - edge);
+      if (offset < distance) { distance = offset; current = index; }
+    });
+    if (gallery.scrollLeft >= gallery.scrollWidth - gallery.clientWidth - 2) current = cards.length - 1;
+    controls.forEach((button, index) => button.setAttribute("aria-current", String(index === current)));
+  }
+  controls.forEach((button, index) => {
+    button.addEventListener("click", () => {
+      const card = cards[index];
+      if (!card) return;
+      const left = gallery.scrollLeft + card.getBoundingClientRect().left - gallery.getBoundingClientRect().left;
+      gallery.scrollTo({ left, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
+    });
+  });
+  gallery.addEventListener("scroll", () => {
+    if (!frame) frame = requestAnimationFrame(updateCurrent);
+  }, { passive: true });
+  window.addEventListener("resize", updateCurrent, { passive: true });
+  updateCurrent();
 })();
 (function () {
   const reduceTiltMotion = window.matchMedia(
@@ -430,7 +463,8 @@ if (burger && navLinks) {
   const summary = document.getElementById("applicationSummary");
   const waLink = document.getElementById("applicationWhatsApp");
   const editBtn = document.getElementById("applicationEdit");
-  const hero = document.querySelector(".hero");
+  const heroApply = document.querySelector(".hero-ctas [data-open-application]");
+  const pageApplyButtons = Array.from(document.querySelectorAll("[data-open-application]")).filter((button) => !button.closest("nav"));
   const mobileApplyButton = document.getElementById("mobileApplyButton");
   const mobileApplyFab = document.getElementById("mobileApplyFab");
   let lastFocused = null;
@@ -459,7 +493,9 @@ if (burger && navLinks) {
     updateMobileApplyFab();
     setTimeout(
       () => {
-        const first = document.getElementById("appName");
+        const first = window.matchMedia("(max-width: 820px)").matches
+          ? modal.querySelector(".apply-dialog")
+          : document.getElementById("appName");
         if (first) first.focus({ preventScroll: true });
       },
       mode === "curtain" ? 240 : 80,
@@ -491,7 +527,7 @@ if (burger && navLinks) {
     mobileApplyButton.addEventListener("click", function (e) {
       e.preventDefault();
       rvuTrackClarity("Apply_Click");
-      openApplication("curtain");
+      openApplication("standard");
     });
   }
   if (modal)
@@ -533,19 +569,16 @@ if (burger && navLinks) {
   }
   function updateMobileApplyFab() {
     if (!mobileApplyFab) return;
-    const heroRect = hero ? hero.getBoundingClientRect() : null;
-    const contactSection = document.getElementById("contact");
-    const contactRect = contactSection
-      ? contactSection.getBoundingClientRect()
-      : null;
-    const heroVisible = heroRect && heroRect.bottom > 110;
-    const contactVisible =
-      contactRect &&
-      contactRect.top < window.innerHeight * 0.92 &&
-      contactRect.bottom > 0;
+    const navBottom = document.querySelector("nav")?.getBoundingClientRect().bottom || 64;
+    const heroPassed = heroApply && heroApply.getBoundingClientRect().bottom <= navBottom;
+    const otherActionVisible = pageApplyButtons.some((button) => {
+      const rect = button.getBoundingClientRect();
+      return rect.width > 0 && rect.top >= navBottom && rect.bottom <= window.innerHeight - 12;
+    });
     const shouldShow =
-      !heroVisible &&
-      !contactVisible &&
+      window.matchMedia("(max-width: 820px)").matches &&
+      heroPassed &&
+      !otherActionVisible &&
       !document.body.classList.contains("application-open");
     mobileApplyFab.classList.toggle("show", shouldShow);
     mobileApplyFab.setAttribute("aria-hidden", shouldShow ? "false" : "true");
@@ -554,6 +587,8 @@ if (burger && navLinks) {
   updateMobileApplyFab();
   window.addEventListener("scroll", updateMobileApplyFab, { passive: true });
   window.addEventListener("resize", updateMobileApplyFab, { passive: true });
+  document.addEventListener("rvu:languagechange", updateMobileApplyFab);
+  document.querySelectorAll("details").forEach((detail) => detail.addEventListener("toggle", updateMobileApplyFab));
   window.updateApplicationLanguage = function () {
     const isAr = window.RVU_LANG === "ar";
     const name = document.getElementById("appName");
