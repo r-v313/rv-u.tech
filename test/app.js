@@ -37,7 +37,7 @@
     renderWork();
     renderChallenge();
     renderSaveStatus();
-    chooseGalleryFilter(galleryFilter);
+    shelves.forEach(shelf => shelf.reset());
     if ($('image-dialog').open) showResearchImage(activeImage);
     if (!$('application-ready').hidden) prepareMessage();
   }
@@ -269,121 +269,73 @@
     document.querySelectorAll('[data-answer]').forEach(b => b.setAttribute('aria-pressed',String(b === button)));
     renderChallenge();
   }));
-  // One gallery with native touch scrolling, mouse drag and keyboard alternatives.
-  const track = $('gallery-track');
-  const cards = Array.from(track.querySelectorAll('.gallery-card'));
-  const filterButtons = Array.from(document.querySelectorAll('[data-filter]'));
-  let galleryFilter = 'all';
-  let galleryFrame = null;
-  const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-  const visibleCards = () => cards.filter(card => !card.hidden);
-  const galleryContext = {
-    ar: {
-      all: 'فيديوهات حقيقية من الشرح وصور من تقارير رامز. الآراء الثلاثة نماذج توضيحية مؤقتة وليست شهادات طلاب حقيقية.',
-      videos: 'مقتطفات تأسيسية من شرح APIs وJWT في الكامب الأول. تعرّف على أسلوب الشرح، ثم استكشف المنهج الكامل.',
-      reviews: 'نماذج مكتوبة لمعاينة التصميم فقط. سيتم استبدالها بآراء الطلاب الحقيقية؛ لا تُعرض كشهادات موثقة.',
-      images: 'صور منشورة من تقارير رامز الأمنية، وليست صورًا من الكامب أو نتائج طلاب. اضغط للتكبير أو فتح الأصل.'
-    },
-    en: {
-      all: 'Real teaching excerpts and images from Ramez’s reports. The three review cards are temporary illustrative examples, not actual student testimonials.',
-      videos: 'Foundational API and JWT excerpts from the first camp. Explore the teaching style, then browse the full curriculum.',
-      reviews: 'Fictional examples for this design preview. These will be replaced with real student feedback; they are not verified testimonials.',
-      images: 'Published images from Ramez’s security reports, not camp photos or student results. Select an image to enlarge it or view the original.'
+  // Independent media shelves share the same drag, touch and keyboard behavior.
+  function createShelf(trackId, prefix) {
+    const track = $(trackId);
+    let frame = null, drag = null, suppressUntil = 0;
+    const rtl = () => document.documentElement.dir === 'rtl';
+    function metrics() {
+      const cards = Array.from(track.querySelectorAll('.gallery-card'));
+      return {cards, step:(cards[0]?.getBoundingClientRect().width || 350)+(parseFloat(getComputedStyle(track).columnGap)||20), max:Math.max(0,track.scrollWidth-track.clientWidth)};
     }
-  };
-  function galleryMetrics() {
-    const visible = visibleCards();
-    const step = (visible[0]?.getBoundingClientRect().width || 350) + (parseFloat(getComputedStyle(track).columnGap) || 20);
-    return {visible, step, max: Math.max(0, track.scrollWidth - track.clientWidth)};
-  }
-  function updateGallery() {
-    const {visible,step,max} = galleryMetrics();
-    const position = Math.min(max, Math.abs(track.scrollLeft));
-    const first = max ? Math.min(visible.length, Math.floor((position + 2) / step) + 1) : 1;
-    const count = max ? Math.min(visible.length, Math.ceil((position + track.clientWidth - 2) / step)) : visible.length;
-    $('gallery-prev').disabled = position <= 2;
-    $('gallery-next').disabled = position >= max - 2;
-    $('gallery-position').textContent = isArabic() ? `العناصر ${first}–${Math.max(first,count)} من ${visible.length}` : `Items ${first}–${Math.max(first,count)} of ${visible.length}`;
-    $('gallery-context').textContent = galleryContext[isArabic() ? 'ar' : 'en'][galleryFilter];
-  }
-  function scheduleGalleryUpdate() {
-    if (galleryFrame !== null) return;
-    galleryFrame = requestAnimationFrame(() => {galleryFrame = null; updateGallery();});
-  }
-  function scrollGallery(position, smooth = true) {
-    const {max} = galleryMetrics();
-    const left = Math.max(0,Math.min(max,position)) * (isArabic() ? -1 : 1);
-    track.scrollTo({left, behavior: smooth && !reducedMotion() ? 'smooth' : 'instant'});
-    scheduleGalleryUpdate();
-  }
-  function chooseGalleryFilter(filter, focus = false) {
-    if (!Object.hasOwn(galleryContext.ar,filter)) return;
-    galleryFilter = filter;
-    cards.forEach(card => {card.hidden = filter !== 'all' && card.dataset.kind !== filter;});
-    filterButtons.forEach(button => {const active = button.dataset.filter === filter; button.classList.toggle('active',active); button.setAttribute('aria-pressed',String(active));});
-    scrollGallery(0,false);
-    updateGallery();
-    if (focus) track.focus({preventScroll:true});
-  }
-  function moveGallery(direction) {
-    const {step} = galleryMetrics();
-    scrollGallery(Math.abs(track.scrollLeft) + step * direction);
-  }
-  filterButtons.forEach(button => button.addEventListener('click', () => chooseGalleryFilter(button.dataset.filter)));
-  document.querySelectorAll('[data-gallery-link]').forEach(link => link.addEventListener('click', () => chooseGalleryFilter(link.dataset.galleryLink)));
-  $('gallery-prev').addEventListener('click', () => moveGallery(-1));
-  $('gallery-next').addEventListener('click', () => moveGallery(1));
-  track.addEventListener('scroll', scheduleGalleryUpdate, {passive:true});
-  window.addEventListener('resize', scheduleGalleryUpdate, {passive:true});
-  if ('ResizeObserver' in window) new ResizeObserver(scheduleGalleryUpdate).observe(track);
-  track.addEventListener('keydown', event => {
-    if (event.target !== track) return;
-    if (event.key === 'Home') scrollGallery(0);
-    else if (event.key === 'End') scrollGallery(galleryMetrics().max);
-    else if (event.key === 'ArrowLeft') moveGallery(isArabic() ? 1 : -1);
-    else if (event.key === 'ArrowRight') moveGallery(isArabic() ? -1 : 1);
-    else return;
-    event.preventDefault();
-  });
-  let drag = null;
-  let suppressClickUntil = 0;
-  track.addEventListener('pointerdown', event => {
-    if (event.pointerType !== 'mouse' || event.button !== 0) return;
-    drag = {id:event.pointerId, x:event.clientX, scroll:track.scrollLeft, moved:false};
-  });
-  track.addEventListener('pointermove', event => {
-    if (!drag || event.pointerId !== drag.id) return;
-    const delta = event.clientX - drag.x;
-    if (!drag.moved && Math.abs(delta) < 7) return;
-    if (!drag.moved) {
-      drag.moved = true;
-      track.classList.add('is-dragging');
-      track.setPointerCapture(event.pointerId);
+    function update() {
+      const {cards,step,max}=metrics(), position=Math.min(max,Math.abs(track.scrollLeft));
+      const first=max?Math.min(cards.length,Math.floor((position+2)/step)+1):1;
+      const last=max?Math.min(cards.length,Math.ceil((position+track.clientWidth-2)/step)):cards.length;
+      $(prefix+'-prev').disabled=position<=2;
+      $(prefix+'-next').disabled=position>=max-2;
+      $(prefix+'-position').textContent=isArabic()?`العناصر ${first}–${Math.max(first,last)} من ${cards.length}`:`Items ${first}–${Math.max(first,last)} of ${cards.length}`;
     }
-    event.preventDefault();
-    const max = galleryMetrics().max;
-    track.scrollLeft = isArabic() ? Math.max(-max,Math.min(0,drag.scroll-delta)) : Math.max(0,Math.min(max,drag.scroll-delta));
-    scheduleGalleryUpdate();
-  });
-  function finishDrag(event) {
-    if (!drag || event.pointerId !== drag.id) return;
-    const moved = drag.moved;
-    drag = null;
-    track.classList.remove('is-dragging');
-    if (track.hasPointerCapture?.(event.pointerId)) track.releasePointerCapture(event.pointerId);
-    if (moved) {
-      suppressClickUntil = performance.now() + 250;
-      const {step} = galleryMetrics();
-      scrollGallery(Math.round(Math.abs(track.scrollLeft)/step)*step);
+    function schedule() {
+      if(frame!==null)return;
+      frame=requestAnimationFrame(()=>{frame=null;update();});
     }
+    function scroll(position,smooth=true) {
+      const left=Math.max(0,Math.min(metrics().max,position))*(rtl()?-1:1);
+      track.scrollTo({left,behavior:smooth&&!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches?'smooth':'instant'});
+      schedule();
+    }
+    function move(direction){scroll(Math.abs(track.scrollLeft)+metrics().step*direction);}
+    $(prefix+'-prev').addEventListener('click',()=>move(-1));
+    $(prefix+'-next').addEventListener('click',()=>move(1));
+    track.addEventListener('scroll',schedule,{passive:true});
+    window.addEventListener('resize',schedule,{passive:true});
+    if('ResizeObserver' in window)new ResizeObserver(schedule).observe(track);
+    track.addEventListener('keydown',event=>{
+      if(event.target!==track)return;
+      if(event.key==='Home')scroll(0);
+      else if(event.key==='End')scroll(metrics().max);
+      else if(event.key==='ArrowLeft')move(rtl()?1:-1);
+      else if(event.key==='ArrowRight')move(rtl()?-1:1);
+      else return;
+      event.preventDefault();
+    });
+    track.addEventListener('pointerdown',event=>{
+      if(event.pointerType==='mouse'&&event.button===0)drag={id:event.pointerId,x:event.clientX,scroll:track.scrollLeft,moved:false};
+    });
+    track.addEventListener('pointermove',event=>{
+      if(!drag||event.pointerId!==drag.id)return;
+      const delta=event.clientX-drag.x;
+      if(!drag.moved&&Math.abs(delta)<7)return;
+      if(!drag.moved){drag.moved=true;track.classList.add('is-dragging');track.setPointerCapture(event.pointerId);}
+      event.preventDefault();
+      const max=metrics().max;
+      track.scrollLeft=rtl()?Math.max(-max,Math.min(0,drag.scroll-delta)):Math.max(0,Math.min(max,drag.scroll-delta));
+      schedule();
+    });
+    function finish(event){
+      if(!drag||event.pointerId!==drag.id)return;
+      const moved=drag.moved;drag=null;track.classList.remove('is-dragging');
+      if(track.hasPointerCapture?.(event.pointerId))track.releasePointerCapture(event.pointerId);
+      if(moved){suppressUntil=performance.now()+250;const {step}=metrics();scroll(Math.round(Math.abs(track.scrollLeft)/step)*step);}
+    }
+    window.addEventListener('pointerup',finish);window.addEventListener('pointercancel',finish);track.addEventListener('lostpointercapture',finish);
+    track.addEventListener('dragstart',event=>event.preventDefault());
+    track.addEventListener('click',event=>{if(performance.now()<suppressUntil&&event.detail!==0){event.preventDefault();event.stopImmediatePropagation();}},true);
+    update();
+    return {reset(){scroll(0,false);update();}};
   }
-  window.addEventListener('pointerup', finishDrag);
-  window.addEventListener('pointercancel', finishDrag);
-  track.addEventListener('lostpointercapture', finishDrag);
-  track.addEventListener('dragstart', event => event.preventDefault());
-  track.addEventListener('click', event => {
-    if (performance.now() < suppressClickUntil && event.detail !== 0) {event.preventDefault();event.stopImmediatePropagation();}
-  },true);
+  const shelves=[createShelf('gallery-track','gallery'),createShelf('reports-track','reports')];
 
   const researchImages = [
     ['تأكيد تقرير استيلاء على الحساب','Account takeover confirmation'],
@@ -416,7 +368,6 @@
     else return;
     event.preventDefault();
   });
-  updateGallery();
 
   renderWork();
   renderSaveStatus();
