@@ -20,9 +20,8 @@ A preparation checklist, not an admission test. Work on missing items or discuss
 
 ## Time
 - [ ] Review the Monday and Thursday schedule: 7:30–10:30 PM, Cairo time.
-- [ ] Set aside 4–6 practice hours weekly, in addition to live sessions.
+- [ ] Set aside 5–7 practice hours weekly, in addition to live sessions.
 - [ ] Collect questions for the private review every two weeks.
-- [ ] 1 November 2026 is the announcement date; confirm the first-session date when details are announced.
 
 ## Document an attempt
 Record: What did I expect? What did I change? What actually happened? What evidence supports it? What remains unclear? What should I try next?
