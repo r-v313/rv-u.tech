@@ -137,7 +137,7 @@
     en: {
       pending: ['Saving your application…', 'We are trying to save your details. You can continue on WhatsApp at any time.'],
       saved: ['Your application has been saved.', 'The application service confirmed the save. Continue on WhatsApp to arrange your interview. Applying does not mean acceptance or reserve a seat.'],
-      unconfirmed: ['We could not confirm the save.', 'The connection may have been interrupted or the service may be unavailable. Send the prepared WhatsApp message to make sure your application reaches Ramez.']
+      unconfirmed: ['We could not confirm the save.', 'The connection may have been interrupted or the service may be unavailable. Send the prepared WhatsApp message to make sure your application reaches me.']
     }
   };
   function renderSaveStatus() {
@@ -355,7 +355,6 @@
     $('image-error').hidden = true;
     $('gallery-full-image').hidden = false;
     $('gallery-full-image').src = path;
-    $('image-original').href = path;
     $('image-position').textContent = `${activeImage+1} / ${researchImages.length}`;
   }
   $('gallery-full-image').addEventListener('error', () => { $('image-error').hidden = false; $('gallery-full-image').hidden = true; });
