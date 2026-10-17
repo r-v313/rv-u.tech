@@ -11,9 +11,9 @@ Scope: `/test/`. The homepage and labs are independent of this preview.
 - Weekly mentorship walkthrough, six weekly topic summaries, one consolidated outcomes section, interactive work samples and feedback example.
 - Optional educational investigation, link to RVU Commerce, and a suitability section.
 - Three downloadable resources in Arabic and English; language selection controls download language.
-- Camp journey disclosure, legal-session gift, closed pricing FAQ and four-step application journey.
+- Camp journey disclosure, legal-session gift, visible EGP 4,000 pricing panel and installment FAQ and four-step application journey.
 - Existing Formspree application handling with explicit pending, saved and unconfirmed states; manual WhatsApp continuation.
-- One stylesheet; superseded gallery/theme files removed. No tracking service introduced.
+- One stylesheet; superseded gallery/theme files removed. A local event adapter is present. It sends no analytics requests in /test/; root-site integration remains part of the separately approved main-site release.
 
 ## Content that requires genuine source material
 
@@ -38,3 +38,13 @@ Disclosure controls use centered CSS line geometry for plus/minus states; close 
 ## Content simplification
 
 Keep the instructor portrait once at the top. The weekly curriculum describes each week without session numbers or repeated outputs; overall outcomes follow week six. The former readiness checklist is removed. Audience-fit cards explain foundations, 5–7 weekly practice hours and realistic expectations. Video instructions and its item counter are removed; arrow and keyboard controls remain functional. Arabic copy uses plain colloquial wording without diacritics or commas. Restrained red and orange accents complement gold. Mobile rules cover narrow 320px layouts, wrapping headings, full-width controls and readable inputs.
+
+## Comparison improvements
+
+The opening now names the learner’s problem, while the original headline remains. Offline cohort counts and dates are retained from the existing main site without inferring a unique-student total. A single schedule summary includes 6 live hours plus 5–7 practice hours, a total of about 11–13 weekly hours. Duplicate facts and the weekly flow are removed. Outcomes name concrete work examples; week six explains team responsibility and valid negative results. The setup requirement and interview expectations are explicit.
+
+The fee is visible before application: EGP 4,000 in two EGP 2,000 installments, second before week four. All application buttons describe a free interview. A country selector supports local Egyptian, Saudi and UAE numbers, explicit international numbers and an Other-country option.
+
+A seven-page Arabic/English PDF kit has an interactive contents page and six bookmarks. Resource cards open the matching guide page and language. `tools/build_resources.py` regenerates the PDF destinations and sharing image; dependencies are in `tools/requirements.txt`. It expects DejaVu fonts on Linux. `RVU_SIGNATURE_FONT` can specify a preferred local signature font for the sharing graphic. PDF rendering and all guide destinations were checked.
+
+The measurement adapter exposes only allowlisted event names and never includes form values. `/test/` sends no Clarity events. Real service integration, search indexing/canonical updates and replacing the homepage remain conditional on main-site approval. Real reviews, session captures and a genuine student-progress example still require source material. No student results or testimonial sources were invented.

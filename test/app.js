@@ -104,8 +104,12 @@
     if (!/^[+\d\s().-]+$/.test(raw)) return null;
     let number = raw.replace(/[\s().-]/g, '');
     if (number.startsWith('00')) number = '+' + number.slice(2);
-    if (/^01[0125]\d{8}$/.test(number)) number = '+20' + number.slice(1);
-    if (/^201[0125]\d{8}$/.test(number)) number = '+' + number;
+    const country = $('phone-country')?.value || '';
+    if (!number.startsWith('+')) {
+      if (country === '+20' && /^01[0125]\d{8}$/.test(number)) number = '+20' + number.slice(1);
+      else if (/^201[0125]\d{8}$/.test(number)) number = '+' + number;
+      else if (country) number = country + number.replace(/^0+/, '');
+    }
     if (!/^\+[1-9]\d{7,14}$/.test(number)) return null;
     if (number.startsWith('+20') && !/^\+201[0125]\d{8}$/.test(number)) return null;
     return number;
@@ -184,6 +188,7 @@
       });
       if (!response.ok) throw new Error('Save not confirmed');
       saveState = 'saved';
+      window.rvuTrack?.('Application_Saved');
     } catch (_) { saveState = 'unconfirmed'; }
     finally {
       clearTimeout(timeout);
