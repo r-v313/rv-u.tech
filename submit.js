@@ -1,5 +1,5 @@
 "use strict";
-// Compatibility for visitors whose previous cached page linked here.
+
 (function () {
   let payload;
   try {

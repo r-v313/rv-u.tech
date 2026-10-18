@@ -1,0 +1,54 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto');
+const {JSDOM,VirtualConsole}=require('jsdom');const css=require('css-tree');
+const root=path.resolve(__dirname,'..'),html=fs.readFileSync(path.join(root,'index.html'),'utf8');
+const errors=[],vc=new VirtualConsole();vc.on('jsdomError',e=>errors.push(e));
+const dom=new JSDOM(html,{url:'https://rv-u.tech/?utm_source='+encodeURIComponent('<img src=x onerror=alert(1)>'.repeat(20))+'&redirect=https://example.invalid',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:vc});
+const w=dom.window,d=w.document;w.matchMedia=()=>({matches:false});
+w.HTMLElement.prototype.scrollTo=function({left}){this.scrollLeft=left};w.HTMLDialogElement.prototype.showModal=function(){this.open=true};w.HTMLDialogElement.prototype.close=function(){this.open=false;this.dispatchEvent(new w.Event('close'))};
+w.requestAnimationFrame=fn=>{fn();return 1};
+const requests=[];let finishRequest;
+w.fetch=(url,options)=>{requests.push({url,body:JSON.parse(options.body)});return new Promise(resolve=>{finishRequest=resolve})};
+for(const name of ['measurement.js','app.js','experience.js'])w.eval(fs.readFileSync(path.join(root,name),'utf8'));
+(async()=>{
+ assert.equal(d.compatMode,'CSS1Compat');
+ assert.equal(d.querySelector('link[rel=canonical]').href,'https://rv-u.tech/');
+ assert.equal(d.querySelector('main>section:last-of-type').id,'faq');
+ assert.equal(d.querySelector('#faq').previousElementSibling.id,'apply');
+ assert.equal(d.querySelectorAll('.preview-bar').length,0);
+ assert(!html.includes('/test/'));
+ const csp=d.querySelector('meta[http-equiv="Content-Security-Policy"]').content;
+ for(const block of d.querySelectorAll('script:not([src])'))assert(csp.includes('sha256-'+crypto.createHash('sha256').update(block.textContent).digest('base64')));
+ assert(!/unsafe-inline|unsafe-eval/.test(csp));
+ for(const e of d.querySelectorAll('*'))for(const a of e.attributes)assert(!/^on/i.test(a.name),'No inline event handlers');
+ for(const a of d.querySelectorAll('a[target="_blank"]'))assert(a.rel.includes('noopener'));
+ for(const file of ['app.js','experience.js','measurement.js'])assert(!/innerHTML|insertAdjacentHTML|document\.write|\beval\s*\(/.test(fs.readFileSync(path.join(root,file),'utf8')));
+ css.parse(fs.readFileSync(path.join(root,'styles.css'),'utf8'));
+ const arTitle=d.querySelector('#mentorship h2').innerHTML;
+ for(let i=0;i<3;i++){d.getElementById('language').click();d.getElementById('language').click();}
+ assert.equal(d.querySelector('#mentorship h2').innerHTML,arTitle,'Arabic line breaks survive language switching');
+ const video=d.querySelector('[data-video]');const known=video.dataset.video;video.dataset.video='../../evil?x=<script>';
+ video.click();assert.equal(d.querySelectorAll('iframe').length,0);video.dataset.video=known;
+ const form=d.getElementById('application-form');
+ form.elements.name.value='<img src=x onerror=alert(1)>';
+ form.elements.phone.value='not-a-phone';form.elements.level.value='basics';form.elements.goal.value='<script>alert(1)</script>';
+ form.dispatchEvent(new w.Event('submit',{cancelable:true}));assert.equal(requests.length,0);
+ form.elements.phone.value='+201012345678';
+ form.dispatchEvent(new w.Event('submit',{cancelable:true}));form.dispatchEvent(new w.Event('submit',{cancelable:true}));
+ assert.equal(requests.length,1,'Only one in-flight application');
+ assert.equal(requests[0].url,'https://formspree.io/f/xoeqykpq');assert.equal(requests[0].body.source,'camp-website');
+ assert.equal(requests[0].body.utm_source.length,200);assert(!('redirect' in requests[0].body));
+ const wa=new URL(d.getElementById('application-whatsapp').href);assert.equal(wa.origin,'https://wa.me');assert.equal(wa.pathname,'/201280499854');
+ assert(wa.searchParams.get('text').includes(form.elements.name.value));assert(!d.querySelector('[onerror]'));assert(!d.querySelector('img[src=x]'));
+ finishRequest({ok:false});await new Promise(r=>setTimeout(r,5));
+ assert.match(d.getElementById('save-title').textContent,/ماقدرناش/);
+ d.getElementById('edit-application').click();form.dispatchEvent(new w.Event('submit',{cancelable:true}));assert.equal(requests.length,1,'Uncertain response must not silently retry');
+ assert.equal(errors.length,0,errors.map(e=>e.message).join('\n'));
+ dom.window.close();
+ for(const url of ['https://rv-u.tech/test/?redirect=https://example.invalid#faq','https://rv-u.tech/test/?utm_source=qa#experience']){
+  const replaced=[];const sandbox={URL,URLSearchParams,location:{href:url,origin:'https://rv-u.tech',hash:new URL(url).hash,search:new URL(url).search,replace:v=>replaced.push(v)}};
+  require('node:vm').runInNewContext(fs.readFileSync(path.join(root,'legacy-redirect.js'),'utf8'),sandbox);
+  assert.equal(new URL(replaced[0]).origin,'https://rv-u.tech');assert.equal(new URL(replaced[0]).pathname,'/');
+ }
+ console.log('PASS: production metadata, FAQ order, CSP hashes, safe rendering, hostile input, fixed video destinations, URL encoding, bounded campaign fields, pending/failed application handling, language round trips and same-origin legacy redirects. All submissions mocked locally.');
+})().catch(e=>{console.error(e);dom.window.close();process.exit(1)});

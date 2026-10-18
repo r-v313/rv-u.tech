@@ -1,4 +1,4 @@
-/* Brand, promise and action share one opening in natural reading order. */
+
 .hero.offer-hero { position:relative !important; display:block !important; min-height:0 !important; padding:106px 0 48px !important; overflow:hidden; background:radial-gradient(ellipse at 50% 20%,rgba(255,106,0,.10),transparent 62%); }
 .hero.offer-hero::before,.hero.offer-hero::after,.hero.offer-hero .offer-content::before,.hero.offer-hero .offer-content::after { content:none !important; }
 .hero.offer-hero .offer-content { position:relative !important; display:block !important; width:min(calc(100% - 40px),940px) !important; max-width:940px !important; margin-inline:auto !important; padding:0 !important; text-align:center !important; }
@@ -19,7 +19,7 @@
 .offer-schedule { margin:12px auto 0; max-width:720px; line-height:1.85; unicode-bidi:plaintext; }
 .trust-strip { margin-top:24px; padding-top:20px; }
 
-/* Preserve content while making mixed Arabic/English text readable. */
+
 #curriculum .week-block .week-sessions { direction:inherit !important; }
 #curriculum .week-block .outcome-session { direction:inherit !important; text-align:start !important; min-width:0; }
 #curriculum .week-block .outcome-session .session-core,#curriculum .week-block .outcome-session .session-outcome,.session-more p { text-align:start !important; line-height:1.85; unicode-bidi:plaintext; }
@@ -30,7 +30,7 @@
 .session-more summary { color:#ffab72; cursor:pointer; min-height:44px; padding-block:10px; font-size:.9rem; }
 .session-more p { margin-top:8px; font-size:1rem; color:var(--text-muted); }
 
-/* Manual gallery: one copy of each image, full resolution loaded on demand. */
+
 .poc-marquee-wrapper { overflow-x:auto !important; overflow-y:hidden !important; scroll-snap-type:x mandatory; overscroll-behavior-x:contain; scrollbar-width:thin; scrollbar-color:#a85c27 #17120f; padding:12px 2px 20px; cursor:auto; }
 .poc-marquee-track { animation:none !important; transform:none !important; will-change:auto; gap:14px !important; padding:0 !important; }
 .poc-card-item { scroll-snap-align:start; flex:0 0 360px !important; width:360px !important; min-width:0 !important; margin:0 !important; cursor:pointer; box-shadow:none !important; }

@@ -38,7 +38,7 @@
       if (!digits.startsWith(dial)) return null;
       digits = digits.slice(dial.length);
     }
-    // Italian numbers preserve their significant leading zero.
+
     if (dial === "7" && digits.length === 11 && digits.startsWith("8")) digits = digits.slice(1);
     if (dial !== "39") digits = digits.replace(/^0+/, "");
     if (dial === "20" && !/^1[0125]\d{8}$/.test(digits)) return null;
@@ -90,7 +90,7 @@
     } catch (_) {}
   }
   function backup(record) {
-    // No automatic retry: an interrupted response may already have saved.
+
     if (record.status !== "ready") return;
     record.status = "pending"; storage.set(KEY, JSON.stringify(record));
     const fd = new FormData();
@@ -124,7 +124,7 @@
     const record = payloadFor(v), url = whatsappUrl(record.payload);
     link.href = url; form.style.display = "none"; handoff.classList.add("show");
     submitting = true; submit.disabled = true; track("Application_Form_Complete");
-    // Synchronous user activation: the backup cannot delay WhatsApp.
+
     try { window.open(url, "_blank", "noopener,noreferrer"); } catch (_) {}
     track("WhatsApp_Open_Attempt"); link.focus({ preventScroll: true }); backup(record);
   });

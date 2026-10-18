@@ -43,7 +43,7 @@
   country.addEventListener('change', () => {
     phone.placeholder = country.value === '+20' ? '010 1234 5678' : country.value ? '5xx xxx xxxx' : '+44 7xxx xxxxxx';
   });
-  // Section links expose the active reading location without shifting focus.
+
   const links = [...document.querySelectorAll('#navigation a[href^="#"]')];
   if ('IntersectionObserver' in window) {
     const visible = new Map();

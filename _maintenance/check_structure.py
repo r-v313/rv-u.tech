@@ -1,4 +1,4 @@
-"""Check document invariants before publishing the static camp preview."""
+"""Check document invariants before publishing the camp website."""
 from html.parser import HTMLParser
 from pathlib import Path
 import re
@@ -30,4 +30,4 @@ document = Document()
 document.feed(source)
 assert document.title, 'Page title must be inside head'
 assert {'viewport', 'robots', 'content-security-policy'} <= document.head_metadata, 'Required metadata must be inside head'
-print('PASS: HTML5 doctype, title, viewport, preview indexing and CSP placement')
+print('PASS: HTML5 doctype, title, viewport, indexing metadata and CSP placement')
