@@ -8,6 +8,12 @@ The current preview uses saturated orange for primary actions, playback and acti
 
 The HTML5 doctype is restored so the browser parses metadata inside `head` and uses standards mode. Resource regeneration preserves the doctype. Run `python test/tools/check_structure.py` from the repository root before publishing.
 
+## Portrait and component finish
+
+The preview has a complete orange border around the instructor panel. Its portrait is an AI-assisted restoration of the supplied photo, delivered as a 1024px WebP; the original root image remains unchanged. The footer contains only a centered vector-script `By: Ramez Medhat` credit and a heart. The date keeps its 1 November meaning while placing the day on the right and month on the left in both languages.
+
+Topic-specific vector covers illustrate an API exchange and the three JWT parts. Playback uses a centered SVG triangle with a visible orange glow. Three expandable review cards use glossy black surfaces and gold typography. They remain explicitly illustrative until genuine student feedback is supplied. Type sizes and contrast are increased for small navigation and supporting copy.
+
 ## Implemented
 
 - Saturated black and gold visual system, natural-color instructor portraits, an English calligraphic vector signature and first-person Arabic / English copy.

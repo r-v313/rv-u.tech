@@ -1,1 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540"><defs><pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#ffffff" stroke-opacity=".045"/></pattern></defs><rect width="960" height="540" fill="#101114"/><rect width="960" height="540" fill="url(#grid)"/><circle cx="780" cy="240" r="180" fill="none" stroke="#ff7a1a" stroke-opacity=".16"/><circle cx="780" cy="240" r="130" fill="none" stroke="#ff7a1a" stroke-opacity=".25"/><path d="M580 240H950M780 40V440" stroke="#ff7a1a" stroke-opacity=".12"/><text x="54" y="68" font-family="monospace" font-size="20" letter-spacing="3" fill="#ff7a1a">RVU CAMP / SESSION EXCERPT</text><text x="54" y="161" font-family="Arial,sans-serif" font-size="58" font-weight="700" fill="#f5f5f5">What is JWT?</text><text x="56" y="205" font-family="monospace" font-size="19" letter-spacing="2" fill="#c8cbd1">HEADER . PAYLOAD . SIGNATURE</text><rect x="54" y="327" width="540" height="65" rx="8" fill="#090909" stroke="#80431f"/><text x="79" y="369" font-family="monospace" font-size="23" fill="#ff7a1a">eyJhbGciOiJIUzI1NiJ9</text><text x="54" y="476" font-family="Arial,sans-serif" font-size="20" fill="#c8cbd1">WITH RAMEZ MEDHAT</text><text x="858" y="476" font-family="Arial,sans-serif" font-size="24" font-weight="700" fill="#ff7a1a">RV.</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900">
+    <title>What is JWT? — RVU Camp teaching excerpt</title>
+    <defs>
+    <linearGradient id="base" x2="1" y2="1"><stop stop-color="#181b20"/><stop offset=".5" stop-color="#090c10"/><stop offset="1" stop-color="#030506"/></linearGradient>
+    <linearGradient id="metal" x2=".8" y2="1"><stop stop-color="#40454c"/><stop offset=".45" stop-color="#1b222b"/><stop offset="1" stop-color="#0a1018"/></linearGradient>
+    <radialGradient id="light"><stop stop-color="#ff7a1a" stop-opacity=".16"/><stop offset="1" stop-color="#ff7a1a" stop-opacity="0"/></radialGradient>
+    <linearGradient id="shine" x2="1" y2="1"><stop stop-color="#ffffff" stop-opacity=".055"/><stop offset=".48" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse"><path d="M60 0H0V60" fill="none" stroke="#c6cbd3" stroke-opacity=".045"/></pattern>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="blur"><feGaussianBlur stdDeviation="30"/></filter>
+    </defs>
+    <rect width="1600" height="900" fill="url(#base)"/><rect width="1600" height="900" fill="url(#grid)"/><ellipse cx="1200" cy="400" rx="650" ry="600" fill="url(#light)"/>
+    <rect x="25" y="25" width="1550" height="850" rx="18" fill="none" stroke="#79542d" stroke-opacity=".75"/>
+    <path d="M65 68h140" stroke="#ff852b" stroke-width="5"/>
+    <text x="70" y="124" fill="#f3c67f" font-family="monospace" font-size="23" letter-spacing="4">RVU CAMP / SESSION EXCERPT</text>
+    <text x="67" y="288" fill="#fff3db" font-family="Arial,sans-serif" font-size="87" font-weight="700" letter-spacing="-2">What is JWT?</text>
+    <text x="72" y="345" fill="#b9c0c9" font-family="monospace" font-size="22" letter-spacing="2">HEADER. PAYLOAD. SIGNATURE.</text>
+    <rect x="70" y="400" width="513" height="55" rx="9" fill="#ff7a1a0d" stroke="#744b26"/><text x="93" y="435" fill="#ffad62" font-family="monospace" font-size="21" letter-spacing="1">UNDERSTAND THE TOKEN</text>
+    <path d="M70 605h594" stroke="#4b4439"/><text x="70" y="655" fill="#d9c59e" font-family="monospace" font-size="20" letter-spacing="1">IDENTITY  ·  CLAIMS  ·  VERIFICATION</text>
+    <g transform="translate(965 188)">
+        <ellipse cx="235" cy="555" rx="260" ry="75" fill="#e6ac4a" opacity=".11" filter="url(#blur)"/>
+        <path d="M10 420 225 306 460 431 245 549Z" fill="#080c10" stroke="#dc9e3f" stroke-width="3"/>
+        <path d="M10 387 225 273 460 398 245 516Z" fill="url(#metal)" stroke="#b29463" stroke-width="3"/>
+        <path d="M10 284 225 170 460 295 245 413Z" fill="url(#metal)" stroke="#ff9a3f" stroke-width="3"/>
+        <path d="M10 180 225 66 460 191 245 309Z" fill="url(#metal)" stroke="#ff6d4a" stroke-width="3"/>
+        <path d="M245 309v34l215-118v-34m-215 222v34l215-118v-34m-215 221v34l215-118v-34" fill="#0a0e13" stroke="#454b53" stroke-width="2"/>
+        <g font-family="monospace" font-size="24" text-anchor="middle" transform="rotate(0)"><text x="231" y="177" fill="#ff9e7c">HEADER</text><text x="231" y="282" fill="#ffc584">PAYLOAD</text><text x="234" y="387" fill="#f2d28f">SIGNATURE</text></g>
+        <g filter="url(#glow)"><path d="M-31 70h106l66 39M398 462l60 37h82" fill="none" stroke="#ffab4e" stroke-width="4"/><circle cx="-33" cy="70" r="8" fill="#ffc76e"/><circle cx="544" cy="499" r="8" fill="#ffc76e"/></g>
+        <rect x="-65" y="-45" width="540" height="54" rx="12" fill="#12171d" stroke="#7b663e"/><text x="-43" y="-10" fill="#c8b18b" font-family="monospace" font-size="20">eyJhbGci… . eyJzdWI… . SflKxw…</text>
+        </g>
+    <path d="M70 777h1460" stroke="#393b3f"/>
+    <text x="70" y="831" fill="#b8bdc5" font-family="Arial,sans-serif" font-size="22">WITH RAMEZ MEDHAT</text><text x="1530" y="832" text-anchor="end" fill="#f5c772" font-family="Arial,sans-serif" font-size="29" font-weight="700">RV.</text>
+    <rect width="1600" height="900" fill="url(#shine)"/>
+    </svg>
