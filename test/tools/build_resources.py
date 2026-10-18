@@ -1,6 +1,6 @@
 from pathlib import Path
 from fpdf import FPDF
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Doctype
 from PIL import Image, ImageDraw, ImageFont
 import re,json
 root=Path(__file__).resolve().parents[1]
@@ -62,6 +62,8 @@ for lang in ['ar','en']:
 output=root/'resources/RVU_Field_Kit_AR_EN.pdf';pdf.output(output)
 (root/'resources/pdf-pages.json').write_text(json.dumps(destinations))
 s=BeautifulSoup((root/'index.html').read_text(),'html.parser')
+if not any(isinstance(node, Doctype) for node in s.contents):
+    s.insert(0, Doctype('html'))
 for link in s.select('[data-pdf-guide]'):
     key=link['data-pdf-guide'];link['data-page-ar']=str(destinations[key]['ar']);link['data-page-en']=str(destinations[key]['en']);link['href']='./resources/RVU_Field_Kit_AR_EN.pdf#page='+str(destinations[key]['ar'])
 (root/'index.html').write_text(str(s))

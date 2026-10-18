@@ -2,6 +2,12 @@
 
 Scope: `/test/`. The homepage and labs are independent of this preview.
 
+## Orange visual refinement
+
+The current preview uses saturated orange for primary actions, playback and active states. Charcoal panels and neutral white / gray copy replace the broad brown, bronze and cream palette. Gold remains in the instructor signature and a small date accent. Video posters follow the orange palette. Layout, curriculum, pricing and application behavior are retained.
+
+The HTML5 doctype is restored so the browser parses metadata inside `head` and uses standards mode. Resource regeneration preserves the doctype. Run `python test/tools/check_structure.py` from the repository root before publishing.
+
 ## Implemented
 
 - Saturated black and gold visual system, natural-color instructor portraits, an English calligraphic vector signature and first-person Arabic / English copy.
