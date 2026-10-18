@@ -23,8 +23,6 @@
       if (event === 'Application_Saved') window.lintrk('track', {conversion_id: 30331010});
     }
     document.dispatchEvent(new CustomEvent('rvu:interaction', {detail:{event}}));
-
-
   };
   document.addEventListener('click', event => {
     const target = event.target.closest('button,a');

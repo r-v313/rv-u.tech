@@ -1,6 +1,7 @@
 'use strict';
 (() => {
   const language = document.getElementById('language');
+  if (!language) return;
   const ar = () => document.documentElement.lang === 'ar';
   function updateResources() {
     document.querySelectorAll('[data-resource]').forEach(link => {
