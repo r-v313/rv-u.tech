@@ -16,7 +16,7 @@ A preparation checklist, not an admission test. Work on missing items or discuss
 - [ ] Working Discord access and clear audio.
 - [ ] Space for notes, recordings and training files when needed.
 - [ ] Screen sharing tested before the first session.
-- [ ] Read RVU Commerce setup instructions in its repository and follow the version used in the camp.
+- [ ] Review the cohort’s training setup requirements and prepare them before the session.
 
 ## Time
 - [ ] Review the Monday and Thursday schedule: 7:30–10:30 PM, Cairo time.

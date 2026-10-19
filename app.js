@@ -2,14 +2,7 @@
 (() => {
   const $ = id => document.getElementById(id);
   const language = $('language');
-  if (!language) {
-    const current = new URL(location.href);
-    if (current.searchParams.get('release') !== '20261018') {
-      current.searchParams.set('release', '20261018');
-      location.replace(current.href);
-    }
-    return;
-  }
+  if (!language) return;
   const translated = Array.from(document.querySelectorAll('[data-en]'));
   const arabicContent = new Map(translated.map(el => [el, [...el.childNodes].map(node => node.cloneNode(true))]));
   const steps = {
@@ -62,7 +55,12 @@
     toggle.setAttribute('aria-expanded', String(open));
   });
   nav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
-  document.addEventListener('keydown', event => { if (event.key === 'Escape') closeMenu(); });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+      closeMenu();
+      toggle.focus();
+    }
+  });
   document.querySelectorAll('[data-step]').forEach(button => {
     button.addEventListener('click', () => {
       activeStep = Number(button.dataset.step);
@@ -188,19 +186,23 @@
     submitting = true;
     $('edit-application').disabled = true;
     attempts.set(fingerprint, 'pending');
-    Object.assign(payload, {submission_id: crypto.randomUUID(), submitted_at: new Date().toISOString(), page_url: location.origin + location.pathname, cohort: '02', source: 'camp-website', language: isArabic() ? 'ar' : 'en', _subject: 'RVU Camp cohort 02 application — ' + payload.name});
-    const params = new URLSearchParams(location.search);
-    for (const key of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term']) payload[key] = (params.get(key) || '').slice(0, 200);
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 12000);
+    let timeout;
     try {
+      const submissionId = typeof crypto.randomUUID === 'function'
+        ? crypto.randomUUID()
+        : Array.from(crypto.getRandomValues(new Uint8Array(16)), byte => byte.toString(16).padStart(2, '0')).join('');
+      Object.assign(payload, {submission_id: submissionId, submitted_at: new Date().toISOString(), page_url: location.origin + location.pathname, cohort: '02', source: 'camp-website', language: isArabic() ? 'ar' : 'en', _subject: 'RVU Camp cohort 02 application - ' + payload.name});
+      const params = new URLSearchParams(location.search);
+      for (const key of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term']) payload[key] = (params.get(key) || '').slice(0, 200);
+      const controller = new AbortController();
+      timeout = setTimeout(() => controller.abort(), 12000);
       const response = await fetch('https://formspree.io/f/xoeqykpq', {
         method: 'POST', headers: {'Content-Type': 'application/json', Accept: 'application/json'},
-        body: JSON.stringify(payload), signal: controller.signal
+        body: JSON.stringify(payload), signal: controller.signal,
+        credentials: 'omit', redirect: 'error', referrerPolicy: 'no-referrer'
       });
       if (!response.ok) throw new Error('Save not confirmed');
       saveState = 'saved';
-      window.rvuTrack?.('Application_Saved');
     } catch (_) { saveState = 'unconfirmed'; }
     finally {
       clearTimeout(timeout);
@@ -208,6 +210,9 @@
       submitting = false;
       $('edit-application').disabled = false;
       renderSaveStatus();
+    }
+    if (saveState === 'saved') {
+      try { window.rvuTrack?.('Application_Saved'); } catch (_) {}
     }
   });
   $('edit-application').addEventListener('click', () => {

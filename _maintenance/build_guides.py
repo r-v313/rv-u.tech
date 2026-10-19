@@ -7,6 +7,7 @@ from weasyprint import HTML
 ROOT = Path(__file__).resolve().parents[1]
 FONTS = ROOT / '_maintenance/fonts'
 OUT = ROOT / 'resources'
+CONTENT = ROOT / '_maintenance/content'
 
 
 def rich(text):
@@ -55,7 +56,7 @@ GUIDES = {
 
 
 def source_parts(key, lang):
-    source = (OUT / f'{key}-{lang}.md').read_text()
+    source = (CONTENT / f'{key}-{lang}.md').read_text()
     lines = [x for x in source.splitlines() if not x.startswith('# ') and not x.startswith('By')]
     intro, sections, current = [], [], None
     for line in lines:
@@ -173,7 +174,7 @@ def main():
             destinations.setdefault(key, {})[lang] = start
             pages += guide_pages(key, lang, start)
     render(pages, 'RVU Field Kit - Arabic and English', 'ar', OUT/'RVU_Field_Kit_AR_EN.pdf')
-    (OUT/'pdf-pages.json').write_text(json.dumps(destinations, indent=2)+'\n')
+    (CONTENT/'pdf-pages.json').write_text(json.dumps(destinations, indent=2)+'\n')
 
 
 if __name__ == '__main__':

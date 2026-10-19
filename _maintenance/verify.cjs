@@ -76,7 +76,9 @@ function boot(success=true) {
   assert.equal(d.querySelectorAll('.offline-cohorts li').length,3);
   assert.equal(d.querySelectorAll('.outcome-example').length,6);
   assert(d.querySelector('.capstone-note'));
-  assert(d.querySelector('#navigation a[href="/labs/"]'));
+  assert(!d.querySelector('a[href*="/labs"]'));
+  for(const old of ['labs','test','submit.html','submit.js','submit.css','legacy-redirect.js','not-found.js'])assert(!fs.existsSync(path.join(root,old)),`Retired asset remains: ${old}`);
+  assert([...d.querySelectorAll('#resources a')].every(a=>new URL(a.href).pathname.endsWith('.pdf')));
   assert.equal(d.querySelectorAll('[data-pdf-guide]').length,3);
   [...d.querySelectorAll('[data-pdf-guide]')].forEach(a=>assert(a.href.endsWith(a.dataset.pdfGuide+'-ar.pdf')));
   assert.match(d.querySelector('.hero-problem').textContent,/الأساسيات/);
@@ -143,5 +145,22 @@ function boot(success=true) {
     assert.equal(test.requests.length,1);assert.equal(test.requests[0].body.phone,expected);
     assert.equal(test.errors.length,0);test.dom.window.close();
   }
-  console.log('PASS: structure, local links, bilingual resources, weekly curriculum, outcomes, audience fit, single portrait, demo labels, visible price, PDF destinations, regional phone numbers, privacy-safe interaction events, video/image cleanup, menu, mocked success/failure and duplicate-submission handling. No real form submissions.');
+  for(const mode of ['uuid-fallback','analytics-failure','unsupported-abort','network-timeout']) {
+    const test=boot(),form=test.d.getElementById('application-form');
+    if(mode==='uuid-fallback')test.w.crypto.randomUUID=undefined;
+    if(mode==='analytics-failure')test.w.rvuTrack=()=>{throw new Error('Analytics unavailable')};
+    if(mode==='unsupported-abort')test.w.AbortController=undefined;
+    if(mode==='network-timeout') {
+      test.w.setTimeout=(fn,delay)=>{if(delay===12000){queueMicrotask(fn);return 1}return setTimeout(fn,delay)};
+      test.w.fetch=(_,options)=>new Promise((resolve,reject)=>options.signal.addEventListener('abort',()=>reject(new Error('Aborted'))));
+    }
+    form.elements.name.value='Compatibility QA';form.elements.phone.value='+201012345678';form.elements.level.value='basics';form.elements.goal.value='Review test';
+    form.dispatchEvent(new test.w.Event('submit',{bubbles:true,cancelable:true}));await new Promise(r=>setTimeout(r,10));
+    assert(!test.d.getElementById('edit-application').disabled,mode+' must release the form');
+    if(['unsupported-abort','network-timeout'].includes(mode))assert.match(test.d.getElementById('save-title').textContent,/ماقدرناش/);
+    else assert.match(test.d.getElementById('save-title').textContent,/بنجاح/);
+    if(mode==='uuid-fallback')assert.match(test.requests[0].body.submission_id,/^[a-f0-9]{32}$/);
+    assert.equal(test.errors.length,0,mode);test.dom.window.close();
+  }
+  console.log('PASS: structure, local links, bilingual resources, weekly curriculum, outcomes, audience fit, single portrait, demo labels, visible price, PDF destinations, regional phone numbers, privacy-safe interaction events, video/image cleanup, menu, mocked success/failure and duplicate-submission handling. Retired routes removed; UUID fallback, analytics failure, unsupported APIs and request timeout checked. No real form submissions.');
 })().catch(e=>{console.error(e);process.exit(1);});

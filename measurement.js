@@ -15,7 +15,7 @@
       document.head.append(script);
     }
   }
-  const allowed = new Set(['Interview_Open','Teaching_Video_Open','Application_Saved','WhatsApp_Click','Guide_Download','PDF_Open','Labs_Open']);
+  const allowed = new Set(['Interview_Open','Teaching_Video_Open','Application_Saved','WhatsApp_Click','Guide_Download','PDF_Open']);
   window.rvuTrack = event => {
     if (!allowed.has(event)) return;
     if (live) {
@@ -32,6 +32,5 @@
     else if (target.matches('[data-resource]')) window.rvuTrack('Guide_Download');
     else if (target.matches('[data-pdf-guide]')) window.rvuTrack('PDF_Open');
     else if (target.href?.startsWith('https://wa.me/')) window.rvuTrack('WhatsApp_Click');
-    else if (target.getAttribute('href') === '/labs/') window.rvuTrack('Labs_Open');
   });
 })();

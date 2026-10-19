@@ -45,10 +45,8 @@ for(const name of ['measurement.js','app.js','experience.js'])w.eval(fs.readFile
  d.getElementById('edit-application').click();form.dispatchEvent(new w.Event('submit',{cancelable:true}));assert.equal(requests.length,1,'Uncertain response must not silently retry');
  assert.equal(errors.length,0,errors.map(e=>e.message).join('\n'));
  dom.window.close();
- for(const url of ['https://rv-u.tech/test/?redirect=https://example.invalid#faq','https://rv-u.tech/test/?utm_source=qa#experience']){
-  const replaced=[];const sandbox={URL,URLSearchParams,location:{href:url,origin:'https://rv-u.tech',hash:new URL(url).hash,search:new URL(url).search,replace:v=>replaced.push(v)}};
-  require('node:vm').runInNewContext(fs.readFileSync(path.join(root,'legacy-redirect.js'),'utf8'),sandbox);
-  assert.equal(new URL(replaced[0]).origin,'https://rv-u.tech');assert.equal(new URL(replaced[0]).pathname,'/');
- }
- console.log('PASS: production metadata, FAQ order, CSP hashes, safe rendering, hostile input, fixed video destinations, URL encoding, bounded campaign fields, pending/failed application handling, language round trips and same-origin legacy redirects. All submissions mocked locally.');
+ for(const old of ['labs','test','submit.html','submit.js','submit.css','legacy-redirect.js','not-found.js'])assert(!fs.existsSync(path.join(root,old)));
+ assert(!/\/labs\/|\/test\//.test(html));
+ assert(!/sessionStorage|localStorage/.test(fs.readFileSync(path.join(root,'app.js'),'utf8')));
+ console.log('PASS: production metadata, FAQ order, CSP hashes, safe rendering, hostile input, fixed video destinations, URL encoding, bounded campaign fields, pending/failed application handling, language round trips and retired-route removal. All submissions mocked locally.');
 })().catch(e=>{console.error(e);dom.window.close();process.exit(1)});

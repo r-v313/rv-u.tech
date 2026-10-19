@@ -2,15 +2,12 @@
 
 Production website: https://rv-u.tech/
 
-Static HTML, CSS and JavaScript published with GitHub Pages. No build step or application server is required. The application form uses Formspree and the video player loads YouTube only when opened.
+A single-page bilingual website served by GitHub Pages. The published files are the main page, its assets, PDF resources, indexing files and a static 404 page. Maintenance tools and PDF source content are excluded from publication.
 
 ## Maintenance
 
-- Run `python _maintenance/check_structure.py` before publishing.
-- Resource build dependencies are listed in `_maintenance/requirements.txt`.
-- Run `python _maintenance/build_guides.py` to regenerate the six standalone guides and the bilingual PDF field kit. Sources remain in `resources/*-ar.md` and `resources/*-en.md`; worksheet layouts and typography live in the builder. The bundled fonts retain their OFL license notices.
-- The three review cards are labelled demonstration samples. Replace them with genuine testimonials only with the students’ permission.
-- `/test/` is a compatibility redirect to the root website. No preview website remains.
-- The original website is recoverable from Git history before this release.
-
-Existing Clarity and LinkedIn project identifiers are retained. The application dialog is masked for session recordings. Conversion events carry event names or the existing conversion ID, never application fields.
+- Run `python _maintenance/check_structure.py` and the JavaScript regression/security checks before publishing.
+- PDF dependencies are listed in `_maintenance/requirements.txt`. Run `python _maintenance/build_guides.py` to regenerate the six standalone guides and bilingual collection. Source text is in `_maintenance/content` and font license notices are retained.
+- The three review cards are clearly labelled design samples until genuine student reviews are provided.
+- The application form submits directly to the configured Formspree endpoint. YouTube loads only when a teaching video is opened. Analytics events exclude application field values and the application dialog is masked.
+- Deployment and rollback use Git history. No duplicate or legacy website is published.
