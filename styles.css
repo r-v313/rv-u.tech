@@ -5864,16 +5864,24 @@ html[dir=ltr] .arrow-next svg {
   margin-inline-start:auto;
 }
 
-.week-content,html[dir=ltr] .week-content {
+.curriculum .week-content,html[dir=ltr] .curriculum .week-content {
+  display:block;
+  min-width:0;
   margin:0 28px 25px;
-  padding-top:20px;
+  padding:20px 0 0!important;
 }
 
 .weekly-overview {
-  font-size:15px!important;
-  line-height:2.15!important;
-  max-width:950px;
+  font-size:16px!important;
+  line-height:2.1!important;
+  max-width:none;
+  margin:0;
+  overflow-wrap:anywhere;
   color:#d4d4d8!important;
+}
+
+.weekly-overview+.weekly-overview {
+  margin-top:12px;
 }
 
 .curriculum details[open] {
@@ -6290,13 +6298,13 @@ img,svg {
     flex-basis:32px;
     height:32px;
   }
-  .week-content,html[dir=ltr] .week-content {
+  .curriculum .week-content,html[dir=ltr] .curriculum .week-content {
     margin:0 17px 21px;
-    padding-top:17px;
+    padding:17px 0 0!important;
   }
   .weekly-overview {
-    font-size:14px!important;
-    line-height:2.1!important;
+    font-size:15px!important;
+    line-height:2.05!important;
   }
   .week-topics {
     gap:6px;
