@@ -1,4 +1,3 @@
-beautifulsoup4
-fpdf2
-uharfbuzz
+weasyprint==70.0
 Pillow
+pypdf

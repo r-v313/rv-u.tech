@@ -5,11 +5,10 @@
   const ar = () => document.documentElement.lang === 'ar';
   function updateResources() {
     document.querySelectorAll('[data-resource]').forEach(link => {
-      link.href = `./resources/${link.dataset.resource}-${ar() ? 'ar' : 'en'}.md`;
+      link.href = `./resources/${link.dataset.resource}-${ar() ? 'ar' : 'en'}.pdf`;
     });
     document.querySelectorAll('[data-pdf-guide]').forEach(link => {
-      const page = link.dataset[ar() ? 'pageAr' : 'pageEn'];
-      link.href = './resources/RVU_Field_Kit_AR_EN.pdf' + (page ? '#page=' + page : '');
+      link.href = `./resources/${link.dataset.pdfGuide}-${ar() ? 'ar' : 'en'}.pdf`;
     });
   }
   function decorateTechnicalTerms() {

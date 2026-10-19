@@ -1,1 +1,14 @@
-{"report-template": {"ar": 2, "en": 5}, "recon-checklist": {"ar": 3, "en": 6}, "camp-preparation": {"ar": 4, "en": 7}}
+{
+  "report-template": {
+    "ar": 2,
+    "en": 14
+  },
+  "recon-checklist": {
+    "ar": 6,
+    "en": 18
+  },
+  "camp-preparation": {
+    "ar": 10,
+    "en": 22
+  }
+}

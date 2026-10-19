@@ -78,7 +78,7 @@ function boot(success=true) {
   assert(d.querySelector('.capstone-note'));
   assert(d.querySelector('#navigation a[href="/labs/"]'));
   assert.equal(d.querySelectorAll('[data-pdf-guide]').length,3);
-  [...d.querySelectorAll('[data-pdf-guide]')].forEach(a=>assert(a.href.endsWith('#page='+a.dataset.pageAr)));
+  [...d.querySelectorAll('[data-pdf-guide]')].forEach(a=>assert(a.href.endsWith(a.dataset.pdfGuide+'-ar.pdf')));
   assert.match(d.querySelector('.hero-problem').textContent,/الأساسيات/);
   assert(d.querySelector('h1 bdi'));
   assert.match(d.querySelector('h1').textContent,/الـ Target/);
@@ -92,9 +92,9 @@ function boot(success=true) {
   assert(price&&!price.open,'Price is inside a closed FAQ');
   d.getElementById('language').click();
   assert.equal(d.documentElement.lang,'en');assert.equal(d.documentElement.dir,'ltr');
-  [...d.querySelectorAll('[data-pdf-guide]')].forEach(a=>assert(a.href.endsWith('#page='+a.dataset.pageEn)));
+  [...d.querySelectorAll('[data-pdf-guide]')].forEach(a=>assert(a.href.endsWith(a.dataset.pdfGuide+'-en.pdf')));
   assert.match(d.querySelector('.camp-price').textContent,/4,000 EGP/);
-  [...d.querySelectorAll('[data-resource]')].forEach(x=>assert.match(x.href,/-en\.md$/));
+  [...d.querySelectorAll('[data-resource]')].forEach(x=>assert.match(x.href,/-en\.pdf$/));
   assert.match(d.querySelector('.hero h1').textContent,/Understand/);
   assert(d.querySelector('.signature-title img'),'Translation must retain signature');
   assert.equal(d.querySelector('.edition-number').textContent,'1 / 11');

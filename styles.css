@@ -2,3 +2,5 @@
 html[lang=ar] .hero .eyebrow{font-family:var(--font);letter-spacing:0;font-size:12px}
 
 .cohort-capacity{display:flex;align-items:center;flex-wrap:wrap;gap:5px 14px;padding:12px 16px;border:1px solid #a94c16;border-inline-start:3px solid #ff7a1a;border-radius:8px;background:linear-gradient(110deg,#ff6a0014,#ffbf4710);margin-block:20px 0}.cohort-capacity strong{color:#ffd28a;font-size:18px;font-weight:700;line-height:1.7}.cohort-capacity>span{font-size:12px;color:#e4d7c9;line-height:1.8}.mobile-cta>span{color:#ffd28a;font-weight:600}@media(max-width:420px){.cohort-capacity{padding:10px 12px;gap:2px 10px}.cohort-capacity strong{font-size:17px}.cohort-capacity>span{font-size:12px}}
+
+.resource-note p{font-size:12px;margin-bottom:10px}.resource-note>.pdf-link{font-size:12px}
