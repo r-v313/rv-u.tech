@@ -100,3 +100,5 @@ The updated bilingual curriculum remains in the requested 12-session order with 
 The complete local functional and security suites passed after this cleanup. Main HTML, JavaScript and CSS contain no comments or debug statements. Required font license notices remain. No current tracked text matched the credential patterns used in the follow-up scan.
 
 The existing hosting-header, provider-administration, mobile-device and load-testing limitations above still apply. Student review examples remain intentionally labelled and unchanged.
+
+Live follow-up checks confirmed that the main HTML, JS and CSS matched the deployed source, retired/private routes returned 404, the main sections retained their sampled computed styles, language switching worked and no loaded image with a source was broken. The image viewer was also given a reserved responsive image area to prevent loading-induced movement of the dialog and close button. No real application was submitted.
