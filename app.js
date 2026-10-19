@@ -5,26 +5,8 @@
   if (!language) return;
   const translated = Array.from(document.querySelectorAll('[data-en]'));
   const arabicContent = new Map(translated.map(el => [el, [...el.childNodes].map(node => node.cloneNode(true))]));
-  const steps = {
-    ar: [
-      ['افهم السلوك الطبيعي الأول.', 'إيه اللي بيتغير لما تضيف منتج للسلة؟ تابع الريكوست والنتيجة قبل ما تبدأ تعدل.'],
-      ['اسأل عن الافتراض اللي ورا الـFlow.', 'السيرفر بيتأكد من الكمية والسعر إزاي؟ ومين المسؤول عن حساب الإجمالي؟ حول السؤال لفرضية اختبار.'],
-      ['اثبت النتيجة  مش اختلاف الريكوست.', 'قارن حالة السلة قبل الاختبار وبعده  وتأكد من الأثر على السيرفر. سجل الدليل وحدود اللي قدرت تثبته.']
-    ],
-    en: [
-      ['Understand normal behavior first.', 'What changes when you add an item? Follow the request and result before changing an input.'],
-      ['Question the assumption behind the flow.', 'How does the server validate quantity and price? Who calculates the total? Turn the question into a test hypothesis.'],
-      ['Verify the outcome, not just the request.', 'Compare the cart before and after, verify server-side impact, and document both your evidence and its limits.']
-    ]
-  };
-  let activeStep = 0;
   let lastFocus = null;
   const isArabic = () => document.documentElement.lang === 'ar';
-  function updateStep() {
-    const copy = steps[isArabic() ? 'ar' : 'en'][activeStep];
-    $('step-title').textContent = copy[0];
-    $('step-copy').textContent = copy[1];
-  }
   function setLanguage(lang) {
     const ar = lang === 'ar';
     document.documentElement.lang = lang;
@@ -38,9 +20,7 @@
     language.setAttribute('aria-label', ar ? 'Switch to English' : 'التبديل إلى العربية');
     document.title = ar ? 'الدفعة الثانية | RVU Mentorship Camp' : 'Cohort 02 | RVU Mentorship Camp';
     $('form-error').hidden = true;
-    updateStep();
     renderWork();
-    renderChallenge();
     renderSaveStatus();
     shelves.forEach(shelf => shelf.reset());
     if ($('image-dialog').open) showResearchImage(activeImage);
@@ -60,15 +40,6 @@
       closeMenu();
       toggle.focus();
     }
-  });
-  document.querySelectorAll('[data-step]').forEach(button => {
-    button.addEventListener('click', () => {
-      activeStep = Number(button.dataset.step);
-      document.querySelectorAll('[data-step]').forEach(b => {
-        const active = b === button; b.classList.toggle('active', active); b.setAttribute('aria-pressed', String(active));
-      });
-      updateStep();
-    });
   });
   function openDialog(dialog) {
     lastFocus = document.activeElement;
@@ -267,31 +238,6 @@
     document.querySelectorAll('[data-work]').forEach(b => { b.classList.toggle('active', b === button); b.setAttribute('aria-pressed', String(b === button)); });
     renderWork();
   }));
-  let selectedAnswer = null;
-  const answers = {
-    ar: {
-      report:['لسه محتاج دليل أقوى.','تغير السعر في الواجهة ممكن يكون مجرد عرض محلي. قبل التقرير  قارن المبلغ اللي السيرفر اعتمده مع السعر المتوقع وحالة الطلب داخل البيئة التدريبية.'],
-      verify:['بالضبط. اثبت النتيجة على السيرفر.','راجع الإجمالي المحفوظ وحالة الطلب باستخدام حساباتك التجريبية. لو السيرفر حسب السعر الصحيح  تغيير الواجهة وحده مش ثغرة. ولو ثبت اختلاف غير مصرح به  وثق الخطوات والأثر وحدود الدليل.'],
-      tools:['ارجع للسلوك الأساسي الأول.','تجربة قيم أكتر من غير متابعة حالة الطلب بتزود الضوضاء. اعرف القيمة الأصلية  غير متغير واحد  وقارن النتيجة اللي السيرفر اعتمدها.']
-    },
-    en: {
-      report:['You still need stronger evidence.','The displayed price might only be a local UI change. Before reporting, compare the server-approved amount with the expected price and order state in the training environment.'],
-      verify:['Exactly. Verify the server-side outcome.','Check the stored total and order state using your test accounts. If the server calculates the correct price, a UI change alone is not a vulnerability. If you prove an unauthorized discrepancy, document the steps, impact and evidence limits.'],
-      tools:['Return to the baseline first.','Trying more values without following the order state adds noise. Establish the original value, change one variable, and compare the server-approved outcome.']
-    }
-  };
-  function renderChallenge() {
-    if (!selectedAnswer) return;
-    const [title,copy] = answers[isArabic() ? 'ar' : 'en'][selectedAnswer];
-    $('challenge-result').hidden = false;
-    $('challenge-result').replaceChildren(node('strong',title),node('p',copy));
-  }
-  document.querySelectorAll('[data-answer]').forEach(button => button.addEventListener('click', () => {
-    selectedAnswer = button.dataset.answer;
-    document.querySelectorAll('[data-answer]').forEach(b => b.setAttribute('aria-pressed',String(b === button)));
-    renderChallenge();
-  }));
-
   function createShelf(trackId, prefix) {
     const track = $(trackId);
     let frame = null, drag = null, suppressUntil = 0;

@@ -46,7 +46,7 @@ for(const name of ['measurement.js','app.js','experience.js'])w.eval(fs.readFile
  assert.equal(errors.length,0,errors.map(e=>e.message).join('\n'));
  dom.window.close();
  for(const old of ['labs','test','submit.html','submit.js','submit.css','legacy-redirect.js','not-found.js'])assert(!fs.existsSync(path.join(root,old)));
- assert(!/\/labs\/|\/test\//.test(html));
+ assert(!/\/labs\/|\/test\/|id="labs"|rvu-commerce/.test(html));
  assert(!/sessionStorage|localStorage/.test(fs.readFileSync(path.join(root,'app.js'),'utf8')));
  console.log('PASS: production metadata, FAQ order, CSP hashes, safe rendering, hostile input, fixed video destinations, URL encoding, bounded campaign fields, pending/failed application handling, language round trips and retired-route removal. All submissions mocked locally.');
 })().catch(e=>{console.error(e);dom.window.close();process.exit(1)});

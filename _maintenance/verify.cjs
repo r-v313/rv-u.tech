@@ -76,7 +76,8 @@ function boot(success=true) {
   assert.equal(d.querySelectorAll('.offline-cohorts li').length,3);
   assert.equal(d.querySelectorAll('.outcome-example').length,6);
   assert(d.querySelector('.capstone-note'));
-  assert(!d.querySelector('a[href*="/labs"]'));
+  assert(!d.querySelector('a[href*="/labs"],#labs,#lab-challenge,[data-step],[data-answer]'));
+  assert(!/RVU LABS|rvu-commerce/.test(html));
   for(const old of ['labs','test','submit.html','submit.js','submit.css','legacy-redirect.js','not-found.js'])assert(!fs.existsSync(path.join(root,old)),`Retired asset remains: ${old}`);
   assert([...d.querySelectorAll('#resources a')].every(a=>new URL(a.href).pathname.endsWith('.pdf')));
   assert.equal(d.querySelectorAll('[data-pdf-guide]').length,3);
@@ -103,9 +104,7 @@ function boot(success=true) {
   assert.equal(d.querySelectorAll('summary .ui-toggle').length,d.querySelectorAll('details').length);
 
   d.querySelector('[data-work=report]').click();assert.match(d.getElementById('work-content').textContent,/reproducible/);
-  d.querySelector('[data-answer=verify]').click();assert.match(d.getElementById('challenge-result').textContent,/server-side/);
   d.getElementById('language').click();assert.equal(d.documentElement.dir,'rtl');
-  assert.match(d.getElementById('challenge-result').textContent,/السيرفر/);
   assert.match(d.getElementById('work-content').textContent,/تقرير/);
   d.querySelector('[data-video="xZR5-4iXnI0"]').click();
   assert(d.getElementById('video-dialog').open);

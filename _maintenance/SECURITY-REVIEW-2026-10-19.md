@@ -90,3 +90,13 @@ These are hardening items. Their absence alone did not demonstrate an exploitabl
 ## Maintenance
 
 Keep main HTML, JS, CSS and PDF links under regression checks when changing the site. Keep _maintenance excluded from publication and retain license notices. Recheck response headers after any hosting/CDN configuration change.
+
+## Follow-up release gate
+
+A subsequent review found that the main page still contained an inline Labs promotion and interactive Commerce scenario after the separate Labs routes had been removed. That remaining section has now been removed, including its GitHub link, exercise controls, JavaScript handlers, translations and unused CSS. Regression checks now reject the section and references as well as retired files and routes.
+
+The updated bilingual curriculum remains in the requested 12-session order with Live Hunting as the final week. Each session has a meaningful description and full-width responsive content.
+
+The complete local functional and security suites passed after this cleanup. Main HTML, JavaScript and CSS contain no comments or debug statements. Required font license notices remain. No current tracked text matched the credential patterns used in the follow-up scan.
+
+The existing hosting-header, provider-administration, mobile-device and load-testing limitations above still apply. Student review examples remain intentionally labelled and unchanged.

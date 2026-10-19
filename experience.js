@@ -35,7 +35,7 @@
     });
   }
   language.addEventListener('click', () => { updateResources(); decorateTechnicalTerms(); });
-  document.querySelectorAll('[data-work],[data-step],[data-answer]').forEach(button => button.addEventListener('click', decorateTechnicalTerms));
+  document.querySelectorAll('[data-work]').forEach(button => button.addEventListener('click', decorateTechnicalTerms));
   updateResources();
   decorateTechnicalTerms();
   const country = document.getElementById('phone-country');
