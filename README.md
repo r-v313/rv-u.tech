@@ -8,6 +8,6 @@ A single-page bilingual website served by GitHub Pages. The published files are 
 
 - Run `python _maintenance/check_structure.py` and the JavaScript regression/security checks before publishing.
 - PDF dependencies are listed in `_maintenance/requirements.txt`. Run `python _maintenance/build_guides.py` to regenerate the six standalone guides and bilingual collection. Source text is in `_maintenance/content` and font license notices are retained.
-- The three review cards are clearly labelled design samples until genuine student reviews are provided.
+- Student testimonials are temporarily removed from the rendered page. Their three illustrative HTML cards remain inside a marked HTML comment in `index.html` for replacement with genuine student reviews later; no review section, sample cards or placeholder heading is displayed.
 - The application form submits directly to the configured Formspree endpoint. YouTube loads only when a teaching video is opened. Analytics events exclude application field values and the application dialog is masked.
 - Deployment and rollback use Git history. No duplicate or legacy website is published.
