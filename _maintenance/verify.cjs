@@ -40,12 +40,10 @@ function boot(success=true) {
   }
   assert.deepEqual([...d.querySelectorAll('#gallery-track>[data-kind]')].map(x=>x.dataset.kind),['videos','videos']);
   assert.equal(d.querySelectorAll('#reports-track [data-image]').length,6);
-  assert.equal(d.querySelectorAll('.demo-label').length,3);
-  assert.equal(d.querySelectorAll('#voices .review-tile').length,3);
+  assert.equal(d.querySelectorAll('#voices,.student-voices,.reviews-grid,.review-tile,.demo-label').length,0,'Sample student reviews must remain absent from the rendered page');
+  assert(html.includes('RVU STUDENT REVIEWS DISABLED'),'Retain commented-out testimonials for future replacement');
+  assert.equal((html.match(/class="review-tile"/g)||[]).length,3,'Keep all three sample cards in the HTML comment');
   assert(!d.querySelector('#gallery-track .review-tile'));
-  const review=d.querySelector('.review-tile');
-  assert(!review.open);review.querySelector('summary').click();assert(review.open);
-  review.querySelector('summary').click();assert(!review.open);
   assert.equal(d.querySelector('.edition-number').textContent,'1 / 11');
   assert.equal(d.querySelector('.edition-number').getAttribute('datetime'),'2026-11-01');
   assert.equal(d.querySelectorAll('summary .ui-toggle').length,d.querySelectorAll('details').length);
