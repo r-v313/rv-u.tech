@@ -295,8 +295,10 @@
   function showResearchImage(index) {
     activeImage = (index + researchImages.length) % researchImages.length;
     const title = researchImages[activeImage][isArabic() ? 0 : 1];
-    const path = `/poc-0${activeImage+1}.png`;
+    const path = `/poc-0${activeImage+1}-full.webp`;
+    const original = `/poc-0${activeImage+1}.png`;
     $('image-title').textContent = title;
+    $('image-original').href = original;
     $('gallery-full-image').alt = title;
     $('image-error').hidden = true;
     $('gallery-full-image').hidden = false;
