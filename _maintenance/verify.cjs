@@ -69,8 +69,10 @@ function boot(success=true) {
   assert(html.includes('RVU STUDENT REVIEWS DISABLED'),'Retain commented-out testimonials for future replacement');
   assert.equal((html.match(/class="review-tile"/g)||[]).length,3,'Keep all three sample cards in the HTML comment');
   assert(!d.querySelector('#gallery-track .review-tile'));
-  assert.equal(d.querySelector('.edition-number').textContent,'22 / 10');
-  assert.equal(d.querySelector('.edition-number').getAttribute('datetime'),'2026-10-22');
+  assert.equal(d.querySelector('.edition-number').textContent,'1 / 11');
+  assert.equal(d.querySelector('.edition-number').getAttribute('datetime'),'2026-11-01');
+  assert.equal(d.querySelector('.edition-note span[data-en]').textContent,'الدفعة الثانية · موعد البداية');
+  assert.equal(d.querySelector('.edition-note strong').textContent,'التقديم مفتوح الآن');
   assert.equal(d.querySelectorAll('summary .ui-toggle').length,d.querySelectorAll('details').length);
   assert.equal(d.querySelectorAll('.close-button.ui-close').length,3);
   assert.equal(d.querySelectorAll('.close-button').length,3);
@@ -126,7 +128,7 @@ function boot(success=true) {
   [...d.querySelectorAll('[data-resource]')].forEach(x=>assert.match(x.href,/-en\.pdf$/));
   assert.match(d.querySelector('.hero h1').textContent,/Understand/);
   assert(d.querySelector('.signature-title img'),'Translation must retain signature');
-  assert.equal(d.querySelector('.edition-number').textContent,'22 / 10');
+  assert.equal(d.querySelector('.edition-number').textContent,'1 / 11');
   assert.equal(d.querySelectorAll('summary .ui-toggle').length,d.querySelectorAll('details').length);
 
   d.querySelector('[data-work=report]').click();assert.match(d.getElementById('work-content').textContent,/reproducible/);
