@@ -13,6 +13,8 @@ w.fetch=(url,options)=>{requests.push({url,body:Object.fromEntries(new URLSearch
 for(const name of ['measurement.js','app.js','experience.js'])w.eval(fs.readFileSync(path.join(root,name),'utf8'));
 (async()=>{
  assert.equal(d.compatMode,'CSS1Compat');
+ assert.equal(d.querySelector('.hero-camp-label').textContent.trim(),'RVU MENTORSHIP · ONLINE BUG BOUNTY CAMP');
+ assert(!html.includes('MENTORSHIP في BUG BOUNTY · أونلاين'));
  assert.equal(d.querySelector('link[rel=canonical]').href,'https://rv-u.tech/');
  assert.equal(d.querySelector('main>section:last-of-type').id,'faq');
  assert.equal(d.querySelector('#faq').previousElementSibling.id,'apply');
