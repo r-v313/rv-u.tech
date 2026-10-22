@@ -10,7 +10,7 @@
   --paper:#eeebe5;
   --dark:#262420;
   --font:'IBM Plex Sans Arabic','Manrope',sans-serif;
-  --mono:'IBM Plex Mono',monospace;
+  --mono:ui-monospace,'Cascadia Code',Consolas,'Liberation Mono',monospace;
   color-scheme:dark;
 }
 
@@ -7401,4 +7401,77 @@ html[lang=ar] .hero .eyebrow {
     letter-spacing:.015em;
     line-height:1.55;
   }
+}
+
+/* RVU 2026 image rendering: aspect-correct responsive previews and readable full-size proof. */
+#reports-track .research-image {
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:16/9;
+  padding:0;
+  border:1px solid #37383b;
+  background:#141618;
+  overflow:hidden;
+}
+#reports-track .research-image img {
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center top;
+  transition:transform .22s ease-out;
+}
+#reports-track .research-image:hover img,
+#reports-track .research-image:focus-visible img {
+  transform:scale(1.025);
+}
+#reports-track .research-image .zoom-mark {
+  z-index:2;
+}
+#image-dialog .image-stage {
+  overflow:auto;
+  overscroll-behavior:contain;
+  scrollbar-gutter:stable;
+}
+#image-dialog .image-stage.is-zoomed {
+  display:block;
+  text-align:start;
+}
+#image-dialog .image-stage.is-zoomed img {
+  display:block;
+  width:max(100%,960px);
+  max-width:none;
+  min-height:0;
+  height:auto;
+  max-height:none;
+  object-fit:contain;
+}
+#image-dialog .image-dialog-footer {
+  flex-wrap:wrap;
+  gap:12px;
+}
+#image-dialog .image-zoom-action {
+  min-height:44px;
+  padding:8px 12px;
+  border:1px solid #665037;
+  border-radius:6px;
+  text-align:center;
+}
+#image-dialog .image-zoom-action[aria-pressed=true] {
+  color:#ffd0a0;
+  border-color:#ff9b52;
+  background:#ff7a1a12;
+}
+@media (max-width:600px) {
+  #reports-track .research-image { aspect-ratio:16/9; }
+  #image-dialog .image-stage { padding:8px; }
+  #image-dialog .image-dialog-footer { justify-content:space-between; }
+  #image-dialog .image-zoom-action { width:100%; }
+  .cover-name p { font-size:clamp(10px,2.55vw,12px); }
+  .cover-name .eyebrow { font-size:clamp(10px,2.55vw,12px); }
+}
+@media (max-width:390px) {
+  .cover-name p { font-size:10px; }
+  .cover-name .eyebrow { font-size:10px; }
 }
