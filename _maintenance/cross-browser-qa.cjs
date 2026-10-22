@@ -55,9 +55,13 @@ const audit=async(page,label)=>{
           const errors=[];
           page.on('pageerror',err=>errors.push(err.message));
           await page.route('**/*',r=>r.request().url().startsWith(base)?r.continue():r.abort());
-          await page.goto(base+'/',{waitUntil:'domcontentloaded'});
+          await page.goto(base+'/',{waitUntil:'load'});
           await page.locator('.cover-portrait img').waitFor();
-          await page.waitForFunction(()=>document.querySelector('.cover-portrait img')?.complete);
+          await page.waitForFunction(()=>{
+            const img=document.querySelector('.cover-portrait img');
+            const style=document.querySelector('link[rel="stylesheet"][href*="styles.min.css"]');
+            return !!img && img.complete && img.naturalWidth>0 && !!style && !!style.sheet;
+          },{timeout:20000});
           const check=async(lang)=>{
             const info=await page.evaluate(()=>{
               const img=document.querySelector('.cover-portrait img');
