@@ -198,33 +198,51 @@ input:focus-visible,textarea:focus-visible,select:focus-visible {
 }
 
 .brand {
-  display:flex;
+  display:inline-flex;
   align-items:center;
   gap:11px;
+  flex-shrink:0;
   font-family:"Manrope",sans-serif;
-  font-size:21px;
+  font-size:20px;
   font-weight:800;
-  line-height:1.1;
+  line-height:1;
 }
 
 .brand-wordmark {
   display:inline-flex;
-  align-items:baseline;
-  gap:.38em;
+  align-items:center;
+  gap:0;
   white-space:nowrap;
 }
 
 .brand-name {
-  color:#ffcf80;
+  color:#f5efe6;
   font-weight:800;
-  letter-spacing:-.035em;
+  letter-spacing:-.055em;
+  line-height:1;
 }
 
 .brand-light {
-  color:#ff842b;
-  font-weight:600;
-  letter-spacing:.065em;
-  font-size:.81em;
+  display:inline-flex;
+  align-items:center;
+  margin-inline-start:.65em;
+  padding-inline-start:.65em;
+  border-inline-start:1px solid #c97943;
+  color:#ff9348;
+  font-size:.73em;
+  font-weight:700;
+  letter-spacing:.1em;
+  line-height:1;
+}
+
+.brand:hover .brand-name,
+.brand:focus-visible .brand-name {
+  color:#fffaf4;
+}
+
+.brand:hover .brand-light,
+.brand:focus-visible .brand-light {
+  color:#ffc17e;
 }
 
 .nav nav {
@@ -1271,6 +1289,10 @@ html[dir=ltr] .section-heading>p {
   .nav .brand {
     font-size:16px;
     gap:7px;
+  }
+  .brand-light {
+    margin-inline-start:.5em;
+    padding-inline-start:.5em;
   }
   .nav-actions {
     gap:3px;
@@ -7314,6 +7336,14 @@ html[lang=en] .hero .hero-title {
 }
 
 @media (max-width:360px) {
+  .nav .brand {
+    font-size:15px;
+    gap:6px;
+  }
+  .brand-light {
+    margin-inline-start:.4em;
+    padding-inline-start:.4em;
+  }
   html[lang=ar] .hero .hero-title {
     font-size:35px;
   }
