@@ -25,7 +25,7 @@ const server=http.createServer((req,res)=>{
   assert(executablePath,'A headless Chrome/Chromium binary is required');
   const browser=await chromium.launch({headless:true,executablePath,args:['--no-sandbox','--disable-dev-shm-usage']});
   try{
-    for(const width of [320,360,390,430,768,1024,1440]){
+    for(const width of [280,320,344,360,375,390,412,430,480,540,600,640,768,820,850,851,900,1024,1100,1280,1440,1920]){
       const page=await browser.newPage({viewport:{width,height:900},deviceScaleFactor:2});
       const errors=[];page.on('pageerror',error=>errors.push(error.message));
       await page.route('**/*',route=>route.request().url().startsWith(base)?route.continue():route.abort());
@@ -58,6 +58,11 @@ const server=http.createServer((req,res)=>{
       assert.equal(metrics.headingAlign,'center','Portrait heading is not centered');
       assert.equal(metrics.reports,6);
       assert.equal(metrics.ytFrames,0,'YouTube must stay unloaded until interaction');
+      assert.equal(await page.locator('#reports-track .research-image img').first().evaluate(img=>getComputedStyle(img).objectFit),'contain','Report previews must preserve full original image');
+      for(const target of ['.hero-copy','.hero-visual','.price-panel','.mentor-cover']){
+        const box=await page.locator(target).first().evaluate(el=>({left:el.getBoundingClientRect().left,right:el.getBoundingClientRect().right,width:el.getBoundingClientRect().width}));
+        assert(box.left>=-3&&box.right<=width+3,'Out-of-viewport primary content '+target+' at '+width+': '+JSON.stringify(box));
+      }
       if(width===390){
         const preview=page.locator('#reports-track .research-image').first();
         await preview.scrollIntoViewIfNeeded();
@@ -74,8 +79,27 @@ const server=http.createServer((req,res)=>{
         await page.locator('#language').click();
         assert.equal(await page.locator('html').getAttribute('lang'),'en');
       }
+      if(width!==390) await page.locator('#language').click();
+      const en=await page.evaluate(()=>{
+        const portrait=document.querySelector('.mentor-cover').getBoundingClientRect();
+        return {dir:document.documentElement.dir,lang:document.documentElement.lang,scroll:document.documentElement.scrollWidth,
+          portraitLeft:portrait.left,portraitRight:portrait.right,
+          imageLabel:document.querySelector('[data-image="0"]').getAttribute('aria-label')};
+      });
+      assert.equal(en.lang,'en','English locale at '+width);
+      assert.equal(en.dir,'ltr');
+      assert(en.scroll<=width+2,'English horizontal overflow at '+width+': '+JSON.stringify(en));
+      assert(en.portraitLeft>=-2&&en.portraitRight<=width+2,'English cover clipped at '+width);
+      assert.match(en.imageLabel,/View account takeover report/);
+      await page.emulateMedia({reducedMotion:'reduce',contrast:'more'});
+      assert.equal(await page.locator('html').evaluate(el=>getComputedStyle(el).scrollBehavior),'auto','Reduced-motion setting respected');
+      if([320,390,768,1024].includes(width)){
+        await page.evaluate(()=>{document.documentElement.style.fontSize='150%'});
+        const scaled=await page.evaluate(()=>document.documentElement.scrollWidth);
+        assert(scaled<=width+2,'Font-scaling overflow at '+width+'px: '+scaled);
+      }
       assert.deepEqual(errors,[],'Client-side exceptions at '+width+'px');
-      console.log('PASS: Chromium viewport '+width+'px; portrait '+metrics.portraitWidth+'px, document '+metrics.documentWidth+'px');
+      console.log('PASS: Chromium '+width+'px AR+EN, image fidelity, adaptive settings; document '+metrics.documentWidth+'px');
       await page.close();
     }
   }finally{
