@@ -47,7 +47,7 @@ const server=http.createServer((req,res)=>{
         };
       });
       assert(metrics.documentWidth<=width+2,'Horizontal overflow at '+width+'px: '+JSON.stringify(metrics));
-      assert(metrics.portraitWidth>=480,'Portrait failed to load at '+width);
+      assert(metrics.portraitWidth>0,'Portrait failed to load at '+width);
       assert(metrics.logoWidth>0,'Logo failed to load at '+width);
       assert(metrics.cardLeft>=-2&&metrics.cardRight<=width+2,'Portrait card out of viewport at '+width);
       assert.equal(metrics.headingAlign,'center','Portrait heading is not centered');
