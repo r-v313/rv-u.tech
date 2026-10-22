@@ -19,7 +19,11 @@ function boot(success=true) {
   w.requestAnimationFrame=fn=>{fn();return 1;};
   let requests=[];
   const navigations=[];
-  w.HTMLAnchorElement.prototype.click=function(){if(this.href.startsWith('https://wa.me/'))navigations.push(this.href);};
+  const originalAnchorClick=w.HTMLAnchorElement.prototype.click;
+  w.HTMLAnchorElement.prototype.click=function(){
+    if(this.href.startsWith('https://wa.me/')){navigations.push(this.href);return;}
+    return originalAnchorClick.call(this);
+  };
   w.fetch=async(url,options)=>{
     requests.push({url,body:Object.fromEntries(new URLSearchParams(options.body)),options});
     return{ok:success};
