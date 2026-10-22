@@ -68,6 +68,11 @@ function boot(success=true) {
   }
   assert.deepEqual([...d.querySelectorAll('#gallery-track>[data-kind]')].map(x=>x.dataset.kind),['videos','videos']);
   assert.equal(d.querySelectorAll('#reports-track [data-image]').length,6);
+  for(let i=1;i<=6;i++){
+    assert(fs.existsSync(path.join(root,`poc-0${i}-full.webp`)),'Optimized screenshot '+i+' exists');
+    assert(fs.statSync(path.join(root,`poc-0${i}-full.webp`)).size<fs.statSync(path.join(root,`poc-0${i}.png`)).size,'Optimized screenshot saves bandwidth');
+  }
+  assert(fs.existsSync(path.join(root,'assets/ramez-medhat-640.webp')));
   const screenshotDimensions=[[960,271],[383,720],[960,275],[392,720],[387,720],[515,720]];
   const screenshots=[...d.querySelectorAll('#reports-track .research-image img')];
   assert.equal(screenshots.length,6);
@@ -154,11 +159,14 @@ function boot(success=true) {
   assert.match(d.querySelector('#video-mount iframe').src,/youtube-nocookie.com\/embed\/xZR5-4iXnI0/);
   d.getElementById('video-dialog').close();assert.equal(d.getElementById('video-mount').children.length,0);
   d.querySelector('[data-image="0"]').click();assert(d.getElementById('image-dialog').open);
+  assert.match(d.getElementById('gallery-full-image').src,/poc-01-full\.webp$/);
+  assert.match(d.getElementById('image-original').href,/poc-01\.png$/);
   const stage=d.getElementById('image-stage'),zoom=d.getElementById('image-zoom');
   assert(!stage.classList.contains('is-zoomed'));
   zoom.click();assert(stage.classList.contains('is-zoomed'));
   assert.equal(zoom.getAttribute('aria-pressed'),'true');
-  d.getElementById('image-next').click();assert.match(d.getElementById('gallery-full-image').src,/poc-02/);
+  d.getElementById('image-next').click();assert.match(d.getElementById('gallery-full-image').src,/poc-02-full\.webp$/);
+  assert.match(d.getElementById('image-original').href,/poc-02\.png$/);
   assert(!stage.classList.contains('is-zoomed'),'Zoom must reset when changing report');
   assert.equal(zoom.getAttribute('aria-pressed'),'false');
   d.getElementById('image-dialog').close();assert(!d.getElementById('gallery-full-image').hasAttribute('src'));
