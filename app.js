@@ -166,7 +166,9 @@
     link.rel = 'noreferrer';
     link.click();
   });
-  window.addEventListener('pageshow', () => { submitting = false; });
+  window.addEventListener('pageshow', event => {
+    if (event.persisted) submitting = false;
+  });
 
   const samples = {
     ar: {
