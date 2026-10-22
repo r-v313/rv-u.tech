@@ -37,7 +37,12 @@ for(const name of ['measurement.js','app.js','experience.js'])w.eval(fs.readFile
  for(const file of ['app.js','experience.js','measurement.js'])assert(!/innerHTML|insertAdjacentHTML|document\.write|\beval\s*\(/.test(fs.readFileSync(path.join(root,file),'utf8')));
  const cssSource=fs.readFileSync(path.join(root,'styles.css'),'utf8');
  const cssMin=fs.readFileSync(path.join(root,'styles.min.css'),'utf8');
- assert.deepEqual(css.generate(css.parse(cssMin)),css.generate(css.parse(cssSource)),'Minified CSS should match the source cascade');
+ const canonicalMin=css.generate(css.parse(cssMin)),canonicalSource=css.generate(css.parse(cssSource));
+ if(canonicalMin!==canonicalSource){
+   let offset=0;
+   while(offset<Math.min(canonicalMin.length,canonicalSource.length)&&canonicalMin[offset]===canonicalSource[offset]) offset++;
+   throw new Error('Minified CSS AST diverges at offset '+offset+'; optimized='+JSON.stringify(canonicalMin.slice(Math.max(0,offset-100),offset+140))+' source='+JSON.stringify(canonicalSource.slice(Math.max(0,offset-100),offset+140)));
+ }
  const {execFileSync}=require('node:child_process');
  execFileSync(process.execPath,[path.join(root,'_maintenance/minify-css.cjs'),'--check'],{stdio:'pipe'});
  const arTitle=d.querySelector('#mentorship h2').innerHTML;
