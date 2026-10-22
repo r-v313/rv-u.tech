@@ -7476,22 +7476,15 @@ html[lang=ar] .hero .eyebrow {
   .cover-name .eyebrow { font-size:10px; }
 }
 
-/* Prevent RTL carousel scroll ranges from contributing to page-wide overflow. */
-#gallery-track,
-#reports-track {
-  contain:paint;
-  min-width:0;
-  max-width:100%;
-}
 
-/* Clip only the research section's RTL off-screen carousel content;
-   the inner gallery remains horizontally scrollable. */
-#research {
-  overflow-x:clip;
-}
 
 /* Desktop hero columns must shrink below min-content width at tablet/desktop widths. */
 .hero-copy,.hero-visual { min-width:0; }
 @media (min-width:851px) {
   .hero { grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
+}
+
+/* The 35px hero halo must not exceed the available desktop side gutter. */
+@media (min-width:851px) and (max-width:1100px) {
+  .hero-visual::before { inset:-20px; }
 }
