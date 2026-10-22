@@ -55,3 +55,19 @@ jobs:
           assert (root / 'assets' / 'ramez-medhat-640.webp').stat().st_size < 85_000, 'Retina portrait budget exceeded'
           print('PASS: optimized evidence', sum(sizes), 'bytes; CSS', (root / 'styles.min.css').stat().st_size, 'bytes')
           PY
+
+  cross-browser-accessibility:
+    name: Firefox / WebKit / WCAG 2.1 AA
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install test dependencies
+        run: npm install --prefix _maintenance --no-fund --no-audit
+      - name: Install Firefox and WebKit with system dependencies
+        run: node _maintenance/node_modules/playwright-core/cli.js install --with-deps firefox webkit
+      - name: Run cross-browser and accessibility audits
+        run: npm run test:cross-browser --prefix _maintenance
