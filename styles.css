@@ -7368,7 +7368,7 @@ html[lang=ar] .hero .eyebrow {
 }
 
 /* Standalone hero label: centered on desktop and mobile in both UI languages. */
-.hero-copy > .hero-camp-label {
+html .hero .hero-copy > .hero-camp-label {
   display:flex;
   align-items:center;
   justify-content:center;
@@ -7390,13 +7390,13 @@ html[lang=ar] .hero .eyebrow {
   text-align:center;
 }
 
-.hero-copy > .hero-camp-label .live-dot {
+html .hero .hero-copy > .hero-camp-label .live-dot {
   background:#ff8b32;
   box-shadow:0 0 0 3px #ff7a1a20;
 }
 
 @media (max-width:540px) {
-  .hero-copy > .hero-camp-label {
+  html .hero .hero-copy > .hero-camp-label {
     max-width:100%;
     padding:7px 10px;
     gap:7px;
@@ -7407,7 +7407,7 @@ html[lang=ar] .hero .eyebrow {
 }
 
 @media (max-width:360px) {
-  .hero-copy > .hero-camp-label {
+  html .hero .hero-copy > .hero-camp-label {
     font-size:8.5px;
     letter-spacing:0;
     padding-inline:8px;
