@@ -39,6 +39,8 @@ jobs:
         run: npm install --prefix _maintenance --no-fund --no-audit
       - name: Run production regression suite
         run: npm test --prefix _maintenance
+      - name: Chromium responsive layout and image QA
+        run: npm run test:browser --prefix _maintenance
       - name: Verify HTML document structure
         run: python _maintenance/check_structure.py
       - name: Enforce transfer-size budgets
