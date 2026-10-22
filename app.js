@@ -18,7 +18,7 @@
     document.querySelectorAll('[data-label-en]').forEach(el => el.setAttribute('aria-label', el.dataset[ar ? 'labelAr' : 'labelEn']));
     language.textContent = ar ? 'EN' : 'AR';
     language.setAttribute('aria-label', ar ? 'Switch to English' : 'التبديل إلى العربية');
-    document.title = ar ? 'الدفعة الثانية | RVU Mentorship Camp' : 'Cohort 02 | RVU Mentorship Camp';
+    document.title = ar ? 'الدفعة الثانية — التقديم مفتوح الآن | RVU Mentorship Camp' : 'Cohort 02 — Applications Open | RVU Mentorship Camp';
     $('form-error').hidden = true;
     renderWork();
     shelves.forEach(shelf => shelf.reset());
