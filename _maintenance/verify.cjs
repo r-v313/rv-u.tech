@@ -35,6 +35,12 @@ function boot(success=true) {
   const ids=[...d.querySelectorAll('[id]')].map(x=>x.id);
   assert.equal(new Set(ids).size,ids.length,'IDs must be unique');
   assert.equal(d.querySelectorAll('h1').length,1);
+  assert.match(d.querySelector('.hero-lead').textContent,/اتعلن رسميًا/);
+  assert.match(d.querySelector('.hero-lead').textContent,/التقديم للانترفيو مفتوح/);
+  assert.equal(d.querySelector('.history-next p').textContent,'التقديم مفتوح الآن');
+  assert(!/بجهز للدفعة الثانية|الإعلان ١ نوفمبر|Official announcement on 1 November|Coming next · announcement/.test(html),'No future-announcement copy in launch content');
+  assert.match(d.querySelector('meta[name=description]').content,/التقديم مفتوح الآن/);
+  assert.match(d.querySelector('meta[property="og:title"]').content,/Applications Open/);
   const portraitHeading=d.querySelector('.mentor-cover .cover-top .mono');
   assert(portraitHeading,'Mentor card heading exists');
   assert.equal(portraitHeading.textContent.trim(),'RVU MENTORSHIP · ONLINE BUG BOUNTY CAMP');
@@ -63,8 +69,8 @@ function boot(success=true) {
   assert(html.includes('RVU STUDENT REVIEWS DISABLED'),'Retain commented-out testimonials for future replacement');
   assert.equal((html.match(/class="review-tile"/g)||[]).length,3,'Keep all three sample cards in the HTML comment');
   assert(!d.querySelector('#gallery-track .review-tile'));
-  assert.equal(d.querySelector('.edition-number').textContent,'1 / 11');
-  assert.equal(d.querySelector('.edition-number').getAttribute('datetime'),'2026-11-01');
+  assert.equal(d.querySelector('.edition-number').textContent,'22 / 10');
+  assert.equal(d.querySelector('.edition-number').getAttribute('datetime'),'2026-10-22');
   assert.equal(d.querySelectorAll('summary .ui-toggle').length,d.querySelectorAll('details').length);
   assert.equal(d.querySelectorAll('.close-button.ui-close').length,3);
   assert.equal(d.querySelectorAll('.close-button').length,3);
@@ -112,13 +118,15 @@ function boot(success=true) {
   assert(price&&!price.open,'Price is inside a closed FAQ');
   d.getElementById('language').click();
   assert.equal(d.documentElement.lang,'en');assert.equal(d.documentElement.dir,'ltr');
+  assert.match(d.querySelector('.hero-lead').textContent,/applications for the free interview are open now/i);
+  assert.equal(d.querySelector('.history-next p').textContent,'Applications are open now');
   assert.equal(d.querySelector('.mentor-cover .cover-top .mono').textContent.trim(),'RVU MENTORSHIP · ONLINE BUG BOUNTY CAMP');
   [...d.querySelectorAll('[data-pdf-guide]')].forEach(a=>assert(a.href.endsWith(a.dataset.pdfGuide+'-en.pdf')));
   assert.match(d.querySelector('.camp-price').textContent,/4,000 EGP/);
   [...d.querySelectorAll('[data-resource]')].forEach(x=>assert.match(x.href,/-en\.pdf$/));
   assert.match(d.querySelector('.hero h1').textContent,/Understand/);
   assert(d.querySelector('.signature-title img'),'Translation must retain signature');
-  assert.equal(d.querySelector('.edition-number').textContent,'1 / 11');
+  assert.equal(d.querySelector('.edition-number').textContent,'22 / 10');
   assert.equal(d.querySelectorAll('summary .ui-toggle').length,d.querySelectorAll('details').length);
 
   d.querySelector('[data-work=report]').click();assert.match(d.getElementById('work-content').textContent,/reproducible/);
