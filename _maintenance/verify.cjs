@@ -35,6 +35,9 @@ function boot(success=true) {
   const ids=[...d.querySelectorAll('[id]')].map(x=>x.id);
   assert.equal(new Set(ids).size,ids.length,'IDs must be unique');
   assert.equal(d.querySelectorAll('h1').length,1);
+  assert.equal(d.querySelectorAll('img[src^="./assets/ramez-medhat-480.webp"]').length,1);
+  assert(!html.includes('IBM+Plex+Mono:wght'),'No redundant monospaced Google Font request');
+  assert(fs.readFileSync(path.join(root,'measurement.js'),'utf8').includes('requestIdleCallback'));
   assert.match(d.querySelector('.hero-lead').textContent,/اتعلن رسميًا/);
   assert.match(d.querySelector('.hero-lead').textContent,/التقديم للانترفيو مفتوح/);
   assert.equal(d.querySelector('.history-next p').textContent,'التقديم مفتوح الآن');
@@ -65,6 +68,18 @@ function boot(success=true) {
   }
   assert.deepEqual([...d.querySelectorAll('#gallery-track>[data-kind]')].map(x=>x.dataset.kind),['videos','videos']);
   assert.equal(d.querySelectorAll('#reports-track [data-image]').length,6);
+  const screenshotDimensions=[[960,271],[383,720],[960,275],[392,720],[387,720],[515,720]];
+  const screenshots=[...d.querySelectorAll('#reports-track .research-image img')];
+  assert.equal(screenshots.length,6);
+  screenshots.forEach((img,i)=>{
+    assert.equal(Number(img.width),screenshotDimensions[i][0]);
+    assert.equal(Number(img.height),screenshotDimensions[i][1]);
+    assert.equal(img.loading,'lazy');
+    assert.equal(img.getAttribute('fetchpriority'),'low');
+  });
+  assert.equal(d.querySelectorAll('link[rel="stylesheet"][href*="styles.min.css"]').length,1);
+  assert(!d.querySelector('link[rel="stylesheet"][href*="styles.css"]'));
+  assert(!d.documentElement.hasAttribute('data-saver'),'No alternative data-saver mode');
   assert.equal(d.querySelectorAll('#voices,.student-voices,.reviews-grid,.review-tile,.demo-label').length,0,'Sample student reviews must remain absent from the rendered page');
   assert(html.includes('RVU STUDENT REVIEWS DISABLED'),'Retain commented-out testimonials for future replacement');
   assert.equal((html.match(/class="review-tile"/g)||[]).length,3,'Keep all three sample cards in the HTML comment');
@@ -85,7 +100,7 @@ function boot(success=true) {
   assert.equal(d.querySelectorAll('.week-practice,.week-output').length,0);
   assert.equal(d.querySelectorAll('#outcomes .outcomes-list article').length,6);
   assert.equal(d.querySelectorAll('#fit .fit-columns article').length,2);
-  assert.equal(d.querySelectorAll('img[src^="./assets/ramez-medhat.webp"]').length,1);
+  assert.equal(d.querySelectorAll('img[src^="./assets/ramez-medhat-480.webp"]').length,1);
   assert.equal(d.querySelectorAll('#readiness,#gallery-help,#gallery-position,.cover-edition').length,0);
   assert(!d.querySelector('#curriculum').textContent.includes('السيشن'));
   assert(!d.body.textContent.includes('موعد أول سيشن'));
@@ -139,7 +154,13 @@ function boot(success=true) {
   assert.match(d.querySelector('#video-mount iframe').src,/youtube-nocookie.com\/embed\/xZR5-4iXnI0/);
   d.getElementById('video-dialog').close();assert.equal(d.getElementById('video-mount').children.length,0);
   d.querySelector('[data-image="0"]').click();assert(d.getElementById('image-dialog').open);
+  const stage=d.getElementById('image-stage'),zoom=d.getElementById('image-zoom');
+  assert(!stage.classList.contains('is-zoomed'));
+  zoom.click();assert(stage.classList.contains('is-zoomed'));
+  assert.equal(zoom.getAttribute('aria-pressed'),'true');
   d.getElementById('image-next').click();assert.match(d.getElementById('gallery-full-image').src,/poc-02/);
+  assert(!stage.classList.contains('is-zoomed'),'Zoom must reset when changing report');
+  assert.equal(zoom.getAttribute('aria-pressed'),'false');
   d.getElementById('image-dialog').close();assert(!d.getElementById('gallery-full-image').hasAttribute('src'));
   d.getElementById('menu-toggle').click();assert.equal(d.getElementById('menu-toggle').getAttribute('aria-expanded'),'true');
   d.querySelector('#navigation a').click();assert.equal(d.getElementById('menu-toggle').getAttribute('aria-expanded'),'false');
