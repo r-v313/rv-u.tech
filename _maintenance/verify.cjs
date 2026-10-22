@@ -79,7 +79,7 @@ function boot(success=true) {
   screenshots.forEach((img,i)=>{
     assert.equal(Number(img.width),screenshotDimensions[i][0]);
     assert.equal(Number(img.height),screenshotDimensions[i][1]);
-    assert.equal(img.loading,'lazy');
+    assert.equal(img.getAttribute('loading'),'lazy');
     assert.equal(img.getAttribute('fetchpriority'),'low');
   });
   assert.equal(d.querySelectorAll('link[rel="stylesheet"][href*="styles.min.css"]').length,1);
