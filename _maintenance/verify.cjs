@@ -30,6 +30,9 @@ function boot(success=true) {
   const ids=[...d.querySelectorAll('[id]')].map(x=>x.id);
   assert.equal(new Set(ids).size,ids.length,'IDs must be unique');
   assert.equal(d.querySelectorAll('h1').length,1);
+  assert.equal(d.querySelectorAll('.brand-wordmark .brand-name').length,1);
+  assert.equal(d.querySelectorAll('.brand-wordmark .brand-light').length,1);
+  assert([...d.querySelectorAll('a[href^="https://wa.me/"]')].every(a=>new URL(a.href).pathname==='/201012809358'),'Every static WhatsApp link must use the current number');
   assert.match(d.querySelector('meta[name=robots]').content,/^index,follow/);
   for(const a of d.querySelectorAll('a[href^="#"]')) assert(d.getElementById(a.hash.slice(1)),`Missing anchor ${a.hash}`);
   for(const el of d.querySelectorAll('img[src],script[src],link[rel=stylesheet],a[download]')) {
@@ -120,6 +123,7 @@ function boot(success=true) {
   assert.equal(requests.length,1);assert.equal(requests[0].body.phone,'+201012345678');
   assert.match(d.getElementById('save-title').textContent,/بنجاح/);
   assert.equal(new URL(d.getElementById('application-whatsapp').href).hostname,'wa.me');
+  assert.equal(new URL(d.getElementById('application-whatsapp').href).pathname,'/201012809358');
   d.getElementById('edit-application').click();form.dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));await new Promise(r=>setTimeout(r,5));
   assert.equal(requests.length,1,'Duplicate submission suppressed');
   assert.equal(errors.length,0,errors.map(e=>e.message).join('\n'));
