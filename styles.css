@@ -1800,21 +1800,6 @@ html[dir=ltr] .section-heading>p {
   font-size:11px;
 }
 
-.ready-mark[data-state=pending] {
-  background:#2e2e30;
-  color:#d4d4d8;
-}
-
-.ready-mark[data-state=unconfirmed] {
-  background:#2d2d2f;
-  color:#d4d4d8;
-}
-
-#save-status {
-  border-inline-start:2px solid var(--orange);
-  padding-inline-start:12px;
-}
-
 .noscript-note {
   padding-block:20px;
 }
@@ -3053,11 +3038,6 @@ dialog,#image-dialog {
   border-color:#242426;
 }
 
-.ready-mark {
-  background:#272729;
-  color:#ff7a1a;
-}
-
 input,select,textarea {
   background:#101010;
   border-color:#2c2c2e;
@@ -3904,11 +3884,6 @@ dialog::backdrop {
 
 .image-stage {
   background:#090909;
-}
-
-.ready-mark {
-  border-color:var(--gold);
-  color:var(--gold);
 }
 
 html[dir=ltr] .hero h1 {
