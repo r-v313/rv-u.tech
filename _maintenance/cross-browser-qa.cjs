@@ -21,6 +21,12 @@ const server=http.createServer((req,res)=>{
     if(!filename.startsWith(root+path.sep)){res.writeHead(403);res.end();return;}
     fs.readFile(filename,(err,body)=>{
       if(err){res.writeHead(404);res.end();return;}
+      // Production is HTTPS. WebKit upgrades HTTP localhost subresources with
+      // CSP upgrade-insecure-requests, unlike Firefox/Chromium; for HTTP-based
+      // test fixtures omit ONLY that directive. All other CSP stays intact.
+      if(path.extname(filename)==='.html'){
+        body=Buffer.from(body.toString('utf8').replace(/; upgrade-insecure-requests/g,''));
+      }
       res.writeHead(200,{'Content-Type':media[path.extname(filename)]||'application/octet-stream',
         'Cache-Control':'no-store'});res.end(body);
     });
