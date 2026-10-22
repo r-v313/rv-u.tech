@@ -22,7 +22,7 @@ function minifyCss(input) {
     if(/\s/.test(ch)){pending=true;continue;}
     if(pending){
       const prev=output.slice(-1);
-      if(prev&&!/[{;}:,]/.test(prev)&&!/[{;}:,]/.test(ch))output+=' ';
+      if(prev&&!/[{;}:,]/.test(prev)&&!/[{;},]/.test(ch))output+=' ';
       pending=false;
     }
     if(ch==='}'&&output.endsWith(';'))output=output.slice(0,-1);
