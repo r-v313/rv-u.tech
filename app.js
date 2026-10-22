@@ -21,10 +21,8 @@
     document.title = ar ? 'الدفعة الثانية | RVU Mentorship Camp' : 'Cohort 02 | RVU Mentorship Camp';
     $('form-error').hidden = true;
     renderWork();
-    renderSaveStatus();
     shelves.forEach(shelf => shelf.reset());
     if ($('image-dialog').open) showResearchImage(activeImage);
-    if (!$('application-ready').hidden) prepareMessage();
   }
   language.addEventListener('click', () => setLanguage(isArabic() ? 'en' : 'ar'));
   const nav = $('navigation');
@@ -107,91 +105,68 @@
       : `Application — RVU Camp / Cohort 02\n\nName: ${name}\nWhatsApp: ${phone}\nLevel: ${level}\nGoal: ${goal}\n\nSource: RVU Camp official website`;
     const url = new URL('https://wa.me/201012809358');
     url.searchParams.set('text', message);
-    $('application-whatsapp').href = url.href;
-    return true;
+    return url.href;
   }
-  let saveState = 'pending';
+  // Visitor goes straight to WhatsApp. Keepalive may finish the form POST
+  // after page unload, but does not guarantee server receipt.
   let submitting = false;
-  const attempts = new Map();
-  const saveCopy = {
-    ar: {
-      pending: ['جاري حفظ طلبك…', 'بنحاول نحفظ بياناتك. تقدر تفتح واتساب وتكمل التواصل في أي وقت.'],
-      saved: ['تم حفظ طلبك بنجاح.', 'وصل تأكيد من خدمة التقديم بحفظ البيانات. تقدر تكمل على واتساب لتنسيق الانترفيو. التقديم لا يعني القبول أو حجز المقعد.'],
-      unconfirmed: ['ماقدرناش نتأكد من حفظ الطلب.', 'ممكن يكون الاتصال انقطع أو خدمة التقديم غير متاحة. ابعت الرسالة الجاهزة على واتساب عشان تتأكد إن طلبك وصل.']
-    },
-    en: {
-      pending: ['Saving your application…', 'We are trying to save your details. You can continue on WhatsApp at any time.'],
-      saved: ['Your application has been saved.', 'The application service confirmed the save. Continue on WhatsApp to arrange your interview. Applying does not guarantee acceptance or reserve a seat.'],
-      unconfirmed: ['We could not confirm the save.', 'The connection may have been interrupted or the service may be unavailable. Send the prepared WhatsApp message to make sure your application reaches me.']
-    }
-  };
-  function renderSaveStatus() {
-    const copy = saveCopy[isArabic() ? 'ar' : 'en'][saveState];
-    $('save-title').textContent = copy[0];
-    $('save-status').textContent = copy[1];
-    const mark = document.querySelector('.ready-mark');
-    mark.dataset.state = saveState;
-    mark.textContent = saveState === 'saved' ? '✓' : saveState === 'pending' ? '…' : '!';
-  }
-  form.addEventListener('submit', async event => {
+  form.addEventListener('submit', event => {
     event.preventDefault();
     if (submitting) return;
     $('form-error').hidden = true;
     if (!form.reportValidity()) return;
-    if (!prepareMessage()) {
-      $('form-error').textContent = isArabic() ? 'راجع اسمك وهدفك  واكتب رقم واتساب صحيح بكود الدولة  مثل +20.' : 'Check your name and goal, and enter a valid WhatsApp number with country code, such as +20.';
+    const whatsappUrl = prepareMessage();
+    if (!whatsappUrl) {
+      $('form-error').textContent = isArabic()
+        ? 'راجع اسمك وهدفك، واكتب رقم واتساب صحيح بكود الدولة، مثل +20.'
+        : 'Check your name and goal, and enter a valid WhatsApp number with country code, such as +20.';
       $('form-error').hidden = false;
       return;
     }
-    const fields = form.elements;
-    const payload = {name: fields.name.value.trim(), phone: normalizedPhone(fields.phone.value), level: fields.level.value, goal: fields.goal.value.trim()};
-    const fingerprint = JSON.stringify(payload);
-    const previous = attempts.get(fingerprint);
-    form.hidden = true;
-    $('application-ready').hidden = false;
-    saveState = previous || 'pending';
-    renderSaveStatus();
-    $('application-whatsapp').focus();
-
-    if (previous) return;
     submitting = true;
-    $('edit-application').disabled = true;
-    attempts.set(fingerprint, 'pending');
-    let timeout;
+    const fields = form.elements;
+    const payload = {
+      name:fields.name.value.trim(),
+      phone:normalizedPhone(fields.phone.value),
+      level:fields.level.value,
+      goal:fields.goal.value.trim()
+    };
     try {
       const submissionId = typeof crypto.randomUUID === 'function'
         ? crypto.randomUUID()
         : Array.from(crypto.getRandomValues(new Uint8Array(16)), byte => byte.toString(16).padStart(2, '0')).join('');
-      Object.assign(payload, {submission_id: submissionId, submitted_at: new Date().toISOString(), page_url: location.origin + location.pathname, cohort: '02', source: 'camp-website', language: isArabic() ? 'ar' : 'en', _subject: 'RVU Camp cohort 02 application - ' + payload.name});
-      const params = new URLSearchParams(location.search);
-      for (const key of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term']) payload[key] = (params.get(key) || '').slice(0, 200);
-      const controller = new AbortController();
-      timeout = setTimeout(() => controller.abort(), 12000);
-      const response = await fetch('https://formspree.io/f/xoeqykpq', {
-        method: 'POST', headers: {'Content-Type': 'application/json', Accept: 'application/json'},
-        body: JSON.stringify(payload), signal: controller.signal,
-        credentials: 'omit', redirect: 'error', referrerPolicy: 'no-referrer'
+      Object.assign(payload, {
+        submission_id:submissionId, submitted_at:new Date().toISOString(),
+        page_url:location.origin + location.pathname, cohort:'02',
+        source:'camp-website', language:isArabic() ? 'ar' : 'en',
+        _subject:'RVU Camp cohort 02 application - ' + payload.name
       });
-      if (!response.ok) throw new Error('Save not confirmed');
-      saveState = 'saved';
-    } catch (_) { saveState = 'unconfirmed'; }
-    finally {
-      clearTimeout(timeout);
-      attempts.set(fingerprint, saveState);
-      submitting = false;
-      $('edit-application').disabled = false;
-      renderSaveStatus();
+      const params = new URLSearchParams(location.search);
+      for (const key of ['utm_source','utm_medium','utm_campaign','utm_content','utm_term']) {
+        payload[key] = (params.get(key) || '').slice(0,200);
+      }
+      // Form-encoded avoids JSON CORS preflight and fits the 64 KiB keepalive cap.
+      const request = fetch('https://formspree.io/f/xoeqykpq', {
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8',Accept:'application/json'},
+        body:new URLSearchParams(payload).toString(),
+        keepalive:true,credentials:'omit',referrerPolicy:'no-referrer'
+      });
+      Promise.resolve(request).then(response => {
+        if (response.ok) {
+          try { window.rvuTrack?.('Application_Saved'); } catch (_) {}
+        }
+      }).catch(() => {});
+    } catch (_) {
+      // WhatsApp remains available even when the background POST cannot start.
     }
-    if (saveState === 'saved') {
-      try { window.rvuTrack?.('Application_Saved'); } catch (_) {}
-    }
+    const link = document.createElement('a');
+    link.href = whatsappUrl;
+    link.target = '_self';
+    link.rel = 'noreferrer';
+    link.click();
   });
-  $('edit-application').addEventListener('click', () => {
-    if (submitting) return;
-    $('application-ready').hidden = true;
-    form.hidden = false;
-    form.elements.name.focus();
-  });
+  window.addEventListener('pageshow', () => { submitting = false; });
 
   const samples = {
     ar: {
@@ -338,5 +313,4 @@
   });
 
   renderWork();
-  renderSaveStatus();
 })();
