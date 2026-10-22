@@ -6,6 +6,8 @@ on:
     paths:
       - '.github/workflows/rvu-optimize.yml'
       - '_maintenance/optimize_assets.py'
+      - 'poc-*.png'
+      - 'assets/ramez-medhat.webp'
   workflow_dispatch:
 
 permissions:
