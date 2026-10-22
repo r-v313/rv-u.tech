@@ -7475,3 +7475,11 @@ html[lang=ar] .hero .eyebrow {
   .cover-name p { font-size:10px; }
   .cover-name .eyebrow { font-size:10px; }
 }
+
+/* Prevent RTL carousel scroll ranges from contributing to page-wide overflow. */
+#gallery-track,
+#reports-track {
+  contain:paint;
+  min-width:0;
+  max-width:100%;
+}
