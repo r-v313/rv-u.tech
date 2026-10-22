@@ -101,6 +101,7 @@ function boot(success=true) {
   assert.equal(d.querySelectorAll('.close-button.ui-close').length,3);
   assert.equal(d.querySelectorAll('.close-button').length,3);
   assert(d.querySelector('.signature-title img'));
+  assert.equal(d.querySelector('.signature-footer img').getAttribute('loading'),'lazy');
   assert.equal(d.querySelectorAll('[data-en] [data-en]').length,0);
   for(const summary of d.querySelectorAll('summary'))assert(!summary.hasAttribute('data-en'),'Translation must not erase icons');
 
