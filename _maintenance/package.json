@@ -3,10 +3,12 @@
   "scripts": {
     "test": "npm run check:css && node verify.cjs && node security.cjs",
     "build:css": "node minify-css.cjs",
-    "check:css": "node minify-css.cjs --check"
+    "check:css": "node minify-css.cjs --check",
+    "test:browser": "node browser-qa.cjs"
   },
   "devDependencies": {
     "jsdom": "30.1.3",
-    "css-tree": "3.2.1"
+    "css-tree": "3.2.1",
+    "playwright-core": "1.56.1"
   }
 }
