@@ -46,6 +46,10 @@ const server=http.createServer((req,res)=>{
           ytFrames:document.querySelectorAll('iframe[src*=youtube]').length
         };
       });
+      if(metrics.documentWidth>width+2){
+        const suspects=await page.evaluate(()=>[...document.querySelectorAll('body *')].map(el=>({tag:el.tagName,className:typeof el.className==='string'?el.className.slice(0,65):'',id:el.id,left:Math.round(el.getBoundingClientRect().left),right:Math.round(el.getBoundingClientRect().right),client:el.clientWidth,scroll:el.scrollWidth,overflow:getComputedStyle(el).overflowX})).filter(x=>x.right>innerWidth+3&&x.left<innerWidth).slice(0,35));
+        console.log('OVERFLOW DIAGNOSTICS',JSON.stringify({width,suspects}));
+      }
       assert(metrics.documentWidth<=width+2,'Horizontal overflow at '+width+'px: '+JSON.stringify(metrics));
       assert(metrics.portraitWidth>0,'Portrait failed to load at '+width);
       assert(metrics.logoWidth>0,'Logo failed to load at '+width);
