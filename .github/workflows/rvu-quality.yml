@@ -1,0 +1,55 @@
+name: RVU site quality
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'styles.css'
+      - 'styles.min.css'
+      - 'app.js'
+      - 'measurement.js'
+      - 'experience.js'
+      - 'poc-*-full.webp'
+      - 'assets/**'
+      - '_maintenance/**'
+      - '.github/workflows/rvu-quality.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify JavaScript syntax
+        run: |
+          node --check app.js
+          node --check measurement.js
+          node --check experience.js
+          node --check _maintenance/verify.cjs
+          node --check _maintenance/security.cjs
+      - name: Install test dependencies
+        run: npm install --prefix _maintenance --no-fund --no-audit
+      - name: Run production regression suite
+        run: npm test --prefix _maintenance
+      - name: Verify HTML document structure
+        run: python _maintenance/check_structure.py
+      - name: Enforce transfer-size budgets
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          root = Path('.')
+          sizes = [p.stat().st_size for p in root.glob('poc-0?-full.webp')]
+          assert len(sizes) == 6, f'Expected 6 optimized proof images, got {len(sizes)}'
+          assert sum(sizes) <= 1_200_000, f'Full-size optimized evidence exceeded 1.2 MB: {sum(sizes)}'
+          assert (root / 'styles.min.css').stat().st_size < 100_000, 'Production CSS budget exceeded'
+          assert (root / 'assets' / 'ramez-medhat-640.webp').stat().st_size < 85_000, 'Retina portrait budget exceeded'
+          print('PASS: optimized evidence', sum(sizes), 'bytes; CSS', (root / 'styles.min.css').stat().st_size, 'bytes')
+          PY
