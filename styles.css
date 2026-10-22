@@ -7367,50 +7367,38 @@ html[lang=ar] .hero .eyebrow {
   font-size:12px;
 }
 
-/* Standalone hero label: centered on desktop and mobile in both UI languages. */
-html .hero .hero-copy > .hero-camp-label {
-  display:flex;
-  align-items:center;
+
+/* Simple centered heading above the mentor portrait. No dot, badge or frame. */
+.mentor-cover .cover-top {
   justify-content:center;
-  gap:9px;
-  width:fit-content;
-  max-width:100%;
-  margin-inline:auto;
-  margin-bottom:18px;
-  padding:8px 13px;
-  border:1px solid #ff8d3a55;
-  border-radius:999px;
-  background:linear-gradient(100deg,#ff7a1a0c,#ff7a1a1d,#ff7a1a0c);
-  color:#ffbd85;
-  font-family:"Manrope",sans-serif;
-  font-size:clamp(10.5px,1.1vw,12px);
-  font-weight:700;
-  letter-spacing:.07em;
-  line-height:1.6;
   text-align:center;
+  width:100%;
 }
 
-html .hero .hero-copy > .hero-camp-label .live-dot {
-  background:#ff8b32;
-  box-shadow:0 0 0 3px #ff7a1a20;
+.mentor-cover .cover-top .mono {
+  display:block;
+  width:100%;
+  margin:0;
+  padding:0;
+  font-family:"Manrope",sans-serif;
+  font-size:clamp(10px,1vw,12px);
+  font-weight:600;
+  letter-spacing:.035em;
+  line-height:1.6;
+  color:#ff9a51;
+  text-align:center;
+  white-space:normal;
+  text-wrap:balance;
+  border:0;
+  border-radius:0;
+  background:none;
+  box-shadow:none;
 }
 
 @media (max-width:540px) {
-  html .hero .hero-copy > .hero-camp-label {
-    max-width:100%;
-    padding:7px 10px;
-    gap:7px;
-    font-size:clamp(10px,2.7vw,11.5px);
-    letter-spacing:.025em;
-    line-height:1.5;
-  }
-}
-
-@media (max-width:360px) {
-  html .hero .hero-copy > .hero-camp-label {
-    font-size:10px;
-    letter-spacing:0;
-    padding-inline:8px;
-    gap:6px;
+  .mentor-cover .cover-top .mono {
+    font-size:clamp(9px,2.55vw,11px);
+    letter-spacing:.015em;
+    line-height:1.55;
   }
 }
