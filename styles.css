@@ -7483,3 +7483,9 @@ html[lang=ar] .hero .eyebrow {
   min-width:0;
   max-width:100%;
 }
+
+/* Clip only the research section's RTL off-screen carousel content;
+   the inner gallery remains horizontally scrollable. */
+#research {
+  overflow-x:clip;
+}
