@@ -300,9 +300,17 @@
     $('gallery-full-image').alt = title;
     $('image-error').hidden = true;
     $('gallery-full-image').hidden = false;
+    $('image-stage').classList.remove('is-zoomed');
+    $('image-zoom').setAttribute('aria-pressed', 'false');
+    $('image-stage').scrollTo({top:0,left:0,behavior:'instant'});
     $('gallery-full-image').src = path;
     $('image-position').textContent = `${activeImage+1} / ${researchImages.length}`;
   }
+  $('image-zoom').addEventListener('click', () => {
+    const zoomed = $('image-stage').classList.toggle('is-zoomed');
+    $('image-zoom').setAttribute('aria-pressed',String(zoomed));
+    $('image-stage').scrollTo({top:0,left:0,behavior:'instant'});
+  });
   $('gallery-full-image').addEventListener('error', () => { $('image-error').hidden = false; $('gallery-full-image').hidden = true; });
   document.querySelectorAll('[data-image]').forEach(button => button.addEventListener('click', () => {showResearchImage(Number(button.dataset.image));openDialog($('image-dialog'));}));
   $('image-prev').addEventListener('click', () => showResearchImage(activeImage-1));
