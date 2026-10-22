@@ -98,6 +98,30 @@ const server=http.createServer((req,res)=>{
         const scaled=await page.evaluate(()=>document.documentElement.scrollWidth);
         assert(scaled<=width+2,'Font-scaling overflow at '+width+'px: '+scaled);
       }
+      if([280,320,390,640,850,1024].includes(width)){
+        const applyButton=page.locator('[data-apply]:visible').first();
+        await applyButton.click();
+        assert(await page.locator('#apply-dialog').evaluate(d=>d.open),'Application dialog opens at '+width);
+        const bounds=await page.locator('#apply-dialog').evaluate(d=>{
+          const outer=d.getBoundingClientRect();
+          return {left:outer.left,right:outer.right,width:outer.width,scroll:d.scrollWidth,client:d.clientWidth,
+            fields:[...d.querySelectorAll('input,select,textarea')].map(el=>{
+              const b=el.getBoundingClientRect();
+              return {name:el.name,left:b.left,right:b.right,width:b.width};
+            })};
+        });
+        assert(bounds.left>=-3&&bounds.right<=width+3,'Application dialog extends outside viewport '+width+': '+JSON.stringify(bounds));
+        assert(bounds.scroll<=bounds.client+3,'Application dialog requires horizontal scroll '+width+': '+JSON.stringify(bounds));
+        assert(bounds.fields.every(b=>b.width>60&&b.left>=bounds.left-3&&b.right<=bounds.right+3),'Application fields clipped '+width+': '+JSON.stringify(bounds));
+        await page.locator('#apply-dialog [data-close]').click();
+        if(width<=850){
+          const menu=page.locator('#menu-toggle');
+          await menu.click();
+          assert.equal(await menu.getAttribute('aria-expanded'),'true','Mobile navigation accessible at '+width);
+          await menu.click();
+          assert.equal(await menu.getAttribute('aria-expanded'),'false','Mobile navigation dismisses at '+width);
+        }
+      }
       assert.deepEqual(errors,[],'Client-side exceptions at '+width+'px');
       console.log('PASS: Chromium '+width+'px AR+EN, image fidelity, adaptive settings; document '+metrics.documentWidth+'px');
       await page.close();
