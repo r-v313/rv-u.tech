@@ -31,7 +31,11 @@ for(const name of ['measurement.js','app.js','experience.js'])w.eval(fs.readFile
  for(const e of d.querySelectorAll('*'))for(const a of e.attributes)assert(!/^on/i.test(a.name),'No inline event handlers');
  for(const a of d.querySelectorAll('a[target="_blank"]'))assert(a.rel.includes('noopener'));
  for(const file of ['app.js','experience.js','measurement.js'])assert(!/innerHTML|insertAdjacentHTML|document\.write|\beval\s*\(/.test(fs.readFileSync(path.join(root,file),'utf8')));
- css.parse(fs.readFileSync(path.join(root,'styles.css'),'utf8'));
+ const cssSource=fs.readFileSync(path.join(root,'styles.css'),'utf8');
+ const cssMin=fs.readFileSync(path.join(root,'styles.min.css'),'utf8');
+ assert.deepEqual(css.generate(css.parse(cssMin)),css.generate(css.parse(cssSource)),'Minified CSS should match the source cascade');
+ const {execFileSync}=require('node:child_process');
+ execFileSync(process.execPath,[path.join(root,'_maintenance/minify-css.cjs'),'--check'],{stdio:'pipe'});
  const arTitle=d.querySelector('#mentorship h2').innerHTML;
  for(let i=0;i<3;i++){d.getElementById('language').click();d.getElementById('language').click();}
  assert.equal(d.querySelector('#mentorship h2').innerHTML,arTitle,'Arabic line breaks survive language switching');
