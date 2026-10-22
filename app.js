@@ -105,7 +105,7 @@
     const message = isArabic()
       ? `طلب تقديم — RVU Camp / الدفعة الثانية\n\nالاسم: ${name}\nواتساب: ${phone}\nالمستوى: ${level}\nهدفي: ${goal}\n\nالمصدر: موقع RVU Camp الرسمي`
       : `Application — RVU Camp / Cohort 02\n\nName: ${name}\nWhatsApp: ${phone}\nLevel: ${level}\nGoal: ${goal}\n\nSource: RVU Camp official website`;
-    const url = new URL('https://wa.me/201280499854');
+    const url = new URL('https://wa.me/201012809358');
     url.searchParams.set('text', message);
     $('application-whatsapp').href = url.href;
     return true;
