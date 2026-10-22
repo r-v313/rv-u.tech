@@ -7489,3 +7489,9 @@ html[lang=ar] .hero .eyebrow {
 #research {
   overflow-x:clip;
 }
+
+/* Desktop hero columns must shrink below min-content width at tablet/desktop widths. */
+.hero-copy,.hero-visual { min-width:0; }
+@media (min-width:851px) {
+  .hero { grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
+}
