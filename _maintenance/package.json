@@ -1,7 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "test": "node verify.cjs && node security.cjs"
+    "test": "npm run check:css && node verify.cjs && node security.cjs",
+    "build:css": "node minify-css.cjs",
+    "check:css": "node minify-css.cjs --check"
   },
   "devDependencies": {
     "jsdom": "30.1.3",
