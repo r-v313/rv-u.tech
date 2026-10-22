@@ -18,18 +18,24 @@ function boot(success=true) {
   w.HTMLElement.prototype.hasPointerCapture=()=>false;
   w.requestAnimationFrame=fn=>{fn();return 1;};
   let requests=[];
-  w.fetch=async(url,options)=>{requests.push({url,body:JSON.parse(options.body)});return{ok:success};};
+  const navigations=[];
+  w.HTMLAnchorElement.prototype.click=function(){if(this.href.startsWith('https://wa.me/'))navigations.push(this.href);};
+  w.fetch=async(url,options)=>{
+    requests.push({url,body:Object.fromEntries(new URLSearchParams(options.body)),options});
+    return{ok:success};
+  };
   const events=[],clarityEvents=[];
   d.addEventListener('rvu:interaction',e=>events.push(e.detail));
   w.clarity=(...args)=>clarityEvents.push(args);
   scripts.forEach(code=>w.eval(code));
-  return {dom,w,d,errors,requests,events,clarityEvents};
+  return {dom,w,d,errors,requests,navigations,events,clarityEvents};
 }
 (async()=>{
-  const {dom,w,d,errors,requests,events,clarityEvents}=boot();
+  const {dom,w,d,errors,requests,navigations,events,clarityEvents}=boot();
   const ids=[...d.querySelectorAll('[id]')].map(x=>x.id);
   assert.equal(new Set(ids).size,ids.length,'IDs must be unique');
   assert.equal(d.querySelectorAll('h1').length,1);
+  assert.equal(d.querySelectorAll('#application-ready,#save-title,#save-status,#edit-application,#application-whatsapp').length,0,'Private save UI was removed');
   assert.equal(d.querySelectorAll('.brand-wordmark .brand-name').length,1);
   assert.equal(d.querySelectorAll('.brand-wordmark .brand-light').length,1);
   assert([...d.querySelectorAll('a[href^="https://wa.me/"]')].every(a=>new URL(a.href).pathname==='/201012809358'),'Every static WhatsApp link must use the current number');
@@ -118,50 +124,71 @@ function boot(success=true) {
   d.querySelector('#navigation a').click();assert.equal(d.getElementById('menu-toggle').getAttribute('aria-expanded'),'false');
   d.querySelector('[data-apply]').click();assert(d.getElementById('apply-dialog').open);
   const form=d.getElementById('application-form');
-  form.elements.name.value='QA Example';form.elements.phone.value='٠١٠١٢٣٤٥٦٧٨';form.elements.level.value='basics';form.elements.goal.value='Practice systematic testing';
-  form.dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));await new Promise(r=>setTimeout(r,5));
-  assert.equal(requests.length,1);assert.equal(requests[0].body.phone,'+201012345678');
-  assert.match(d.getElementById('save-title').textContent,/بنجاح/);
-  assert.equal(new URL(d.getElementById('application-whatsapp').href).hostname,'wa.me');
-  assert.equal(new URL(d.getElementById('application-whatsapp').href).pathname,'/201012809358');
-  d.getElementById('edit-application').click();form.dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));await new Promise(r=>setTimeout(r,5));
-  assert.equal(requests.length,1,'Duplicate submission suppressed');
+  form.elements.name.value='QA Example';
+  form.elements.phone.value='٠١٠١٢٣٤٥٦٧٨';
+  form.elements.level.value='basics';
+  form.elements.goal.value='Practice systematic testing';
+  form.dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));
+  await new Promise(r=>setTimeout(r,5));
+  assert.equal(requests.length,1);
+  assert.equal(requests[0].body.phone,'+201012345678');
+  assert.equal(requests[0].url,'https://formspree.io/f/xoeqykpq');
+  assert.equal(requests[0].options.keepalive,true,'The save request must support navigation');
+  assert.match(requests[0].options.headers['Content-Type'],/^application\/x-www-form-urlencoded/);
+  assert.equal(navigations.length,1,'Immediate WhatsApp navigation');
+  assert.equal(new URL(navigations[0]).hostname,'wa.me');
+  assert.equal(new URL(navigations[0]).pathname,'/201012809358');
+  assert(new URL(navigations[0]).searchParams.get('text').includes('QA Example'));
+  form.dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));
+  assert.equal(requests.length,1,'Duplicate submit suppressed');
+  assert.equal(navigations.length,1,'Duplicate WhatsApp navigation suppressed');
   assert.equal(errors.length,0,errors.map(e=>e.message).join('\n'));
-  assert(events.some(e=>e.event==='Application_Saved'));
   assert(events.every(e=>Object.keys(e).join(',')==='event'));
-  assert(clarityEvents.length > 0);
-  assert(clarityEvents.every(args => args.length === 2 && args[0] === 'event' && typeof args[1] === 'string'),'Analytics receives event names only');
+  assert(clarityEvents.every(args=>args.length===2&&args[0]==='event'&&typeof args[1]==='string'));
   dom.window.close();
-  const bad=boot(false),f=bad.d.getElementById('application-form');
-  f.elements.name.value='QA';f.elements.phone.value='+201012345678';f.elements.level.value='basics';f.elements.goal.value='Example';
-  f.dispatchEvent(new bad.w.Event('submit',{bubbles:true,cancelable:true}));await new Promise(r=>setTimeout(r,5));
-  assert.match(bad.d.getElementById('save-title').textContent,/ماقدرناش/);
-  assert(!bad.d.getElementById('application-whatsapp').hidden);
+
+  const bad=boot(false),bf=bad.d.getElementById('application-form');
+  bf.elements.name.value='QA';
+  bf.elements.phone.value='+201012345678';
+  bf.elements.level.value='basics';
+  bf.elements.goal.value='Test';
+  bf.dispatchEvent(new bad.w.Event('submit',{bubbles:true,cancelable:true}));
+  await new Promise(r=>setTimeout(r,5));
+  assert.equal(bad.requests.length,1);
+  assert.equal(bad.navigations.length,1,'WhatsApp available even when Formspree responds with an error');
+  assert(!bad.d.getElementById('application-ready'));
   bad.dom.window.close();
-  for(const [country,local,expected] of [['+966','0551234567','+966551234567'],['+971','0501234567','+971501234567'],['','+447700900123','+447700900123']]) {
-    const test=boot(),form=test.d.getElementById('application-form');
+
+  for(const [country,local,expected] of [
+    ['+966','0551234567','+966551234567'],
+    ['+971','0501234567','+971501234567'],
+    ['','+447700900123','+447700900123']
+  ]) {
+    const test=boot(),tf=test.d.getElementById('application-form');
     test.d.getElementById('phone-country').value=country;
-    form.elements.name.value='Regional QA';form.elements.phone.value=local;form.elements.level.value='basics';form.elements.goal.value='Example';
-    form.dispatchEvent(new test.w.Event('submit',{bubbles:true,cancelable:true}));await new Promise(r=>setTimeout(r,5));
-    assert.equal(test.requests.length,1);assert.equal(test.requests[0].body.phone,expected);
+    tf.elements.name.value='Regional QA';tf.elements.phone.value=local;
+    tf.elements.level.value='basics';tf.elements.goal.value='Example';
+    tf.dispatchEvent(new test.w.Event('submit',{bubbles:true,cancelable:true}));
+    await new Promise(r=>setTimeout(r,5));
+    assert.equal(test.requests[0].body.phone,expected);
+    assert.equal(test.navigations.length,1);
     assert.equal(test.errors.length,0);test.dom.window.close();
   }
-  for(const mode of ['uuid-fallback','analytics-failure','unsupported-abort','network-timeout']) {
-    const test=boot(),form=test.d.getElementById('application-form');
+  for(const mode of ['uuid-fallback','analytics-failure','network-rejection','sync-fetch-error','network-stall']) {
+    const test=boot(),tf=test.d.getElementById('application-form');
     if(mode==='uuid-fallback')test.w.crypto.randomUUID=undefined;
-    if(mode==='analytics-failure')test.w.rvuTrack=()=>{throw new Error('Analytics unavailable')};
-    if(mode==='unsupported-abort')test.w.AbortController=undefined;
-    if(mode==='network-timeout') {
-      test.w.setTimeout=(fn,delay)=>{if(delay===12000){queueMicrotask(fn);return 1}return setTimeout(fn,delay)};
-      test.w.fetch=(_,options)=>new Promise((resolve,reject)=>options.signal.addEventListener('abort',()=>reject(new Error('Aborted'))));
-    }
-    form.elements.name.value='Compatibility QA';form.elements.phone.value='+201012345678';form.elements.level.value='basics';form.elements.goal.value='Review test';
-    form.dispatchEvent(new test.w.Event('submit',{bubbles:true,cancelable:true}));await new Promise(r=>setTimeout(r,10));
-    assert(!test.d.getElementById('edit-application').disabled,mode+' must release the form');
-    if(['unsupported-abort','network-timeout'].includes(mode))assert.match(test.d.getElementById('save-title').textContent,/ماقدرناش/);
-    else assert.match(test.d.getElementById('save-title').textContent,/بنجاح/);
+    if(mode==='analytics-failure')test.w.rvuTrack=()=>{throw new Error('Analytics unavailable');};
+    if(mode==='network-rejection')test.w.fetch=()=>Promise.reject(new Error('Offline'));
+    if(mode==='sync-fetch-error')test.w.fetch=()=>{throw new Error('Unsupported API');};
+    if(mode==='network-stall')test.w.fetch=()=>new Promise(()=>{});
+    tf.elements.name.value='Compatibility QA';tf.elements.phone.value='+201012345678';
+    tf.elements.level.value='basics';tf.elements.goal.value='Example';
+    tf.dispatchEvent(new test.w.Event('submit',{bubbles:true,cancelable:true}));
+    await new Promise(r=>setTimeout(r,5));
+    assert.equal(test.navigations.length,1,mode+' should not block WhatsApp');
     if(mode==='uuid-fallback')assert.match(test.requests[0].body.submission_id,/^[a-f0-9]{32}$/);
-    assert.equal(test.errors.length,0,mode);test.dom.window.close();
+    assert.equal(test.errors.length,0,mode);
+    test.dom.window.close();
   }
-  console.log('PASS: structure, local links, bilingual resources, weekly curriculum, outcomes, audience fit, single portrait, demo labels, visible price, PDF destinations, regional phone numbers, privacy-safe interaction events, video/image cleanup, menu, mocked success/failure and duplicate-submission handling. Retired routes removed; UUID fallback, analytics failure, unsupported APIs and request timeout checked. No real form submissions.');
+  console.log('PASS: content structure, bilingual UI, assets, mobile-oriented markup, navigation, privacy, immediate WhatsApp, keepalive Formspree POST, failure handling, duplicate prevention and international numbers. No actual submissions.');
 })().catch(e=>{console.error(e);process.exit(1);});
