@@ -8,7 +8,11 @@ const w=dom.window,d=w.document;w.matchMedia=()=>({matches:false});
 w.HTMLElement.prototype.scrollTo=function({left}){this.scrollLeft=left};w.HTMLDialogElement.prototype.showModal=function(){this.open=true};w.HTMLDialogElement.prototype.close=function(){this.open=false;this.dispatchEvent(new w.Event('close'))};
 w.requestAnimationFrame=fn=>{fn();return 1};
 const requests=[],navigations=[];let finishRequest;
-w.HTMLAnchorElement.prototype.click=function(){if(this.href.startsWith('https://wa.me/'))navigations.push(this.href);};
+const originalAnchorClick=w.HTMLAnchorElement.prototype.click;
+  w.HTMLAnchorElement.prototype.click=function(){
+    if(this.href.startsWith('https://wa.me/')){navigations.push(this.href);return;}
+    return originalAnchorClick.call(this);
+  };
 w.fetch=(url,options)=>{requests.push({url,body:Object.fromEntries(new URLSearchParams(options.body)),options});return new Promise(resolve=>{finishRequest=resolve})};
 for(const name of ['measurement.js','app.js','experience.js'])w.eval(fs.readFileSync(path.join(root,name),'utf8'));
 (async()=>{
