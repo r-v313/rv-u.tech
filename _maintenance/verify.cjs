@@ -100,7 +100,8 @@ function boot(success=true) {
   assert.equal(d.querySelectorAll('[data-en] [data-en]').length,0);
   for(const summary of d.querySelectorAll('summary'))assert(!summary.hasAttribute('data-en'),'Translation must not erase icons');
 
-  assert.equal(d.querySelectorAll('a[href$=".png"]').length,0,'Original image links must stay removed');
+  assert.equal(d.querySelectorAll('a[href$=".png"]:not(#image-original)').length,0,'No unexpected direct PNG downloads');
+  assert.equal(d.querySelectorAll('a#image-original[href$=".png"]').length,1,'Full-fidelity evidence remains accessible on demand');
   assert.equal(d.querySelectorAll('#curriculum details').length,6);
   assert.equal(d.querySelectorAll('.week-practice,.week-output').length,0);
   assert.equal(d.querySelectorAll('#outcomes .outcomes-list article').length,6);
