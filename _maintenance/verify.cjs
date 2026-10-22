@@ -38,7 +38,7 @@ function boot(success=true) {
   assert.equal(d.querySelectorAll('img[src^="./assets/ramez-medhat-480.webp"]').length,1);
   assert(!html.includes('IBM+Plex+Mono:wght'),'No redundant monospaced Google Font request');
   assert(fs.readFileSync(path.join(root,'measurement.js'),'utf8').includes('requestIdleCallback'));
-  assert.match(d.querySelector('.hero-lead').textContent,/اتعلن رسميًا/);
+  assert.match(d.querySelector('.hero-lead').textContent,/اتعلن رسميا/);
   assert.match(d.querySelector('.hero-lead').textContent,/التقديم للانترفيو مفتوح/);
   assert.equal(d.querySelector('.history-next p').textContent,'التقديم مفتوح الآن');
   assert(!/بجهز للدفعة الثانية|الإعلان ١ نوفمبر|Official announcement on 1 November|Coming next · announcement/.test(html),'No future-announcement copy in launch content');
