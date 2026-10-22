@@ -35,6 +35,11 @@ function boot(success=true) {
   const ids=[...d.querySelectorAll('[id]')].map(x=>x.id);
   assert.equal(new Set(ids).size,ids.length,'IDs must be unique');
   assert.equal(d.querySelectorAll('h1').length,1);
+  assert.equal(d.querySelectorAll('.hero-copy > .hero-camp-label').length,1);
+  assert.equal(d.querySelector('.hero-camp-label').textContent.trim(),'RVU MENTORSHIP · ONLINE BUG BOUNTY CAMP');
+  assert.equal(d.querySelector('.hero-camp-label').getAttribute('dir'),'ltr');
+  assert.match(fs.readFileSync(path.join(root,'styles.css'),'utf8'),/\.hero-copy > \.hero-camp-label\s*\{[\s\S]*?justify-content:center;/);
+  assert.match(fs.readFileSync(path.join(root,'styles.css'),'utf8'),/\.cover-top\s*\{[\s\S]*?justify-content:center;/);
   assert.equal(d.querySelectorAll('#application-ready,#save-title,#save-status,#edit-application,#application-whatsapp').length,0,'Private save UI was removed');
   assert.equal(d.querySelectorAll('.brand-wordmark .brand-name').length,1);
   assert.equal(d.querySelectorAll('.brand-wordmark .brand-light').length,1);
@@ -102,6 +107,7 @@ function boot(success=true) {
   assert(price&&!price.open,'Price is inside a closed FAQ');
   d.getElementById('language').click();
   assert.equal(d.documentElement.lang,'en');assert.equal(d.documentElement.dir,'ltr');
+  assert.equal(d.querySelector('.hero-camp-label').textContent.trim(),'RVU MENTORSHIP · ONLINE BUG BOUNTY CAMP');
   [...d.querySelectorAll('[data-pdf-guide]')].forEach(a=>assert(a.href.endsWith(a.dataset.pdfGuide+'-en.pdf')));
   assert.match(d.querySelector('.camp-price').textContent,/4,000 EGP/);
   [...d.querySelectorAll('[data-resource]')].forEach(x=>assert.match(x.href,/-en\.pdf$/));
