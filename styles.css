@@ -7383,7 +7383,7 @@ html .hero .hero-copy > .hero-camp-label {
   background:linear-gradient(100deg,#ff7a1a0c,#ff7a1a1d,#ff7a1a0c);
   color:#ffbd85;
   font-family:"Manrope",sans-serif;
-  font-size:clamp(9px,.96vw,11px);
+  font-size:clamp(10.5px,1.1vw,12px);
   font-weight:700;
   letter-spacing:.07em;
   line-height:1.6;
@@ -7400,7 +7400,7 @@ html .hero .hero-copy > .hero-camp-label .live-dot {
     max-width:100%;
     padding:7px 10px;
     gap:7px;
-    font-size:clamp(8.5px,2.3vw,10px);
+    font-size:clamp(10px,2.7vw,11.5px);
     letter-spacing:.025em;
     line-height:1.5;
   }
@@ -7408,7 +7408,7 @@ html .hero .hero-copy > .hero-camp-label .live-dot {
 
 @media (max-width:360px) {
   html .hero .hero-copy > .hero-camp-label {
-    font-size:8.5px;
+    font-size:10px;
     letter-spacing:0;
     padding-inline:8px;
     gap:6px;
