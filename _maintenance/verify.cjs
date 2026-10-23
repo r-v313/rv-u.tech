@@ -70,8 +70,20 @@ function boot(success=true) {
     const resolved=path.join(root,new URL(value,w.location.href).pathname);
     assert(fs.existsSync(resolved),`Missing asset ${value}`);
   }
-  assert.deepEqual([...d.querySelectorAll('#gallery-track>[data-kind]')].map(x=>x.dataset.kind),['videos','videos']);
+  assert.deepEqual([...d.querySelectorAll('#gallery-track>[data-kind]')].map(x=>x.dataset.kind),['videos','videos','videos','videos']);
   assert.equal(d.querySelectorAll('#reports-track [data-image]').length,6);
+  const approvedLessons=['xZR5-4iXnI0','0O1a8Uv2RIs','CZx_WauYbcI','FDWt0pSoFTA'];
+  const lessonButtons=[...d.querySelectorAll('#gallery-track button[data-video]')];
+  assert.deepEqual(lessonButtons.map(el=>el.dataset.video),approvedLessons);
+  const posterPaths=['api','jwt','solving-labs','account-testing'];
+  lessonButtons.forEach((button,i)=>{
+    const poster=button.querySelector('img');
+    assert(poster&&poster.getAttribute('src').includes('rvu-video-'+posterPaths[i]+'.webp'));
+    assert.equal(poster.getAttribute('loading'),'lazy');
+    assert(fs.statSync(path.join(root,'assets','rvu-video-'+posterPaths[i]+'.webp')).size<140000);
+    assert.equal(button.closest('.gallery-card').querySelector('.gallery-card-info a').href,
+      'https://www.youtube.com/watch?v='+approvedLessons[i]);
+  });
   for(let i=1;i<=6;i++){
     assert(fs.existsSync(path.join(root,`poc-0${i}-full.webp`)),'Optimized screenshot '+i+' exists');
     assert(fs.statSync(path.join(root,`poc-0${i}-full.webp`)).size<fs.statSync(path.join(root,`poc-0${i}.png`)).size,'Optimized screenshot saves bandwidth');
@@ -164,6 +176,13 @@ function boot(success=true) {
   assert(d.getElementById('video-dialog').open);
   assert.match(d.querySelector('#video-mount iframe').src,/youtube-nocookie.com\/embed\/xZR5-4iXnI0/);
   d.getElementById('video-dialog').close();assert.equal(d.getElementById('video-mount').children.length,0);
+  for(const id of ['CZx_WauYbcI','FDWt0pSoFTA']){
+    d.querySelector('#gallery-track [data-video="'+id+'"]').click();
+    assert(d.getElementById('video-dialog').open);
+    assert(d.querySelector('#video-mount iframe').src.includes('youtube-nocookie.com/embed/'+id));
+    assert(d.getElementById('video-link').href.endsWith('watch?v='+id));
+    d.getElementById('video-dialog').close();
+  }
   d.querySelector('[data-image="0"]').click();assert(d.getElementById('image-dialog').open);
   assert.match(d.getElementById('gallery-full-image').src,/poc-01-full\.webp$/);
   assert.match(d.getElementById('image-original').href,/poc-01\.png$/);
