@@ -126,18 +126,24 @@ index=root/'index.html'
 html=index.read_text(encoding='utf-8')
 old='./assets/rvu-video-solving-labs.webp?v=20261023-swapped'
 new='./assets/rvu-video-account-methodology.webp?v=20261023-account-edit'
-assert html.count(old)==1, 'Expected one existing Account Testing poster'
-pos=html.index(old)
-assert 'FDWt0pSoFTA' in html[max(0,pos-600):pos]
-html=html.replace(old,new,1)
-index.write_text(html,encoding='utf-8')
+if old in html:
+    assert html.count(old)==1, 'Expected one original Account Testing poster'
+    pos=html.index(old)
+    assert 'FDWt0pSoFTA' in html[max(0,pos-600):pos]
+    html=html.replace(old,new,1)
+    index.write_text(html,encoding='utf-8')
+else:
+    assert html.count(new)==1, 'Edited Account Testing poster reference missing'
 
 # Keep the existing full site QA assertion aligned with the new asset.
 verify=root/'_maintenance/verify.cjs'
 tests=verify.read_text(encoding='utf-8')
 before="const posterPaths=['api','jwt','account-testing','solving-labs'];"
 after="const posterPaths=['api','jwt','account-testing','account-methodology'];"
-assert tests.count(before)==1, 'Poster test list changed'
-verify.write_text(tests.replace(before,after,1),encoding='utf-8')
+if before in tests:
+    assert tests.count(before)==1, 'Poster test list changed'
+    verify.write_text(tests.replace(before,after,1),encoding='utf-8')
+else:
+    assert tests.count(after)==1, 'Edited poster regression check missing'
 print('PASS: Account Methodology poster edited, linked and regression-tested')
 print('Image bytes:',destination.stat().st_size)
