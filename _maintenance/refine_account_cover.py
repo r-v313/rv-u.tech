@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Rework the account lesson's cover from the original, preserving the real portrait."""
 from pathlib import Path
+import subprocess
 import numpy as np
 import cv2
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
@@ -66,9 +67,13 @@ base.paste(mat,(0,0),matalpha)
 
 # Render Account over the exact first-line title location in warm bronze/orange.
 canvas=base.convert('RGBA')
-font='/usr/share/fonts/opentype/inter/InterDisplay-Black.otf'
-fb='/usr/share/fonts/opentype/inter/Inter-SemiBold.otf'
-fm='/usr/share/fonts/opentype/inter/Inter-Medium.otf'
+def font_match(family):
+    """Portable font discovery for Ubuntu CI and local workstations."""
+    return subprocess.check_output(
+        ['fc-match','-f','%{file}',family], text=True).strip()
+font=font_match('Inter Display:style=Black')
+fb=font_match('Inter:style=SemiBold')
+fm=font_match('Inter:style=Medium')
 big=ImageFont.truetype(font,115)
 letters=Image.new('L',(w,h),0)
 ImageDraw.Draw(letters).text((565,148),'Account',font=big,fill=255,anchor='lt')
