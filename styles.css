@@ -7609,3 +7609,146 @@ html[lang=ar] .hero .eyebrow {
   .resource-grid { grid-template-columns:minmax(0,1fr); }
   .resource-actions { gap:12px; }
 }
+/* Cohort 02 mobile hero: dedicated one-column portrait and readable credentials. */
+.mentor-cover .cover-roles {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:7px;
+  margin:13px auto 2px;
+  max-width:100%;
+}
+.mentor-cover .cover-roles span {
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  min-width:0;
+  padding:6px 10px;
+  border:1px solid #5c4834;
+  border-radius:99px;
+  color:#e0e0e4;
+  background:#211d1a;
+  font:500 clamp(10px,.86vw,12px)/1.4 "Manrope",sans-serif;
+  white-space:normal;
+  text-align:center;
+}
+.edition-note .edition-date {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  direction:ltr;
+  gap:clamp(5px,1.5vw,11px);
+  white-space:nowrap;
+  letter-spacing:0;
+  flex-shrink:0;
+  font-family:"Manrope",sans-serif;
+  font-weight:800;
+  font-variant-numeric:tabular-nums;
+}
+.edition-note .edition-date .date-day,
+.edition-note .edition-date .date-month {
+  font:inherit;
+  font-size:clamp(30px,4.3vw,46px);
+  line-height:1;
+  letter-spacing:-.055em;
+  color:#ffae49;
+}
+.edition-note .edition-date .date-divider {
+  font-size:clamp(22px,3.5vw,35px);
+  line-height:1;
+  color:#a86a35;
+  opacity:1;
+  font-weight:400;
+}
+@media(max-width:850px) {
+  .mentor-cover .cover-name {min-width:0}
+  .mentor-cover .cover-roles {justify-content:center}
+}
+@media(max-width:600px) {
+  .hero-visual {min-width:0;max-width:100%}
+  .hero-visual .mentor-cover {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:0;
+    width:100%;
+    padding:22px clamp(16px,5vw,26px) 0;
+    text-align:center;
+  }
+  .mentor-cover .cover-top {width:100%;margin-bottom:17px}
+  .mentor-cover .cover-top .mono {font-size:clamp(10px,2.4vw,12px);line-height:1.6}
+  .mentor-cover .cover-portrait {
+    width:clamp(132px,35vw,165px);
+    margin:0 auto 16px;
+    padding:7px;
+    flex-shrink:0;
+    border-radius:9px;
+  }
+  .mentor-cover .cover-portrait img {
+    display:block;
+    width:100%;
+    height:auto;
+    aspect-ratio:5/6;
+    object-fit:cover;
+    border-radius:5px;
+  }
+  .mentor-cover .cover-name {width:100%;max-width:100%;align-self:center;text-align:center}
+  .mentor-cover .cover-name .eyebrow {
+    justify-content:center;
+    font-size:clamp(11px,2.9vw,13px);
+    line-height:1.6;
+    margin-bottom:8px;
+  }
+  .mentor-cover .cover-name .signature-title {
+    width:min(100%,310px);
+    max-width:310px;
+    margin:0 auto 12px!important;
+  }
+  .mentor-cover .cover-name .name-signature {width:100%;height:auto;display:block}
+  .mentor-cover .cover-roles {gap:7px;margin:2px auto 19px}
+  .mentor-cover .cover-roles span {
+    font-size:clamp(10px,2.8vw,12px);
+    padding:7px 10px;
+    line-height:1.3;
+  }
+  .mentor-cover .cover-method {
+    width:100%;
+    margin-top:0;
+    padding:15px 0;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:8px 12px;
+    font-size:clamp(9px,2.4vw,11px);
+  }
+  .mentor-cover .cover-sample {
+    width:100%;
+    padding:15px 0 18px;
+    min-height:0;
+    font-size:clamp(12px,3.2vw,14px);
+  }
+  .edition-note {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:clamp(10px,3vw,20px);
+    width:100%;
+    padding:clamp(14px,4vw,20px);
+    margin:12px 0 0;
+    border-radius:12px;
+    transform:none;
+  }
+  .edition-note>div {min-width:0}
+  .edition-note .edition-date .date-day,
+  .edition-note .edition-date .date-month {font-size:clamp(30px,9vw,42px)}
+  .edition-note .edition-date .date-divider {font-size:clamp(24px,7vw,33px)}
+  .edition-note strong {font-size:clamp(12px,3.4vw,16px)}
+  .edition-note div span {font-size:clamp(10px,2.8vw,12px)}
+}
+@media(max-width:340px) {
+  .mentor-cover .cover-roles span:first-child {width:100%}
+  .edition-note {padding:12px;gap:8px}
+  .edition-note .edition-date .date-day,
+  .edition-note .edition-date .date-month {font-size:29px}
+  .edition-note div span {font-size:10px}
+}
