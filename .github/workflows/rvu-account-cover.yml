@@ -21,6 +21,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Install poster typography
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fonts-inter fontconfig
+          fc-match -f '%{family}: %{file}\n' 'Inter Display:style=Black'
       - name: Install stable image-processing libraries
         run: |
           python -m pip install --no-cache-dir 'Pillow>=11,<13' 'numpy>=2,<3' 'opencv-python-headless>=4.10,<5'
