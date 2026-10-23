@@ -1,0 +1,70 @@
+name: Install final RVU video covers
+on:
+  push:
+    branches: [main]
+    paths:
+      - rvu_video_covers_for_github.zip
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify and install exact supplied designs
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          from hashlib import sha256
+          root=Path('.')
+          archive=root/'rvu_video_covers_for_github.zip'
+          expected={
+            'rvu-video-api.webp':'1b8989386d43cb9884027fa65d39cfbaf2c4eb38688c210285e2f01e11f9803d',
+            'rvu-video-jwt.webp':'012f3d019d2f5b20e8364636d213147d7177f4b233522f5c628d24ef4541167f',
+            'rvu-video-solving-labs.webp':'45470c0a105fbd80a39e37ee9ceab4052d35a953a1d3985cd8903ce96e0308de',
+            'rvu-video-account-testing.webp':'c62241111b69da1e7a2b9beb9edc5659695f0fe6217f7a38a6f432f4ec31bba3',
+          }
+          if not archive.exists():
+              print('No uploaded archive found — upload rvu_video_covers_for_github.zip at repository root.')
+              raise SystemExit(1)
+          with ZipFile(archive) as z:
+              assert set(z.namelist())==set(expected), 'Archive names do not match expected cover images'
+              for filename,checksum in expected.items():
+                  payload=z.read(filename)
+                  assert sha256(payload).hexdigest()==checksum, 'Incorrect file: '+filename
+                  assert payload[:4]==b'RIFF' and payload[8:12]==b'WEBP', 'Not a WebP image: '+filename
+                  assert len(payload)<140000, 'File too large: '+filename
+                  (root/'assets'/filename).write_bytes(payload)
+          html=root/'index.html'
+          original=html.read_text(encoding='utf8')
+          assert original.count('?v=20261023')>=4
+          updated=original
+          for filename in expected:
+              old='./assets/'+filename+'?v=20261023'
+              assert old in updated, 'Poster reference missing: '+filename
+              updated=updated.replace(old,'./assets/'+filename+'?v=20261023-original')
+          html.write_text(updated,encoding='utf8')
+          # Avoid regeneration replacing the supplied artwork on future changes.
+          (root/'assets'/'RVU_CUSTOM_VIDEO_COVERS.txt').write_text(
+              'The four video WebP files are user-supplied final poster designs. Do not regenerate automatically.\n',encoding='utf8')
+          archive.unlink()
+          print('Four original RVU thumbnails installed successfully')
+          PY
+      - name: Commit final poster replacements
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html assets/rvu-video-*.webp assets/RVU_CUSTOM_VIDEO_COVERS.txt
+          git add -u rvu_video_covers_for_github.zip
+          git commit -m "Use original four premium image designs for video posters"
+          git push origin HEAD:main
