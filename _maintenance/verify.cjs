@@ -75,6 +75,8 @@ function boot(success=true) {
   const approvedLessons=['xZR5-4iXnI0','0O1a8Uv2RIs','CZx_WauYbcI','FDWt0pSoFTA'];
   const lessonButtons=[...d.querySelectorAll('#gallery-track button[data-video]')];
   assert.deepEqual(lessonButtons.map(el=>el.dataset.video),approvedLessons);
+  assert.equal(lessonButtons[2].dataset.title,'Find Logic Vulns');
+  assert.equal(lessonButtons[2].closest('.media-card').querySelector('.gallery-card-info h3').textContent,'Find Logic Vulns');
   const posterPaths=['api','jwt','solving-labs','account-testing'];
   lessonButtons.forEach((button,i)=>{
     const poster=button.querySelector('img');
