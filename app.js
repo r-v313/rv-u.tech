@@ -60,7 +60,7 @@
   });
   document.querySelectorAll('[data-close]').forEach(button => button.addEventListener('click', () => $(button.dataset.close).close()));
   document.querySelectorAll('[data-apply]').forEach(button => button.addEventListener('click', () => openDialog($('apply-dialog'))));
-  const videos = new Set(['0O1a8Uv2RIs', 'xZR5-4iXnI0']);
+  const videos = new Set(['0O1a8Uv2RIs', 'xZR5-4iXnI0', 'CZx_WauYbcI', 'FDWt0pSoFTA']);
   document.querySelectorAll('[data-video]').forEach(button => {
     button.addEventListener('click', () => {
       const id = button.dataset.video;
