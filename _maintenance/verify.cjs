@@ -77,7 +77,7 @@ function boot(success=true) {
   assert.deepEqual(lessonButtons.map(el=>el.dataset.video),approvedLessons);
   assert.equal(lessonButtons[2].dataset.title,'Find Logic Vulns');
   assert.equal(lessonButtons[2].closest('.media-card').querySelector('.gallery-card-info h3').textContent,'Find Logic Vulns');
-  const posterPaths=['api','jwt','solving-labs','account-testing'];
+  const posterPaths=['api','jwt','account-testing','solving-labs'];
   lessonButtons.forEach((button,i)=>{
     const poster=button.querySelector('img');
     assert(poster&&poster.getAttribute('src').includes('rvu-video-'+posterPaths[i]+'.webp'));
