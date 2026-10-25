@@ -73,8 +73,12 @@ const server=http.createServer((req,res)=>{
         assert.match(await page.locator('#image-original').getAttribute('href'),/poc-01\.png/);
         await page.locator('#image-zoom').click();
         assert.equal(await page.locator('#image-zoom').getAttribute('aria-pressed'),'true');
-        await page.locator('#image-next').click();
+        await page.locator('[data-close=image-dialog]').click();
+        const second=page.locator('#reports-track [data-image="1"]');
+        await second.scrollIntoViewIfNeeded();
+        await second.click();
         assert.equal(await page.locator('#image-zoom').getAttribute('aria-pressed'),'false');
+        assert.match(await page.locator('#gallery-full-image').getAttribute('src'),/poc-02-full\.webp/);
         await page.locator('[data-close=image-dialog]').click();
         await page.locator('#language').click();
         assert.equal(await page.locator('html').getAttribute('lang'),'en');
