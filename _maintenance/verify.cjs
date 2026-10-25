@@ -76,6 +76,11 @@ function boot(success=true) {
   assert.equal(d.querySelectorAll('.hero-camp-label,.hero-camp-label .live-dot').length,0,'Remove duplicate hero badge and glow');
   assert.equal(d.querySelectorAll('.mentor-cover .cover-top .live-dot').length,0,'Portrait heading must not have a glowing dot');
   const styles=fs.readFileSync(path.join(root,'styles.css'),'utf8');
+  assert.deepEqual([...d.querySelectorAll('.mentor-cover .cover-roles span')].map(x=>x.textContent),
+    ['Application Security Researcher','Bug Bounty Hunter','Instructor']);
+  assert.match(styles,/.hero-visual \.mentor-cover \.cover-roles span::after/,'Orange underline on role labels must remain styled');
+  assert.match(styles,/.student-feedback-grid:has\(> \.student-feedback-card:nth-child\(3\)\)/,
+    'Three real student reviews must fit a desktop row');
   assert.match(styles,/\.mentor-cover \.cover-top\s*\{[\s\S]*?justify-content:center;/);
   assert.match(styles,/\.mentor-cover \.cover-top \.mono\s*\{[\s\S]*?background:none;/);
   assert(!styles.includes('Standalone hero label:'),'Retired hero badge styles must be gone');
