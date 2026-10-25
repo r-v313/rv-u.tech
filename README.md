@@ -8,8 +8,8 @@ A single-page bilingual website served by GitHub Pages. The published files are 
 
 - Run `python _maintenance/check_structure.py` and the JavaScript regression/security checks before publishing.
 - PDF dependencies are listed in `_maintenance/requirements.txt`. Run `python _maintenance/build_guides.py` to regenerate the six standalone guides and bilingual collection. Source text is in `_maintenance/content` and font license notices are retained.
-- Student testimonials are temporarily removed from the rendered page. Their three illustrative HTML cards remain inside a marked HTML comment in `index.html` for replacement with genuine student reviews later; no review section, sample cards or placeholder heading is displayed.
-- The application form submits directly to the configured Formspree endpoint. YouTube loads only when a teaching video is opened. Analytics events exclude application field values and the application dialog is masked.
+- The live student reviews section contains two genuine testimonials (Ahmed Alaa and Zain Ali). The former three illustrative placeholder reviews remain **commented out** in `index.html` and are not rendered. Never publish those sample reviews as real testimonials.
+- The application form sends a best-effort background POST to Formspree before opening WhatsApp with a prefilled application message. YouTube loads only when a teaching video is opened. Analytics events exclude application field values and the application dialog is masked.
 - Deployment and rollback use Git history. No duplicate or legacy website is published.
 
 
@@ -18,7 +18,7 @@ A single-page bilingual website served by GitHub Pages. The published files are 
 - Keep `styles.css` readable as the **source**. After editing it, run `node _maintenance/minify-css.cjs` and commit both `styles.css` and `styles.min.css`. The page loads the minified version.
 - Security-report screenshots are kept as `poc-01.png` through `poc-06.png` for full-fidelity reference. `poc-0N-full.webp` are the default high-quality, reduced-transfer display versions. Rebuild via `python _maintenance/optimize_assets.py` (requires Pillow); a GitHub Action also regenerates WebP when source screenshots change.
 - `assets/ramez-medhat-480.webp` and `assets/ramez-medhat-640.webp` are responsive portrait candidates. Poster thumbnails and full-resolution proof images should not be loaded until needed.
-- On `main` pushes, the **RVU site quality** workflow checks the HTML, URL/local-asset validity, form mocks, CSS source equivalence, security properties, page budget, and 320–1440px Chromium browser layouts.
+- On `main` pushes, the **RVU site quality** workflow checks the HTML, URL/local-asset validity, form mocks, CSS source equivalence, security properties, page budget, and responsive Chromium layouts; separate Firefox/WebKit and automated WCAG 2.1 AA checks cover additional viewports and language modes.
 - To run locally: `npm install --prefix _maintenance`, then `npm test --prefix _maintenance` and `npm run test:browser --prefix _maintenance` (requires Chrome/Chromium).
 - GitHub Pages serves the site using its own HTTP compression and cache settings; these cannot be overridden using a repository `_headers` file. Asset query versions should change only when that asset changes.
 - Formspree submissions use best-effort `fetch(..., {keepalive:true})` before navigating to WhatsApp, and **are not guaranteed to persist** if a device disconnects. WhatsApp's prefilled message must still be sent by the applicant.
