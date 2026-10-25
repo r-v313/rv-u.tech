@@ -8058,7 +8058,7 @@ html[lang=ar] .hero .eyebrow {
 #research #reports-track .gallery-card-info{display:flex;justify-content:center;align-items:center;min-height:0;margin-top:13px;padding:0;border:0;text-align:center}
 #research #reports-track .gallery-card-info>div{width:100%;min-width:0}
 #research #reports-track .gallery-card-info h3{margin:0;color:#f7eee1;font-size:clamp(15px,1.5vw,19px);line-height:1.55;text-align:center;overflow-wrap:anywhere}
-#research #reports-track .gallery-card-info .eyebrow{display:none}
+
 #image-dialog .image-dialog-footer{justify-content:space-between}
 @media(max-width:950px){#research #reports-track{grid-template-columns:repeat(2,minmax(0,1fr))}#research #reports-track .research-image{height:clamp(205px,28vw,265px)}}
 @media(max-width:600px){.hero-introduction .hero-lead,.hero-introduction .hero-lead-followup{font-size:clamp(14px,3.7vw,16px);line-height:1.92}#research #reports-track{grid-template-columns:minmax(0,1fr);gap:15px}#research #reports-track .research-card{padding:14px}#research #reports-track .research-image{height:clamp(220px,64vw,305px)}#research #reports-track .gallery-card-info h3{font-size:18px}}
