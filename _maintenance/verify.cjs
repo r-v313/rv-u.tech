@@ -130,7 +130,9 @@ function boot(success=true) {
   assert(reviews.every(card=>card.querySelector('h3').compareDocumentPosition(card.querySelector('blockquote')) & w.Node.DOCUMENT_POSITION_FOLLOWING),'Student name precedes the review');
   assert(reviews.every(card=>card.querySelector('blockquote').getAttribute('lang')==='ar'&&card.querySelector('blockquote').getAttribute('dir')==='rtl'),'Original Arabic reviews keep their language and direction');
   assert(reviews.every(card=>!card.querySelector('blockquote').hasAttribute('data-en')),'Do not replace authentic Arabic quotes with machine-generated translations');
-  assert.match(reviews[0].querySelector('blockquote').textContent,/الكامب جميل الصراحه وضاف ليا كتير/);
+  assert.equal(reviews[0].querySelector('blockquote').textContent,
+    "الكامب جميل جدا الصراحه وضاف ليا كتير المحتوي الحمدلله يعتبر كله عملي وده فرق معايا لان النظري ممل بالنسبالي وحضرتك ماشاء الله عندك معلومات محترمه وبقدر الامكان بتحاول تسهل الدنيا وتوصلهالنا\n" +
+    "فملخص الكامب هو ان انا استفدت منه وطلعت باكتر من معلومه جديده منه وده سهل ليا اني اخد الخطوات الصح ف ال hunting وافهم الادوات والشغل ف مجال ال penteration testing بشكل اوضح.");
   assert.match(reviews[0].querySelector('blockquote').textContent,/penteration testing بشكل اوضح/);
   assert.match(reviews[1].querySelector('blockquote').textContent,/رأيى بكل صراحة/);
   assert.match(reviews[1].querySelector('blockquote').textContent,/وربنا يباركلك/);
