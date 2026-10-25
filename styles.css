@@ -1643,16 +1643,6 @@ html[dir=ltr] .section-heading>p {
   direction:ltr;
 }
 
-.sample-chip {
-  font-size:10px;
-  letter-spacing:.5px;
-  border:1px solid currentColor;
-  border-radius:3px;
-  padding:3px 8px;
-  line-height:1.6;
-  color:#d4d4d8;
-}
-
 .work-document h3 {
   font-size:26px;
   margin-bottom:8px;
@@ -1938,9 +1928,6 @@ html[dir=ltr] .section-heading>p {
   }
   .document-bar .mono {
     font-size:10px;
-  }
-  .sample-chip {
-    font-size:9px;
   }
   .work-document #work-content {
     padding:20px 15px;
@@ -2887,10 +2874,6 @@ html[dir=ltr] .gallery-arrows button span {
   color:#ff7a1a;
 }
 
-.sample-chip {
-  color:#d4d4d8;
-}
-
 .work-document p {
   color:#d4d4d8;
 }
@@ -3672,12 +3655,6 @@ h3 {
 
 .sample-table th,.sample-report strong {
   color:#d4d4d8;
-}
-
-.sample-chip {
-  background:#161618;
-  color:#f5f5f5;
-  border-color:#373739;
 }
 
 .sample-download {
@@ -5031,12 +5008,6 @@ html[dir=ltr] .arrow-next svg {
 
 .resource-card .mono,.resource-card a {
   color:#ff7a1a;
-}
-
-.sample-chip {
-  color:#f5f5f5;
-  border-color:#4e4e50;
-  background:#1a1a1c;
 }
 
 .legal {
