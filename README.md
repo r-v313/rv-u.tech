@@ -7,13 +7,13 @@ A single-page bilingual website served by GitHub Pages. The published files are 
 ## Maintenance
 
 - Run `python _maintenance/check_structure.py` and the JavaScript regression/security checks before publishing.
-- PDF dependencies are listed in `_maintenance/requirements.txt`. Run `python _maintenance/build_guides.py` to regenerate the six standalone guides and bilingual collection. Source text is in `_maintenance/content` and font license notices are retained.
-- The published testimonials are genuine student reviews from Ahmed Alaa and Zain Ali. The three former illustrative placeholder testimonials were removed entirely, not published as real student feedback. A third review must only be added after the student's actual name and text are provided.
+- PDF dependencies are listed in `_maintenance/requirements.txt`. Run `python _maintenance/build_guides.py` to regenerate the three public Arabic field guides. Arabic source text lives in `_maintenance/content`, and the font license notices are retained.
+- The live student testimonials are Ahmed Alaa and Zain Ali. The third review is pending its actual student name and exact approved text; no placeholder or fabricated testimonial is published. The layout automatically supports three cards across wide screens when a third real review is added.
 - The application form sends a best-effort background POST to Formspree before opening WhatsApp with a prefilled application message. YouTube loads only when a teaching video is opened. Analytics events exclude application field values and the application dialog is masked.
 - Deployment and rollback use Git history. No duplicate or legacy website is published.
 
 
-## Production performance workflow (Cohort 02)
+## Production quality and performance (Cohort 02)
 
 - Keep `styles.css` readable as the **source**. After editing it, run `node _maintenance/minify-css.cjs` and commit both `styles.css` and `styles.min.css`. The page loads the minified version.
 - Security-report screenshots are kept as `poc-01.png` through `poc-06.png` for full-fidelity reference. `poc-0N-full.webp` are the default high-quality, reduced-transfer display versions. Rebuild via `python _maintenance/optimize_assets.py` (requires Pillow); a GitHub Action also regenerates WebP when source screenshots change.
