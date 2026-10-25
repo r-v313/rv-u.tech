@@ -122,10 +122,11 @@ function boot(success=true) {
   assert(html.includes('RVU STUDENT REVIEWS DISABLED'),'Retain commented-out testimonials for future replacement');
   assert.equal((html.match(/class="review-tile"/g)||[]).length,3,'Keep all three sample cards in the HTML comment');
   assert(!d.querySelector('#gallery-track .review-tile'));
-  assert.equal(d.querySelector('.edition-number').textContent,'1 / 11');
-  assert.equal(d.querySelector('.edition-number').getAttribute('datetime'),'2026-11-01');
-  assert.equal(d.querySelector('.edition-note span[data-en]').textContent,'الدفعة الثانية · موعد البداية');
-  assert.equal(d.querySelector('.edition-note strong').textContent,'التقديم مفتوح الآن');
+  const cohortBanner=d.querySelector('.application-open-banner');
+  assert(cohortBanner&&cohortBanner.hasAttribute('data-apply'),'Application banner must remain actionable');
+  assert.equal(cohortBanner.querySelector('.application-open-label').textContent,'الدفعة الثانية · باب التقديم مفتوح');
+  assert.equal(cohortBanner.querySelector('strong').textContent,'التقديم مفتوح الآن');
+  assert.match(styles,/\.hero-visual \.application-open-banner strong/);
   assert.equal(d.querySelectorAll('summary .ui-toggle').length,d.querySelectorAll('details').length);
   assert.equal(d.querySelectorAll('.close-button.ui-close').length,3);
   assert.equal(d.querySelectorAll('.close-button').length,3);
