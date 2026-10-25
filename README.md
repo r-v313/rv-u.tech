@@ -8,7 +8,7 @@ A single-page bilingual website served by GitHub Pages. The published files are 
 
 - Run `python _maintenance/check_structure.py` and the JavaScript regression/security checks before publishing.
 - PDF dependencies are listed in `_maintenance/requirements.txt`. Run `python _maintenance/build_guides.py` to regenerate the six standalone guides and bilingual collection. Source text is in `_maintenance/content` and font license notices are retained.
-- The live student reviews section contains two genuine testimonials (Ahmed Alaa and Zain Ali). The former three illustrative placeholder reviews remain **commented out** in `index.html` and are not rendered. Never publish those sample reviews as real testimonials.
+- The published testimonials are genuine student reviews from Ahmed Alaa and Zain Ali. The three former illustrative placeholder testimonials were removed entirely, not published as real student feedback. A third review must only be added after the student's actual name and text are provided.
 - The application form sends a best-effort background POST to Formspree before opening WhatsApp with a prefilled application message. YouTube loads only when a teaching video is opened. Analytics events exclude application field values and the application dialog is masked.
 - Deployment and rollback use Git history. No duplicate or legacy website is published.
 
