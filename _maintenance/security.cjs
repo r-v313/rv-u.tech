@@ -45,9 +45,9 @@ for(const name of ['measurement.js','app.js','experience.js'])w.eval(fs.readFile
  }
  const {execFileSync}=require('node:child_process');
  execFileSync(process.execPath,[path.join(root,'_maintenance/minify-css.cjs'),'--check'],{stdio:'pipe'});
- const arTitle=d.querySelector('#mentorship h2').innerHTML;
+ const arTitle=d.querySelector('#experience h2').innerHTML;
  for(let i=0;i<3;i++){d.getElementById('language').click();d.getElementById('language').click();}
- assert.equal(d.querySelector('#mentorship h2').innerHTML,arTitle,'Arabic line breaks survive language switching');
+ assert.equal(d.querySelector('#experience h2').innerHTML,arTitle,'Arabic gallery heading survives language switching');
  const video=d.querySelector('[data-video]');const known=video.dataset.video;video.dataset.video='../../evil?x=<script>';
  video.click();assert.equal(d.querySelectorAll('iframe').length,0);video.dataset.video=known;
  const form=d.getElementById('application-form');
