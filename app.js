@@ -281,15 +281,15 @@
     update();
     return {reset(){scroll(0,false);update();}};
   }
-  const shelves=[createShelf('gallery-track','gallery'),createShelf('reports-track','reports')];
+  const shelves=[createShelf('gallery-track','gallery')];
 
   const researchImages = [
-    ['تأكيد تقرير استيلاء على الحساب','Account takeover confirmation'],
-    ['كشف معلومات — تم إصلاحه','Information disclosure — resolved'],
-    ['تأكيد تقرير IDOR في الـAPI','API authorization confirmation'],
-    ['خلل في الصلاحيات — تم إصلاحه','Access control — resolved'],
-    ['تقرير Stored XSS — تم إصلاحه','Stored XSS — resolved'],
-    ['رسالة قبول تقرير ومكافأة','Report acceptance and reward']
+    ['Account Takeover','Account Takeover'],
+    ['Information Disclosure','Information Disclosure'],
+    ['API Authorization','API Authorization'],
+    ['Access Control','Access Control'],
+    ['Stored XSS','Stored XSS'],
+    ['Report Accepted','Report Accepted']
   ];
   let activeImage = 0;
   function showResearchImage(index) {
@@ -306,7 +306,6 @@
     $('image-zoom').setAttribute('aria-pressed', 'false');
     $('image-stage').scrollTo({top:0,left:0,behavior:'instant'});
     $('gallery-full-image').src = path;
-    $('image-position').textContent = `${activeImage+1} / ${researchImages.length}`;
   }
   $('image-zoom').addEventListener('click', () => {
     const zoomed = $('image-stage').classList.toggle('is-zoomed');
@@ -315,14 +314,5 @@
   });
   $('gallery-full-image').addEventListener('error', () => { $('image-error').hidden = false; $('gallery-full-image').hidden = true; });
   document.querySelectorAll('[data-image]').forEach(button => button.addEventListener('click', () => {showResearchImage(Number(button.dataset.image));openDialog($('image-dialog'));}));
-  $('image-prev').addEventListener('click', () => showResearchImage(activeImage-1));
-  $('image-next').addEventListener('click', () => showResearchImage(activeImage+1));
-  $('image-dialog').addEventListener('keydown', event => {
-    if (event.key === 'ArrowLeft') showResearchImage(activeImage + (isArabic() ? 1 : -1));
-    else if (event.key === 'ArrowRight') showResearchImage(activeImage + (isArabic() ? -1 : 1));
-    else return;
-    event.preventDefault();
-  });
-
   renderWork();
 })();
