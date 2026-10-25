@@ -44,7 +44,10 @@ function boot(success=true) {
   assert(fs.readFileSync(path.join(root,'measurement.js'),'utf8').includes('requestIdleCallback'));
   assert.match(d.querySelector('.hero-lead').textContent,/نشكر ربنا على نجاح الدفعة الرابعة/);
   assert.match(d.querySelector('.hero-lead-followup').textContent,/وهنشتغل عملي مع بعض/);
-  assert.deepEqual([...d.querySelectorAll('.hero-facts-featured span')].map(el=>el.textContent),['٦ أسابيع','متابعة 1:1']);
+  assert.equal(d.querySelector('.hero-facts-featured'),null,'Removed hero metric cards must not render');
+  assert.equal(d.querySelector('.cohort-capacity strong').textContent,'الدفعة 12 طالب فقط + متابعة 1:1');
+  assert.equal(d.querySelector('.cohort-capacity > span').textContent,'علشان أتابع شغل كل واحد معاه');
+  assert.equal(d.querySelector('.mobile-cta > span').textContent,'الدفعة 12 طالب فقط + متابعة 1:1');
   assert.match(d.querySelector('.hero-lead').textContent,/التقديم للانترفيو مفتوح/);
   assert.equal(d.querySelector('.history-next p').textContent,'التقديم مفتوح الآن');
   assert(!/بجهز للدفعة الثانية|الإعلان ١ نوفمبر|Official announcement on 1 November|Coming next · announcement/.test(html),'No future-announcement copy in launch content');
@@ -205,7 +208,10 @@ function boot(success=true) {
   assert.equal(d.documentElement.lang,'en');assert.equal(d.documentElement.dir,'ltr');
   assert.match(d.querySelector('.hero-lead').textContent,/applications for the free interview are open now/i);
   assert.match(d.querySelector('.hero-lead-followup').textContent,/hands-on practice together/i);
-  assert.deepEqual([...d.querySelectorAll('.hero-facts-featured span')].map(el=>el.textContent),['6 weeks','1:1 mentoring']);
+  assert.equal(d.querySelector('.hero-facts-featured'),null);
+  assert.equal(d.querySelector('.cohort-capacity strong').textContent,'Only 12 students in this cohort + 1:1 mentoring');
+  assert.equal(d.querySelector('.cohort-capacity > span').textContent,'So I can personally follow up on each student’s work');
+  assert.equal(d.querySelector('.mobile-cta > span').textContent,'Only 12 students + 1:1 mentoring');
   assert.equal(d.querySelector('.history-next p').textContent,'Applications are open now');
   assert.equal(d.querySelector('.mentor-cover .cover-top .mono').textContent.trim(),'RVU MENTORSHIP · ONLINE BUG BOUNTY CAMP');
   assert.equal(d.querySelector('#student-feedback-title').textContent,'What my students say');
