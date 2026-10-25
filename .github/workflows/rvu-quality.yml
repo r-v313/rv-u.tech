@@ -30,6 +30,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Check maintenance Python syntax
+        run: python -m py_compile _maintenance/build_guides.py _maintenance/optimize_assets.py _maintenance/check_structure.py
       - name: Verify JavaScript syntax
         run: |
           node --check app.js
