@@ -7975,3 +7975,104 @@ html[lang=ar] .hero .eyebrow {
   .mentor-cover .cover-bio-icon {transition:none}
   .mentor-cover .cover-bio-icon:hover {transform:none}
 }
+
+/* Genuine RVU student feedback — full quotations, no fabricated ratings or photos. */
+.section.student-feedback {
+  border-top:1px solid #303037;
+  background:radial-gradient(ellipse at 50% 0%,rgba(255,122,26,.065),transparent 63%),#0e0f11;
+}
+.student-feedback-heading {
+  margin-bottom:clamp(25px,3.5vw,42px);
+  text-align:center;
+}
+.student-feedback-heading .eyebrow {
+  margin-bottom:9px;
+  color:#ff9e52;
+  font-size:clamp(10px,1vw,12px);
+  letter-spacing:.12em;
+}
+.student-feedback-heading h2 {
+  margin:0;
+  color:#f7f6f4;
+  font-size:clamp(29px,3.5vw,43px);
+  line-height:1.4;
+}
+.student-feedback-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  align-items:stretch;
+  gap:clamp(15px,2.1vw,26px);
+}
+.student-feedback-card {
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  padding:clamp(22px,2.8vw,32px);
+  border:1px solid #4a403c;
+  border-top:2px solid #ed8130;
+  border-radius:15px;
+  background:linear-gradient(140deg,#1d1b1c 0%,#131518 85%);
+  box-shadow:0 12px 32px rgba(0,0,0,.22);
+}
+.student-feedback-person {
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding-bottom:18px;
+  border-bottom:1px solid #39393d;
+}
+.student-feedback-initials {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:48px;
+  height:48px;
+  flex:0 0 48px;
+  border:1px solid #9e653e;
+  border-radius:50%;
+  background:linear-gradient(145deg,#3a2921,#211e1e);
+  color:#ffb779;
+  font:800 15px/1 "Manrope",sans-serif;
+  letter-spacing:.02em;
+}
+.student-feedback-person>div {min-width:0}
+.student-feedback-person h3 {
+  margin:0;
+  color:#faf5f0;
+  font:800 clamp(17px,1.6vw,20px)/1.45 "Manrope",sans-serif;
+  text-align:start;
+}
+.student-feedback-person>div>span {
+  display:block;
+  margin-top:3px;
+  color:#c4c5c9;
+  font-size:12px;
+  line-height:1.5;
+}
+.student-feedback-quote-mark {
+  margin-inline-start:auto;
+  color:#f39240;
+  font:600 56px/.65 Georgia,serif;
+}
+.student-feedback-card blockquote {
+  display:block;
+  margin:22px 0 0;
+  color:#e9e6e3;
+  font-size:clamp(14px,1.22vw,16px);
+  font-weight:400;
+  line-height:2.05;
+  text-align:start;
+  white-space:pre-line;
+  overflow-wrap:anywhere;
+}
+@media (max-width:760px) {
+  .student-feedback-grid {grid-template-columns:minmax(0,1fr)}
+  .student-feedback-card {padding:clamp(18px,5vw,26px)}
+  .student-feedback-card blockquote {font-size:clamp(14px,3.65vw,16px);line-height:1.95}
+}
+@media (max-width:360px) {
+  .student-feedback-person {gap:10px}
+  .student-feedback-initials {width:43px;height:43px;flex-basis:43px}
+  .student-feedback-quote-mark {font-size:45px}
+}
