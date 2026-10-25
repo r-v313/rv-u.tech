@@ -204,6 +204,16 @@ function boot(success=true) {
   assert(!d.querySelector('#reports-track .card-kicker,#reports-track .report-context,#reports-track .gallery-card-info > p'));
   assert.equal(d.querySelectorAll('#reports-track .research-card').length,6);
   assert.equal(d.querySelectorAll('#reports-track .research-card .gallery-card-info h3').length,6);
+  // Six proof cards show only their vulnerability titles; no repeated label or explanatory paragraphs.
+  const reportTitles=['Account Takeover','Information Disclosure','API Authorization','Access Control','Stored XSS','Report Accepted'];
+  const proofCards=[...d.querySelectorAll('#reports-track .research-card')];
+  assert.deepEqual(proofCards.map(card=>card.querySelector('.gallery-card-info h3').textContent),reportTitles);
+  for (const card of proofCards) {
+    const info=card.querySelector('.gallery-card-info');
+    assert.equal(info.textContent.trim(),info.querySelector('h3').textContent.trim(),'Only vulnerability name appears below screenshot');
+    assert.equal(info.querySelectorAll('p,small,.eyebrow,.mono').length,0,'Old report labels are removed from HTML');
+    assert.equal(card.querySelectorAll('.research-image[data-image]').length,1,'Screenshot still opens the image viewer');
+  }
   assert(!d.querySelector('#reports-prev,#reports-next,#reports-position,#reports-help,#image-prev,#image-next,#image-position'));
   assert(!d.querySelector('#research .gallery-toolbar,#research .gallery-footer'));
   assert.match(d.querySelector('.faq-list').textContent,/دور الكامب انه يطور مهاراتك/);
