@@ -42,6 +42,7 @@ function boot(success=true) {
   assert.equal(d.querySelectorAll('img[src^="./assets/ramez-medhat-480.webp"]').length,1);
   assert(!html.includes('IBM+Plex+Mono:wght'),'No redundant monospaced Google Font request');
   assert(fs.readFileSync(path.join(root,'measurement.js'),'utf8').includes('requestIdleCallback'));
+  assert.match(d.querySelector('.hero-problem').textContent,/لو عندك الأساسيات وعندك معلومات كتير بس أول ما تفتح Target حقيقي/);
   assert.match(d.querySelector('.hero-lead').textContent,/نشكر ربنا على نجاح الدفعة الرابعة/);
   assert.match(d.querySelector('.hero-lead-followup').textContent,/وهنشتغل عملي مع بعض/);
   assert.equal(d.querySelector('.hero-facts-featured'),null,'Removed hero metric cards must not render');
@@ -83,6 +84,8 @@ function boot(success=true) {
   assert.equal(d.querySelectorAll('.brand-wordmark .brand-light').length,1);
   assert([...d.querySelectorAll('a[href^="https://wa.me/"]')].every(a=>new URL(a.href).pathname==='/201012809358'),'Every static WhatsApp link must use the current number');
   assert.match(d.querySelector('meta[name=robots]').content,/^index,follow/);
+  assert.match(fs.readFileSync(path.join(root,'sitemap.xml'),'utf8'),/<loc>https:\/\/rv-u\.tech\/<\/loc>/);
+  assert.match(fs.readFileSync(path.join(root,'robots.txt'),'utf8'),/Sitemap: https:\/\/rv-u\.tech\/sitemap\.xml/);
   for(const a of d.querySelectorAll('a[href^="#"]')) assert(d.getElementById(a.hash.slice(1)),`Missing anchor ${a.hash}`);
   for(const el of d.querySelectorAll('img[src],script[src],link[rel=stylesheet],a[download]')) {
     const value=el.getAttribute('src')||el.getAttribute('href');
@@ -194,7 +197,10 @@ function boot(success=true) {
   assert(fs.readFileSync(path.join(root,'assets/ramez-signature.svg'),'utf8').includes('<title>Ramez Medhat</title>'));
 
   assert(!d.querySelector('#workbench .feedback-disclosure,.curriculum-note,.cover-method'));
-  assert(!d.querySelector('#workbench .section-heading > p'));
+  assert(!d.querySelector('#workbench .section-heading > p,#workbench .sample-chip'),'Do not display removed example disclaimers');
+  assert(!/5 لـ 7 ساعات في الأسبوع|5 to 7 hours weekly|اشتغلت بالبرب بس بتقف/.test(html),'Removed weekly-hour quotas and outdated fit copy must remain absent');
+  assert.match(d.querySelector('.fit-yes').textContent,/عندك الأساسيات وعندك معلومات كتير/);
+  assert.match(d.querySelector('.fit-yes').textContent,/مستعد تخصص وقت للتطبيق/);
   assert(!d.querySelector('#reports-track .card-kicker,#reports-track .report-context,#reports-track .gallery-card-info > p'));
   assert.equal(d.querySelectorAll('#reports-track .research-card').length,6);
   assert.equal(d.querySelectorAll('#reports-track .research-card .gallery-card-info h3').length,6);
@@ -206,6 +212,8 @@ function boot(success=true) {
   assert(price&&!price.open,'Price is inside a closed FAQ');
   d.getElementById('language').click();
   assert.equal(d.documentElement.lang,'en');assert.equal(d.documentElement.dir,'ltr');
+  assert.match(d.querySelector('.fit-yes').textContent,/You know the fundamentals and have plenty of information/);
+  assert.match(d.querySelector('.fit-yes').textContent,/make time to practise alongside the sessions/);
   assert.match(d.querySelector('.hero-lead').textContent,/applications for the free interview are open now/i);
   assert.match(d.querySelector('.hero-lead-followup').textContent,/hands-on practice together/i);
   assert.equal(d.querySelector('.hero-facts-featured'),null);
