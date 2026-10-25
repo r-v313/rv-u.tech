@@ -10,6 +10,8 @@ on:
       - 'app.js'
       - 'measurement.js'
       - 'experience.js'
+      - 'robots.txt'
+      - 'sitemap.xml'
       - 'poc-*-full.webp'
       - 'assets/**'
       - '_maintenance/**'
