@@ -191,7 +191,7 @@ function boot(success=true) {
   assert(!d.querySelector('#workbench .feedback-disclosure,.curriculum-note,.cover-method'));
   assert(!d.querySelector('#workbench .section-heading > p'));
   assert(!d.querySelector('#reports-track .card-kicker,#reports-track .report-context,#reports-track .gallery-card-info > p'));
-  assert.equal(d.querySelectorAll('#reports-track .research-card'),6);
+  assert.equal(d.querySelectorAll('#reports-track .research-card').length,6);
   assert.equal(d.querySelectorAll('#reports-track .research-card .gallery-card-info h3').length,6);
   assert(!d.querySelector('#reports-prev,#reports-next,#reports-position,#reports-help,#image-prev,#image-next,#image-position'));
   assert(!d.querySelector('#research .gallery-toolbar,#research .gallery-footer'));
