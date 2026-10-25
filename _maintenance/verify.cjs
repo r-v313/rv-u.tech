@@ -142,10 +142,11 @@ function boot(success=true) {
   assert.match(reviews[0].querySelector('blockquote').textContent,/penteration testing بشكل اوضح/);
   assert.match(reviews[1].querySelector('blockquote').textContent,/رأيى بكل صراحة/);
   assert.match(reviews[1].querySelector('blockquote').textContent,/وربنا يباركلك/);
-  assert.equal(d.querySelectorAll('.student-voices,.reviews-grid,.review-tile,.demo-label').length,0,'Old illustrative review cards must stay hidden');
-  assert(html.includes('RVU STUDENT REVIEWS DISABLED'),'Keep old sample review markup commented out');
-  assert.equal((html.match(/class="review-tile"/g)||[]).length,3,'Keep the three historical demo cards in an HTML comment');
-  assert(!d.querySelector('#gallery-track .review-tile'));
+  assert(!html.includes('RVU STUDENT REVIEWS DISABLED')&&!html.includes('class="review-tile"'),'Retired placeholder testimonial markup must not remain');
+  assert.equal(d.querySelectorAll('.student-voices,.reviews-grid,.review-tile,.demo-label').length,0,'Old illustrative review cards must not exist');
+
+
+
   const cohortBanner=d.querySelector('.application-open-banner');
   assert(cohortBanner&&cohortBanner.hasAttribute('data-apply'),'Application banner must remain actionable');
   assert.equal(cohortBanner.querySelector('.application-open-label').textContent,'الدفعة الثانية · باب التقديم مفتوح');
