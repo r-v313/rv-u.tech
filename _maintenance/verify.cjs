@@ -149,10 +149,10 @@ function boot(success=true) {
   assert(!d.body.textContent.includes('اضغط + لقراءة'));
   assert(!d.querySelector('#research .section-heading > p'));
   assert.equal(d.querySelector('#research h2').textContent,'جزء من شغلي');
-  assert.match(d.querySelector('#mentorship').textContent,/5 لـ 7/);
+  assert.match(d.querySelector('#mentorship').textContent,/٦ أسابيع/);
   assert.match(d.querySelector('.camp-price').textContent,/4000/);
   assert(!d.querySelector('.camp-price').closest('details'));
-  assert.match(d.querySelector('.camp-summary').textContent,/11 لـ 13/);
+  assert.match(d.querySelector('#mentorship').textContent,/١٢ جلسة مباشرة/);
   assert(!d.querySelector('.facts,.week-preview'));
   assert.equal(d.querySelectorAll('.offline-cohorts li').length,3);
   assert.equal(d.querySelectorAll('.outcome-example').length,6);
@@ -164,9 +164,9 @@ function boot(success=true) {
   assert.equal(d.querySelectorAll('[data-pdf-guide]').length,3);
   [...d.querySelectorAll('[data-pdf-guide]')].forEach(a=>assert(a.href.endsWith(a.dataset.pdfGuide+'-ar.pdf')));
   assert.match(d.querySelector('.hero-problem').textContent,/الأساسيات/);
-  assert(d.querySelector('h1 bdi'));
+  assert(d.querySelector('.hero h1 em'));
   assert.match(d.querySelector('h1').textContent,/الـ Target/);
-  [...d.querySelectorAll('[data-apply]')].forEach(b=>assert.match(b.textContent,/للانترفيو/));
+  [...d.querySelectorAll('[data-apply]')].forEach(b=>assert(b.matches('button')&&b.type==='button','Every apply control must be a proper button'));
   assert(!/[\u064b-\u065f\u0670]/.test(d.body.textContent));
   assert(fs.readFileSync(path.join(root,'assets/ramez-signature.svg'),'utf8').includes('<title>Ramez Medhat</title>'));
 
@@ -184,7 +184,7 @@ function boot(success=true) {
   [...d.querySelectorAll('[data-resource]')].forEach(x=>assert.match(x.href,/-en\.pdf$/));
   assert.match(d.querySelector('.hero h1').textContent,/Understand/);
   assert(d.querySelector('.signature-title img'),'Translation must retain signature');
-  assert.equal(d.querySelector('.edition-number').textContent,'1 / 11');
+  assert.equal(d.querySelector('.application-open-banner strong').textContent,'Applications are open now');
   assert.equal(d.querySelectorAll('summary .ui-toggle').length,d.querySelectorAll('details').length);
 
   d.querySelector('[data-work=report]').click();assert.match(d.getElementById('work-content').textContent,/reproducible/);
