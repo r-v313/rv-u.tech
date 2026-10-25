@@ -92,8 +92,11 @@ const audit=async(page,label)=>{
             await page.waitForFunction(()=>document.getElementById('gallery-full-image').naturalWidth>0);
             await page.locator('#image-zoom').click();
             assert.equal(await page.locator('#image-zoom').getAttribute('aria-pressed'),'true');
-            await page.locator('#image-next').click();
+            await page.keyboard.press('Escape');
+            const second=page.locator('#reports-track [data-image="1"]');
+            await second.scrollIntoViewIfNeeded();await second.click();
             assert.equal(await page.locator('#image-zoom').getAttribute('aria-pressed'),'false');
+            assert.match(await page.locator('#gallery-full-image').getAttribute('src'),/poc-02-full\.webp/);
             await page.keyboard.press('Escape');
             assert.equal(await page.locator('#image-dialog').evaluate(d=>d.open),false,'Escape closes image');
             await audit(page,engine+' Arabic main page');
