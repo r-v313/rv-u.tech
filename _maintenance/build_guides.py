@@ -40,17 +40,14 @@ GUIDES = {
     'report-template': {
         'id': '01', 'words': ['SECURITY', 'REPORT', 'PLAYBOOK'],
         'ar': ['قالب تقرير أمني', 'اختبار واضح ودليل يقدر غيرك يعيده', 'اكتب تقرير يقدر غيرك يراجعه', 'من الاختبار لمسودة قابلة للإرسال', 'رتب السلوك والخطوات والأثر وراجع دليلك قبل الإرسال', [('افهم', 'حدد المتوقع والفرق اللي لاحظته'), ('اثبت', 'اربط كل خطوة بدليل من الاختبار'), ('اكتب', 'خلي غيرك يقدر يعيد النتيجة')]],
-        'en': ['Security report playbook', 'A clear test. Evidence others can reproduce.', 'Write a report others can review', 'From a test to a reviewable draft', 'Organize behavior, steps and impact, then review your evidence', [('Understand', 'Identify expected and observed behavior'), ('Verify', 'Connect each claim to test evidence'), ('Write', 'Make the result reproducible')]],
     },
     'recon-checklist': {
         'id': '02', 'words': ['TARGET', 'RESEARCH', 'FIELDNOTES'],
         'ar': ['قائمة لفهم الـTarget', 'افهم التطبيق قبل ما تزود الأدوات', 'خمس خطوات لصورة أوضح', 'ورقة شغل للـTarget', 'خريطة صغيرة وأسئلة مرتبة ودليل مطلوب لكل اختبار', [('حدد الحدود', 'الأصول والحسابات وقواعد الاختبار'), ('ارسم الخريطة', 'وظائف وطلبات وأدوار وموارد'), ('رتب الأسئلة', 'فرضية واضحة ونتيجة تقدر تتحقق منها')]],
-        'en': ['Target research fieldnotes', 'Understand the application before adding tools.', 'Five steps to a clearer target', 'Your target research worksheet', 'A small map, prioritized questions and evidence for each test', [('Set boundaries', 'Assets, accounts and engagement rules'), ('Map the app', 'Features, requests, roles and resources'), ('Prioritize', 'A clear hypothesis and a verifiable outcome')]],
     },
     'camp-preparation': {
         'id': '03', 'words': ['CAMP', 'READY', 'CHECKLIST'],
         'ar': ['تجهيزك قبل الكامب', 'جهز وقتك وأدواتك وتعالى بمحاولة', 'ابدأ وانت مجهز الأساسيات', 'خطتك لأول أسبوع', 'قائمة تساعدك تبدأ من نقطة واضحة وليست اختبار قبول', [('راجع الأساسيات', 'ويب وحسابات وطلبات وتجربة بالبرب'), ('جهز البيئة', 'جهاز واتصال وصوت وأدوات شغالة'), ('نظم التطبيق', 'وقت أسبوعي وملاحظات وأسئلة واضحة')]],
-        'en': ['Camp readiness checklist', 'Prepare your time and tools. Bring an attempt.', 'Arrive with the foundations ready', 'Your first-week plan', 'A checklist for a clearer starting point, not an admission test', [('Review foundations', 'Web concepts and hands-on Burp use'), ('Prepare your setup', 'Computer, connection, audio and tools'), ('Plan your practice', 'Weekly time, useful notes and questions')]],
     },
 }
 
@@ -159,22 +156,10 @@ def render(pages, title, lang, destination):
 
 
 def main():
+    """Build the three Arabic public guides only; no bilingual kit or unpublished editions."""
+    OUT.mkdir(parents=True, exist_ok=True)
     for key, guide in GUIDES.items():
-        for lang in ['ar', 'en']:
-            render(guide_pages(key, lang), guide[lang][0], lang, OUT/f'{key}-{lang}.pdf')
-    body = '<p class="eyebrow">RVU / PRACTICAL RESOURCES</p><h1 class="kit-title">THE<br><em>FIELD KIT</em></h1><h2>بداية أوضح وشغل مرتب</h2>' + para('ثلاثة أدلة عملية بالعربي والإنجليزي مع أوراق عمل ترتب بيها فهمك واختبارك وتقريرك', 'kit-intro') + '<div class="kit-list">'
-    for lang in ['ar', 'en']:
-        for key, guide in GUIDES.items():
-            body += f'<a href="#{key}-{lang}"><span>{rich(guide[lang][0])}</span><small>{"ARABIC" if lang == "ar" else "ENGLISH"} / {guide["id"]}</small></a>'
-    body += '</div><div class="cover-bottom"><span>ARABIC + ENGLISH</span><span>03 GUIDES / 06 WORKSHEETS</span></div>'
-    pages, destinations = [page(body, 'ar', 1, 'cover')], {}
-    for lang in ['ar', 'en']:
-        for key in GUIDES:
-            start = len(pages)+1
-            destinations.setdefault(key, {})[lang] = start
-            pages += guide_pages(key, lang, start)
-    render(pages, 'RVU Field Kit - Arabic and English', 'ar', OUT/'RVU_Field_Kit_AR_EN.pdf')
-    (CONTENT/'pdf-pages.json').write_text(json.dumps(destinations, indent=2)+'\n')
+        render(guide_pages(key, 'ar'), guide['ar'][0], 'ar', OUT / f'{key}-ar.pdf')
 
 
 if __name__ == '__main__':
