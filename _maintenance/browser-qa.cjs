@@ -58,6 +58,28 @@ const server=http.createServer((req,res)=>{
       assert.equal(metrics.headingAlign,'center','Portrait heading is not centered');
       assert.equal(metrics.reports,6);
       assert.equal(metrics.ytFrames,0,'YouTube must stay unloaded until interaction');
+      if ([390,850,1440].includes(width)) {
+        // Preview the third approved testimonial's responsive slot without publishing sample content.
+        const styles=await page.evaluate(()=>{
+          const roles=document.querySelector('.cover-roles');
+          const underline=getComputedStyle(roles.querySelector('span'),'::after');
+          const grid=document.querySelector('.student-feedback-grid');
+          const added=grid.firstElementChild.cloneNode(true);
+          added.removeAttribute('aria-labelledby');
+          added.querySelector('[id]')?.removeAttribute('id');
+          grid.append(added);
+          const columns=getComputedStyle(grid).gridTemplateColumns.trim().split(/\s+/).length;
+          added.remove();
+          return {roleCount:roles.querySelectorAll('span').length,
+            borderStyle:getComputedStyle(roles).borderBottomStyle,
+            underlineHeight:underline.height,columns};
+        });
+        assert.equal(styles.roleCount,3,'Profile must show all three career titles');
+        assert.equal(styles.borderStyle,'solid','Profile credentials require an underline');
+        assert.equal(styles.underlineHeight,'2px','Each career title has a clear orange underline');
+        assert.equal(styles.columns,width===1440?3:width===850?2:1,
+          'A third student review must fit a responsive grid at '+width+'px');
+      }
       assert.equal(await page.locator('#reports-track .research-image img').first().evaluate(img=>getComputedStyle(img).objectFit),'contain','Report previews must preserve full original image');
       for(const target of ['.hero-copy','.hero-visual','.price-panel','.mentor-cover']){
         const box=await page.locator(target).first().evaluate(el=>({left:el.getBoundingClientRect().left,right:el.getBoundingClientRect().right,width:el.getBoundingClientRect().width}));
