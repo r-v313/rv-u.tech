@@ -8072,3 +8072,77 @@ html[lang=ar] .hero .eyebrow {
   .cohort-capacity strong { font-size:16px; }
   .mobile-cta > span { font-size:10px; }
 }
+
+/* Hero profile: readable credentials, a clear accent underline and consistent spacing. */
+.hero-visual .mentor-cover{
+  border-color:#794725;
+  background:linear-gradient(155deg,#1e1d1e 0%,#121417 70%,#17120f 100%);
+  box-shadow:0 18px 50px #0007;
+}
+.hero-visual .mentor-cover .cover-name{min-width:0}
+.hero-visual .mentor-cover .cover-roles{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+  gap:6px 15px;
+  max-width:100%;
+  width:fit-content;
+  margin:12px auto 16px;
+  padding:0 0 12px;
+  border-bottom:1px solid #a4612d;
+}
+.hero-visual .mentor-cover .cover-roles span{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:0;
+  max-width:100%;
+  padding:6px 1px 7px;
+  background:transparent;
+  border:0;
+  border-radius:0;
+  color:#f5e6d7;
+  font:650 clamp(10px,.95vw,12.5px)/1.5 "Manrope",sans-serif;
+  letter-spacing:.01em;
+  text-align:center;
+  white-space:normal;
+  overflow-wrap:break-word;
+}
+.hero-visual .mentor-cover .cover-roles span::after{
+  content:"";
+  position:absolute;
+  inset-inline:17%;
+  bottom:0;
+  height:2px;
+  border-radius:2px;
+  background:linear-gradient(90deg,#b76329,#ffae68,#b76329);
+}
+.hero-visual .mentor-cover .cover-bio-copy{
+  min-width:0;
+  overflow-wrap:break-word;
+}
+@media (min-width:1100px){
+  .student-feedback-grid:has(> .student-feedback-card:nth-child(3)){
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:18px;
+  }
+  .student-feedback-grid:has(> .student-feedback-card:nth-child(3)) .student-feedback-card{
+    padding:clamp(18px,1.8vw,27px);
+  }
+}
+@media (max-width:600px){
+  .hero-visual .mentor-cover .cover-roles{
+    gap:5px 11px;
+    margin:5px auto 17px;
+    padding-bottom:10px;
+  }
+  .hero-visual .mentor-cover .cover-roles span{
+    font-size:clamp(10px,2.8vw,12px);
+    padding:5px 1px 7px;
+  }
+  .hero-visual .mentor-cover .cover-bio-copy{
+    text-align:start;
+  }
+}
