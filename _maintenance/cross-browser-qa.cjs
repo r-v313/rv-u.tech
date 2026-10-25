@@ -76,13 +76,13 @@ const audit=async(page,label)=>{
                 page:document.documentElement.scrollWidth,viewport:innerWidth,
                 picture:img.naturalWidth,
                 pictureFit:getComputedStyle(report).objectFit,
-                date:document.querySelector('.edition-date').getAttribute('datetime')};
+                banner:document.querySelector('.application-open-banner .application-open-label').textContent};
             });
             assert.equal(info.lang,lang,engine+' language mismatch');
             assert(info.page<=width+3,engine+' horizontal overflow '+width+' '+lang+' '+JSON.stringify(info));
             assert(info.picture>0,engine+' portrait image failed');
             assert.equal(info.pictureFit,'contain',engine+' image evidence was cropped');
-            assert.equal(info.date,'2026-11-01');
+            assert(info.banner.length>8,engine+' applications banner missing');
           };
           await check('ar');
           if(width===390){
