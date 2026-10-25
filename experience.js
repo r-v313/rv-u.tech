@@ -2,15 +2,6 @@
 (() => {
   const language = document.getElementById('language');
   if (!language) return;
-  const ar = () => document.documentElement.lang === 'ar';
-  function updateResources() {
-    document.querySelectorAll('[data-resource]').forEach(link => {
-      link.href = `./resources/${link.dataset.resource}-${ar() ? 'ar' : 'en'}.pdf`;
-    });
-    document.querySelectorAll('[data-pdf-guide]').forEach(link => {
-      link.href = `./resources/${link.dataset.pdfGuide}-${ar() ? 'ar' : 'en'}.pdf`;
-    });
-  }
   function decorateTechnicalTerms() {
     const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
     const nodes = [];
@@ -34,9 +25,8 @@
       text.replaceWith(fragment);
     });
   }
-  language.addEventListener('click', () => { updateResources(); decorateTechnicalTerms(); });
+  language.addEventListener('click', decorateTechnicalTerms);
   document.querySelectorAll('[data-work]').forEach(button => button.addEventListener('click', decorateTechnicalTerms));
-  updateResources();
   decorateTechnicalTerms();
   const country = document.getElementById('phone-country');
   const phone = document.querySelector('input[name="phone"]');
