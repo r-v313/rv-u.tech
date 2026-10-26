@@ -6849,3 +6849,8 @@ html[dir=ltr] #experience .arrow-next svg,html[dir=ltr] #research .arrow-next sv
 @media(min-width:901px){
   .hero.hero-unified .mentor-cover .cover-portrait{width:min(32vw,370px)}
 }
+
+.hero.hero-unified .mentor-cover .cover-portrait img{
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 78%,rgba(0,0,0,.94) 83%,rgba(0,0,0,.72) 89%,rgba(0,0,0,.38) 95%,transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 0%,#000 78%,rgba(0,0,0,.94) 83%,rgba(0,0,0,.72) 89%,rgba(0,0,0,.38) 95%,transparent 100%);
+}
