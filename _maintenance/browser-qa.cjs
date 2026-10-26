@@ -57,11 +57,14 @@ const server=http.createServer((req,res)=>{
       assert.equal(await page.locator('#image-original,#image-zoom').count(),0);
       if([320,390,800,1280].includes(width)){
         await page.locator('#reports-track [data-image="0"]').click();
-        assert(await page.locator('#image-dialog').evaluate(el=>el.open),'Image dialog did not open');
-        await page.waitForFunction(()=>document.querySelector('#gallery-full-image').naturalWidth>0);
-        assert(/poc-01-full\.webp/.test(await page.locator('#gallery-full-image').getAttribute('src')));
-        await page.locator('#image-dialog [data-close]').click();
-        assert.equal(await page.locator('#image-dialog').evaluate(el=>el.open),false);
+        assert(new URL(page.url()).pathname==='/viewer.html','Dedicated report page did not open');
+        await page.waitForFunction(()=>document.getElementById('full-image').naturalWidth>0);
+        assert(/poc-01-full\.webp/.test(await page.locator('#full-image').getAttribute('src')));
+        assert.equal(await page.locator('#close-viewer').evaluate(el=>Math.round(el.getBoundingClientRect().left)<width/3),true,'Close X must be top left');
+        await page.locator('#zoom-in').click();
+        assert(await page.locator('#zoom-level').textContent()!=='100%','Image zoom must work');
+        await page.locator('#close-viewer').click();
+        await page.waitForURL(url=>url.pathname==='/');
       }
       await page.locator('#language').click();
       assert.equal(await page.locator('html').getAttribute('lang'),'en');
