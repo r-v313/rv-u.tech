@@ -6996,6 +6996,20 @@ html[lang=ar] .hero .eyebrow {
   font-size:clamp(13px,1.42vw,16px);
   line-height:1.92;
 }
+.hero.hero-unified .cover-bio-copy .bio-accent{
+  color:#ffae68;
+  font-weight:800;
+  font-style:normal;
+}
+.hero.hero-unified .cover-bio-copy .bio-name{
+  font-family:"Manrope",sans-serif;
+  direction:ltr;
+  unicode-bidi:isolate;
+}
+.hero.hero-unified .cover-bio-copy .bio-goal-title{
+  display:inline;
+  color:#ffb36c;
+}
 .hero.hero-unified .hero-copy{
   width:min(100%,850px);
   max-width:100%;
@@ -7046,16 +7060,9 @@ html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(30px,4.9vw,60px)}
 .hero.hero-unified .hero-benefits-inline span{
   display:inline-flex;
   align-items:center;
-  gap:8px;
   white-space:nowrap;
 }
-.hero.hero-unified .hero-benefits-inline span::before{
-  content:"";
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:#ff8f39;
-}
+
 .hero.hero-unified .cohort-capacity{
   width:min(100%,720px);
   justify-content:center;
