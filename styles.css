@@ -6806,3 +6806,46 @@ html[lang=en] #research .section-heading h2.section-dot-title{
 html[dir=ltr] #experience .arrow-prev svg,html[dir=ltr] #research .arrow-prev svg{transform:rotate(180deg)}
 html[dir=ltr] #experience .arrow-next svg,html[dir=ltr] #research .arrow-next svg{transform:none}
 @media(max-width:540px){#journey .history-stats article+article{border-inline-start:0;border-top:1px solid #444046}}
+
+.hero.hero-unified .mentor-cover .cover-portrait{
+  position:relative;
+  flex:0 0 auto;
+  width:min(100%,360px);
+  max-width:100%;
+  margin:0 auto 10px;
+  padding:0;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  overflow:visible;
+}
+.hero.hero-unified .mentor-cover .cover-portrait::before,
+.hero.hero-unified .mentor-cover .cover-portrait::after{
+  content:none!important;
+  display:none!important;
+}
+.hero.hero-unified .mentor-cover .cover-portrait img{
+  display:block;
+  width:100%;
+  max-width:100%;
+  height:auto!important;
+  aspect-ratio:auto!important;
+  object-fit:contain!important;
+  object-position:center bottom;
+  filter:none!important;
+  opacity:1;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  background:transparent!important;
+}
+@media(max-width:600px){
+  .hero.hero-unified .mentor-cover .cover-portrait{width:min(74vw,300px);margin-bottom:10px}
+}
+@media(min-width:601px) and (max-width:900px){
+  .hero.hero-unified .mentor-cover .cover-portrait{width:min(42vw,330px)}
+}
+@media(min-width:901px){
+  .hero.hero-unified .mentor-cover .cover-portrait{width:min(32vw,370px)}
+}
