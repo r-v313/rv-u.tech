@@ -38,7 +38,7 @@
   });
   function render(){
     var w=img.offsetWidth,h=img.offsetHeight,vw=stage.clientWidth,vh=stage.clientHeight;
-    var maxX=Math.max(0,(w*scale-vw)/2)+Math.max(0,(w*scale-vw)/2)>0?Math.max(0,(w*scale-vw)/2):0;
+    var maxX=Math.max(0,(w*scale-vw)/2);
     var maxY=Math.max(0,(h*scale-vh)/2);
     x=clamp(x,-maxX,maxX);y=clamp(y,-maxY,maxY);
     img.style.transform='translate(-50%,-50%) translate('+x+'px,'+y+'px) scale('+scale+')';
@@ -91,7 +91,7 @@
   stage.addEventListener('pointerdown',function(e){
     if(e.pointerType!=='mouse'||e.button!==0)return;
     drag={x:e.clientX,y:e.clientY,tx:x,ty:y,id:e.pointerId};
-    stage.classList.add('is-grabbing');stage.setPointerCapture(e.pointerId);
+    stage.classList.add('is-grabbing');if(typeof stage.setPointerCapture==='function')stage.setPointerCapture(e.pointerId);
   });
   stage.addEventListener('pointermove',function(e){
     if(e.pointerType!=='mouse'||!drag||drag.id!==e.pointerId||scale<=1)return;
