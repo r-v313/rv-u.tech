@@ -81,10 +81,14 @@ function boot(success=true) {
   const bioParagraphs=[...bio.querySelectorAll('.cover-bio-copy p')];
   assert.equal(bioParagraphs.length,2);
   assert.deepEqual(bioParagraphs.map(p=>p.textContent),[
-    'أنا Ramez Medhat بدأت رحلتي في Bug Bounty سنة ٢٠٢٢ وقدمت تقارير لبرامج عامة وخاصة وبنيت الكامب على الفهم والتطبيق ومراجعة طريقة التفكير',
-    'قدمت ٣ كامبات أوفلاين وكامب أونلاين وبكمل الرحلة معاك بنفس الهدف تبني طريقة شغل تفهمها وتقدر تطورها بنفسك'
-  ],'Approved instructor biography must remain word for word');
-  assert(!bio.textContent.includes('هدفي إنك تبني منهجية واضحة'),'Previously substituted instructor copy must not return');
+    'أنا Ramez Medhat بدأت رحلتي في Bug Bounty سنة ٢٠٢٢ وقدمت تقارير لـ Public and Private Programs وكمان لـ External Companies جوه وبره مصر وقررت ابني الكامب ده علشان اساعد الشباب اللي في المجال ومحتاجه حد يكون معاها خطوة بخطوة لحد ما يبقوا قادرين يكملوا لوحدهم',
+    'الهدف من الكامب هو الفهم والتطبيق العملي وكمان هنشتغل Live Hunting مع بعض وهراجع طريقة تفكير كل طالب بنفسي وهيكون في متابعه شخصية مع كل واحد كل اسبوعين علي الاقل علشان اعرف تقدم كل واحد.'
+  ],'Approved new instructor biography must remain word for word');
+  assert.equal(bioParagraphs[0].querySelector('.bio-name').textContent,'Ramez Medhat','Instructor name must be highlighted');
+  assert.equal(bioParagraphs[1].querySelector('.bio-goal-title').textContent,'الهدف من الكامب','The goal headline must be highlighted');
+  assert(bioParagraphs[0].querySelector('.bio-name').matches('strong'));
+  assert(bioParagraphs[1].querySelector('.bio-goal-title').matches('strong'));
+  assert(!bio.textContent.includes('قدمت ٣ كامبات أوفلاين وكامب أونلاين'),'Retired instructor biography must not return');
   const profileLink=bio.querySelector('a[href^="https://www.linkedin.com/"]');
   assert(profileLink&&profileLink.href==='https://www.linkedin.com/in/ramez-medhat-rvu/');
   assert.equal(profileLink.getAttribute('target'),'_blank');
@@ -98,6 +102,8 @@ function boot(success=true) {
   assert.equal(d.querySelectorAll('.hero-camp-label,.hero-camp-label .live-dot').length,0,'Remove duplicate hero badge and glow');
   assert.equal(d.querySelectorAll('.mentor-cover .cover-top .live-dot').length,0,'Portrait heading must not have a glowing dot');
   const styles=fs.readFileSync(path.join(root,'styles.css'),'utf8');
+  assert(!styles.includes('.hero.hero-unified .hero-benefits-inline span::before'),'The two orange dots under the intro must be removed');
+  assert.match(styles,/\.hero\.hero-unified \.cover-bio-copy \.bio-accent\s*\{/,'Highlighted biography labels must be styled');
   assert.deepEqual([...d.querySelectorAll('.mentor-cover .cover-roles span')].map(x=>x.textContent),
     ['Application Security Researcher','Bug Bounty Hunter','Instructor']);
   assert.match(styles,/.hero-visual \.mentor-cover \.cover-roles span::after/,'Orange underline on role labels must remain styled');
@@ -158,8 +164,8 @@ function boot(success=true) {
   assert(reviewSection&&reviewSection.closest('main'),'Student testimonials must be in the main page');
   assert.equal(d.querySelector('#student-feedback-title').textContent,'من آراء طلاب الكامب');
   const reviews=[...reviewSection.querySelectorAll('.student-feedback-card')];
-  assert.equal(reviews.length,2,'Only the two submitted student testimonials should appear');
-  assert.deepEqual(reviews.map(card=>card.querySelector('h3').textContent),['Ahmed Alaa','Zain Ali']);
+  assert.equal(reviews.length,3,'All three authentic student testimonials must be published');
+  assert.deepEqual(reviews.map(card=>card.querySelector('h3').textContent),['Ahmed Alaa','Zain Ali','Ghada Abdelrahman']);
   assert(reviews.every(card=>card.querySelector('h3').compareDocumentPosition(card.querySelector('blockquote')) & w.Node.DOCUMENT_POSITION_FOLLOWING),'Student name precedes the review');
   assert(reviews.every(card=>card.querySelector('blockquote').getAttribute('lang')==='ar'&&card.querySelector('blockquote').getAttribute('dir')==='rtl'),'Original Arabic reviews keep their language and direction');
   assert(reviews.every(card=>!card.querySelector('blockquote').hasAttribute('data-en')),'Do not replace authentic Arabic quotes with machine-generated translations');
@@ -169,6 +175,11 @@ function boot(success=true) {
   assert.match(reviews[0].querySelector('blockquote').textContent,/penteration testing بشكل اوضح/);
   assert.match(reviews[1].querySelector('blockquote').textContent,/رأيى بكل صراحة/);
   assert.match(reviews[1].querySelector('blockquote').textContent,/وربنا يباركلك/);
+  assert.equal(reviews[2].querySelector('blockquote').textContent,
+    'الكامب رائع جدا و مهندس رامز متميز جدا فى توصيل المعلومات و المحتوى منظم جدا وكل اللى كان عنده تحدى فى اى حاجه كان بيلجأله وهو كان معانا علطول\n' +
+    'الكورس معمول باحترافية شديدة ومحتاج متدربين متحمسين و منظمين وقتهم عشان يحققوا هدفهم من الكورس وشكرا لحضرتك يا بشمهندس');
+  assert.equal(reviews[2].querySelector('h3').textContent,'Ghada Abdelrahman');
+  assert.equal(reviews[2].querySelector('.student-feedback-person > div > span').textContent,'طالبة في الكامب');
   assert(!html.includes('RVU STUDENT REVIEWS DISABLED')&&!html.includes('class="review-tile"'),'Retired placeholder testimonial markup must not remain');
   assert.equal(d.querySelectorAll('.student-voices,.reviews-grid,.review-tile,.demo-label').length,0,'Old illustrative review cards must not exist');
 
@@ -266,6 +277,10 @@ function boot(success=true) {
   assert.equal(d.querySelector('.mentor-cover .cover-top .mono').textContent.trim(),'RVU MENTORSHIP · ONLINE BUG BOUNTY CAMP');
   assert.equal(d.querySelector('#student-feedback-title').textContent,'What my students say');
   assert.equal(d.querySelector('#review-ahmed-name').textContent,'Ahmed Alaa');
+  assert.equal(d.querySelector('#review-ghada-name').textContent,'Ghada Abdelrahman');
+  assert.equal(d.querySelector('.cover-bio-copy .bio-goal-title').textContent,'The aim of the camp');
+  assert.equal(d.querySelector('.cover-bio-copy .bio-name').textContent,'Ramez Medhat');
+  assert.equal(d.querySelector('.student-feedback-card:last-child blockquote').getAttribute('lang'),'ar');
   assert.match(d.querySelector('#review-zain-name').closest('article').querySelector('blockquote').textContent,/رأيى بكل صراحة/);
   assert([...d.querySelectorAll('#resources .resource-card a')].every(a=>a.href.endsWith('-ar.pdf')));
   assert.match(d.querySelector('.camp-price').textContent,/4,000 EGP/);
