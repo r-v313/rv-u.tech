@@ -6546,14 +6546,6 @@ html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(30px,4.9vw,60px)}
   width:min(100%,850px);
   margin:0 auto;
 }
-.hero.hero-unified .hero-lead{
-  flex:1 1 0;
-  min-width:0;
-  width:auto;
-  max-width:none;
-  margin:0;
-  text-align:start;
-}
 .hero.hero-unified .student-reviews-jump{
   display:flex;
   flex:0 0 72px;
@@ -6591,9 +6583,12 @@ html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(30px,4.9vw,60px)}
   line-height:1.25;
 }
 .hero.hero-unified .hero-lead{
-  width:min(100%,780px);
-  max-width:100%;
-  margin-inline:auto;
+  flex:1 1 0;
+  min-width:0;
+  width:auto;
+  max-width:none;
+  margin:0;
+  text-align:start;
   font-size:clamp(14px,1.4vw,17px);
   line-height:1.9;
 }
