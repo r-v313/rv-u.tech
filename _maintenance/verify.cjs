@@ -42,9 +42,13 @@ function boot(success=true) {
   assert.equal(d.querySelectorAll('img[src^="./assets/ramez-medhat-480.webp"]').length,1);
   assert(!html.includes('IBM+Plex+Mono:wght'),'No redundant monospaced Google Font request');
   assert(fs.readFileSync(path.join(root,'measurement.js'),'utf8').includes('requestIdleCallback'));
-  assert.match(d.querySelector('.hero-problem').textContent,/لو عندك الأساسيات وعندك معلومات كتير بس أول ما تفتح Target حقيقي/);
-  assert.match(d.querySelector('.hero-lead').textContent,/نشكر ربنا على نجاح الدفعة الرابعة/);
-  assert.match(d.querySelector('.hero-lead-followup').textContent,/وهنشتغل عملي مع بعض/);
+  assert.equal(d.querySelector('.hero-problem').textContent,'لو عندك الأساسيات وعندك معلومات بس أول ما تفتح Target حقيقي بتقف ومش بتكون عارف تعمل ايه او تبدأ منين يبقى انت اللي الكامب بيستهدفه');
+  assert.equal(d.querySelector('.hero-lead').textContent,'بشكر ربنا على نجاح الدفعة الرابعة من الكامب والأولى أونلاين.. وبعلن عن الدفعة الخامسة من RVU Mentorship Camp وهي الثانية أونلاين والتقديم للانترفيو مفتوح دلوقتي لأي بشمهندس حابب يطور من نفسه.');
+  assert.equal(d.querySelector('.hero-lead .thanks-oval').textContent,'بشكر ربنا');
+  assert.equal(d.querySelectorAll('.hero-lead .thanks-oval').length,1,'Thank-you oval appears once');
+  assert.equal(d.querySelector('.hero-lead-followup').textContent,'خلال ٦ أسابيع هنشتغل على منهجيتك بشكل عملي وهنطور طريقة تفكيرك مع بعض وأنا هتابع معاك بنفسي خطوة بخطوة.');
+  assert.equal(d.querySelector('.hero-lead-followup .duration-underline').textContent,'٦ أسابيع');
+  assert.equal(d.querySelectorAll('.hero-lead-followup .duration-underline').length,1,'Six-week underline appears once');
   assert.equal(d.querySelector('.hero-facts-featured'),null,'Removed large hero metric boxes must not return');
   const unifiedHero=d.querySelector('section.hero.hero-unified');
   assert(unifiedHero,'Hero must use one full-width unified card');
@@ -52,7 +56,7 @@ function boot(success=true) {
   assert.equal(unifiedHero.querySelectorAll('.hero-copy').length,1);
   assert.equal(unifiedHero.querySelectorAll('.application-open-banner').length,1);
   const profile=unifiedHero.querySelector('.mentor-cover');
-  const ordered=['.cover-portrait','.cover-name','.cover-bio','.hero-title','.hero-problem','.hero-benefits-inline','.cohort-capacity','.application-open-banner'];
+  const ordered=['.cover-portrait','.cover-name','.cover-bio','.hero-title','.hero-lead','.hero-problem','.hero-lead-followup','.hero-benefits-inline','.cohort-capacity','.application-open-banner'];
   const nodes=ordered.map(selector=>profile.querySelector(selector));
   assert(nodes.every(Boolean),'Portrait, biography, story and fifth-cohort CTA must share one card');
   for(let i=1;i<nodes.length;i++)assert(nodes[i-1].compareDocumentPosition(nodes[i]) & w.Node.DOCUMENT_POSITION_FOLLOWING,'Hero sequence: '+ordered[i-1]+' before '+ordered[i]);
@@ -81,8 +85,8 @@ function boot(success=true) {
   const bioParagraphs=[...bio.querySelectorAll('.cover-bio-copy p')];
   assert.equal(bioParagraphs.length,2);
   assert.deepEqual(bioParagraphs.map(p=>p.textContent),[
-    'أنا Ramez Medhat بدأت رحلتي في Bug Bounty سنة ٢٠٢٢ وقدمت تقارير لـ Public and Private Programs وكمان لـ External Companies جوه وبره مصر وقررت ابني الكامب ده علشان اساعد الشباب اللي في المجال ومحتاجه حد يكون معاها خطوة بخطوة لحد ما يبقوا قادرين يكملوا لوحدهم',
-    'الهدف من الكامب هو الفهم والتطبيق العملي وكمان هنشتغل Live Hunting مع بعض وهراجع طريقة تفكير كل طالب بنفسي وهيكون في متابعه شخصية مع كل واحد كل اسبوعين علي الاقل علشان اعرف تقدم كل واحد.'
+    'أنا Ramez Medhat بدأت رحلتي في Bug Bounty سنة ٢٠٢٢ وقدمت تقارير لـ Public and Private Programs وكمان لـ External Companies جوه وبره مصر وقررت ابني الكامب ده علشان اساعد الشباب اللي حابه المجال ومحتاجه حد يكون معاها خطوة بخطوة لحد ما يبقوا قادرين يكملوا لوحدهم',
+    'الهدف من الكامب هو الفهم والتطبيق العملي وكمان هنشتغل Live Hunting مع بعض وهراجع طريقة تفكير كل واحد بنفسي وهيكون في متابعه شخصية مع كل مهندس كل اسبوعين علي الاقل علشان اعرف مستوى تقدمة واعرف ومحتاج ايه بالظبط'
   ],'Approved new instructor biography must remain word for word');
   assert.equal(bioParagraphs[0].querySelector('.bio-name').textContent,'Ramez Medhat','Instructor name must be highlighted');
   assert.equal(bioParagraphs[1].querySelector('.bio-goal-title').textContent,'الهدف من الكامب','The goal headline must be highlighted');
@@ -103,6 +107,8 @@ function boot(success=true) {
   assert.equal(d.querySelectorAll('.mentor-cover .cover-top .live-dot').length,0,'Portrait heading must not have a glowing dot');
   const styles=fs.readFileSync(path.join(root,'styles.css'),'utf8');
   assert(!styles.includes('.hero.hero-unified .hero-benefits-inline span::before'),'The two orange dots under the intro must be removed');
+  assert.match(styles,/\.hero\.hero-unified \.hero-lead \.thanks-oval\s*\{/,'Oval thank-you label must be styled');
+  assert.match(styles,/\.hero\.hero-unified \.hero-lead-followup \.duration-underline\s*\{/,'Six-week underline must be styled');
   assert.match(styles,/\.hero\.hero-unified \.cover-bio-copy \.bio-accent\s*\{/,'Highlighted biography labels must be styled');
   assert.deepEqual([...d.querySelectorAll('.mentor-cover .cover-roles span')].map(x=>x.textContent),
     ['Application Security Researcher','Bug Bounty Hunter','Instructor']);
@@ -272,7 +278,9 @@ function boot(success=true) {
   assert.match(d.querySelector('.fit-yes').textContent,/You know the fundamentals and have plenty of information/);
   assert.match(d.querySelector('.fit-yes').textContent,/make time to practise alongside the sessions/);
   assert.match(d.querySelector('.hero-lead').textContent,/applications for the free interview are open now/i);
-  assert.match(d.querySelector('.hero-lead-followup').textContent,/hands-on practice together/i);
+  assert.match(d.querySelector('.hero-lead-followup').textContent,/develop your methodology through practical work/i);
+  assert.equal(d.querySelector('.hero-lead .thanks-oval').textContent,'I thank God');
+  assert.equal(d.querySelector('.hero-lead-followup .duration-underline').textContent,'6 weeks');
   assert.equal(d.querySelector('.hero-facts-featured'),null);
   assert.deepEqual([...d.querySelectorAll('.hero-benefits-inline span')].map(x=>x.textContent),['6 weeks','Personal 1:1 feedback']);
   assert.match(d.querySelector('.hero-lead').textContent,/fifth RVU Mentorship Camp cohort, our second online cohort/);
