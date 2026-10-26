@@ -45,7 +45,25 @@ function boot(success=true) {
   assert.match(d.querySelector('.hero-problem').textContent,/لو عندك الأساسيات وعندك معلومات كتير بس أول ما تفتح Target حقيقي/);
   assert.match(d.querySelector('.hero-lead').textContent,/نشكر ربنا على نجاح الدفعة الرابعة/);
   assert.match(d.querySelector('.hero-lead-followup').textContent,/وهنشتغل عملي مع بعض/);
-  assert.equal(d.querySelector('.hero-facts-featured'),null,'Removed hero metric cards must not render');
+  assert.equal(d.querySelector('.hero-facts-featured'),null,'Removed large hero metric boxes must not return');
+  const unifiedHero=d.querySelector('section.hero.hero-unified');
+  assert(unifiedHero,'Hero must use one full-width unified card');
+  assert.equal(unifiedHero.querySelectorAll('.mentor-cover').length,1);
+  assert.equal(unifiedHero.querySelectorAll('.hero-copy').length,1);
+  assert.equal(unifiedHero.querySelectorAll('.application-open-banner').length,1);
+  const profile=unifiedHero.querySelector('.mentor-cover');
+  const ordered=['.cover-portrait','.cover-name','.cover-bio','.hero-title','.hero-problem','.hero-benefits-inline','.cohort-capacity','.application-open-banner'];
+  const nodes=ordered.map(selector=>profile.querySelector(selector));
+  assert(nodes.every(Boolean),'Portrait, biography, story and fifth-cohort CTA must share one card');
+  for(let i=1;i<nodes.length;i++)assert(nodes[i-1].compareDocumentPosition(nodes[i]) & w.Node.DOCUMENT_POSITION_FOLLOWING,'Hero sequence: '+ordered[i-1]+' before '+ordered[i]);
+  assert.deepEqual([...profile.querySelectorAll('.hero-benefits-inline span')].map(x=>x.textContent),['٦ أسابيع','متابعة 1:1']);
+  assert.equal(d.querySelector('h1').closest('.mentor-cover'),profile,'The main headline follows the instructor profile in the same card');
+  assert.equal(d.querySelector('.history-next .history-number').textContent,'05');
+  assert.match(d.querySelector('.history-next h3').textContent,/الدفعة الخامسة/);
+  assert.match(d.querySelector('.hero-lead').textContent,/الدفعة الخامسة.*الثانية أونلاين/);
+  assert.match(d.querySelector('title').textContent,/الدفعة الخامسة/);
+  assert.equal(d.querySelector('meta[property="og:title"]').content,'RVU Mentorship Camp — Cohort 05 | Applications Open');
+  assert(!/الدفعة الثانية|COHORT 02|Cohort 02|cohort 02/.test(html),'Stale overall cohort numbering must not survive');
   assert.equal(d.querySelector('.cohort-capacity strong').textContent,'الدفعة 12 طالب فقط + متابعة 1:1');
   assert.equal(d.querySelector('.cohort-capacity > span').textContent,'علشان أتابع شغل كل واحد معاه');
   assert.equal(d.querySelector('.mobile-cta > span').textContent,'الدفعة 12 طالب فقط + متابعة 1:1');
@@ -131,7 +149,7 @@ function boot(success=true) {
   assert.equal(d.querySelectorAll('link[rel="stylesheet"][href*="styles.min.css"]').length,1);
   assert(!d.querySelector('link[rel="stylesheet"][href*="styles.css"]'));
   assert(!d.documentElement.hasAttribute('data-saver'),'No alternative data-saver mode');
-  // Only the two user-provided testimonials are published; three old dummy cards remain commented out.
+  // Publish only verified student testimonials; old illustrative reviews have been deleted.
   const reviewSection=d.querySelector('#voices.student-feedback');
   assert(reviewSection&&reviewSection.closest('main'),'Student testimonials must be in the main page');
   assert.equal(d.querySelector('#student-feedback-title').textContent,'من آراء طلاب الكامب');
@@ -154,7 +172,7 @@ function boot(success=true) {
 
   const cohortBanner=d.querySelector('.application-open-banner');
   assert(cohortBanner&&cohortBanner.hasAttribute('data-apply'),'Application banner must remain actionable');
-  assert.equal(cohortBanner.querySelector('.application-open-label').textContent,'الدفعة الثانية · باب التقديم مفتوح');
+  assert.equal(cohortBanner.querySelector('.application-open-label').textContent,'الدفعة الخامسة · باب التقديم مفتوح');
   assert.equal(cohortBanner.querySelector('strong').textContent,'التقديم مفتوح الآن');
   assert.match(styles,/\.hero-visual \.application-open-banner strong/);
   assert.equal(d.querySelectorAll('summary .ui-toggle').length,d.querySelectorAll('details').length);
@@ -233,6 +251,8 @@ function boot(success=true) {
   assert.match(d.querySelector('.hero-lead').textContent,/applications for the free interview are open now/i);
   assert.match(d.querySelector('.hero-lead-followup').textContent,/hands-on practice together/i);
   assert.equal(d.querySelector('.hero-facts-featured'),null);
+  assert.deepEqual([...d.querySelectorAll('.hero-benefits-inline span')].map(x=>x.textContent),['6 weeks','Personal 1:1 feedback']);
+  assert.match(d.querySelector('.hero-lead').textContent,/fifth RVU Mentorship Camp cohort, our second online cohort/);
   assert.equal(d.querySelector('.cohort-capacity strong').textContent,'Only 12 students in this cohort + 1:1 mentoring');
   assert.equal(d.querySelector('.cohort-capacity > span').textContent,'So I can personally follow up on each student’s work');
   assert.equal(d.querySelector('.mobile-cta > span').textContent,'Only 12 students + 1:1 mentoring');
