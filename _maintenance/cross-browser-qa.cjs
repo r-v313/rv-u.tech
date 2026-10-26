@@ -76,13 +76,13 @@ const audit=async(page,label)=>{
                 page:document.documentElement.scrollWidth,viewport:innerWidth,
                 picture:img.naturalWidth,
                 pictureFit:getComputedStyle(report).objectFit,
-                banner:document.querySelector('.application-open-banner .application-open-label').textContent};
+                banner:document.querySelector('.hero-primary-apply').textContent};
             });
             assert.equal(info.lang,lang,engine+' language mismatch');
             assert(info.page<=width+3,engine+' horizontal overflow '+width+' '+lang+' '+JSON.stringify(info));
             assert(info.picture>0,engine+' portrait image failed');
             assert.equal(info.pictureFit,'contain',engine+' image evidence was cropped');
-            assert(info.banner.length>8,engine+' applications banner missing');
+            assert(info.banner.includes(lang==='ar'?'قدم لانترفيو الكامب الخامس':'Apply for the fifth camp interview'),engine+' application CTA missing');
           };
           await check('ar');
           if(width===390){
