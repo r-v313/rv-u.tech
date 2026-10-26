@@ -80,11 +80,13 @@ function boot() {
   assert.equal(d.querySelectorAll('#video-mount iframe').length,1);
   d.querySelector('#video-dialog [data-close]').click();
   assert.equal(d.querySelectorAll('#video-mount iframe').length,0);
-  d.querySelector('#reports-track [data-image="0"]').click();
-  assert(d.querySelector('#image-dialog').open);
-  assert(/poc-01-full\.webp$/.test(d.querySelector('#gallery-full-image').getAttribute('src')));
-  d.querySelector('#image-dialog [data-close]').click();
-  assert.equal(d.querySelector('#gallery-full-image').hasAttribute('src'),false);
+  const firstReport=d.querySelector('#reports-track [data-image="0"]');
+  assert.equal(firstReport.tagName,'A');
+  assert.equal(firstReport.getAttribute('href'),'/viewer.html?image=1');
+  assert.equal(d.querySelector('meta[name="viewport"]').content.includes('user-scalable=yes'),true);
+  assert(fs.existsSync(path.join(root,'viewer.html')));
+  assert(fs.existsSync(path.join(root,'viewer.js')));
+  assert(fs.existsSync(path.join(root,'viewer.css')));
   d.getElementById('language').click();
   assert.equal(d.documentElement.lang,'en');
   assert.equal(d.documentElement.dir,'ltr');
@@ -93,6 +95,7 @@ function boot() {
   assert.equal(d.querySelector('#voices blockquote').dir,'ltr');
   assert(d.querySelector('#voices blockquote').textContent.startsWith('The camp was very good'));
   assert.equal(d.querySelector('#reports-track img').alt,'Confirmation of account takeover report');
+  assert.equal(d.querySelector('#reports-track [data-image="0"]').getAttribute('href'),'/viewer.html?image=1&lang=en');
   assert.equal(d.querySelector('#research h2').textContent,'Some of my work');
   assert.equal(d.querySelectorAll('#reports-track .research-card').length,6);
   d.getElementById('language').click();
@@ -102,6 +105,7 @@ function boot() {
   assert.equal(d.querySelector('#voices blockquote').lang,'ar');
   assert.equal(d.querySelector('#voices blockquote').dir,'rtl');
   assert(d.querySelector('#voices blockquote').textContent.startsWith('الكامب جميل جدا'));
+  assert.equal(d.querySelector('#reports-track [data-image="0"]').getAttribute('href'),'/viewer.html?image=1');
   const form=d.getElementById('application-form');
   form.elements.name.value='Browser QA';
   form.elements.phone.value='+201012345678';
