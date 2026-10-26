@@ -8,7 +8,7 @@ A single-page bilingual website served by GitHub Pages. The published files are 
 
 - Run `python _maintenance/check_structure.py` and the JavaScript regression/security checks before publishing.
 - PDF dependencies are listed in `_maintenance/requirements.txt`. Run `python _maintenance/build_guides.py` to regenerate the three public Arabic field guides. Arabic source text lives in `_maintenance/content`, and the font license notices are retained.
-- The live student testimonials are Ahmed Alaa and Zain Ali. The third female student’s exact original feedback and name could not be recovered from the available context, so it has deliberately not been fabricated. Once supplied, her card will join the same three-column desktop grid. The new fifth overall cohort is the second online cohort after three offline and one completed online cohorts.
+- Three genuine student testimonials are published: Ahmed Alaa, Zain Ali, and Ghada Abdelrahman. The reviews retain the exact Arabic text and line breaks supplied by the students. The responsive grid shows three columns on wide desktop layouts, two on tablets, and one on phones. The new fifth overall cohort is the second online cohort after three offline and one completed online cohorts.
 - The application form sends a best-effort background POST to Formspree before opening WhatsApp with a prefilled application message. YouTube loads only when a teaching video is opened. Analytics events exclude application field values and the application dialog is masked.
 - Deployment and rollback use Git history. No duplicate or legacy website is published.
 
