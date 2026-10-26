@@ -63,6 +63,30 @@ const server=http.createServer((req,res)=>{
         assert.equal(await page.locator('#close-viewer').evaluate(el=>Math.round(el.getBoundingClientRect().left)<window.innerWidth/3),true,'Close X must be top left');
         await page.locator('#zoom-in').click();
         assert(await page.locator('#zoom-level').textContent()!=='100%','Image zoom must work');
+        if(width===390){
+          const gesture=await page.evaluate(()=>{
+            if(typeof Touch!=='function'||typeof TouchEvent!=='function')return {supported:false};
+            const stage=document.getElementById('image-surface'),img=document.getElementById('full-image');
+            const pt=(id,x,y)=>new Touch({identifier:id,target:stage,clientX:x,clientY:y});
+            const emit=(type,touches,changed)=>stage.dispatchEvent(new TouchEvent(type,{bubbles:true,cancelable:true,touches,targetTouches:touches,changedTouches:changed}));
+            const a=pt(1,100,400),b=pt(2,180,400),c=pt(1,60,400),d=pt(2,220,400);
+            emit('touchstart',[a,b],[a,b]);
+            emit('touchmove',[c,d],[c,d]);
+            emit('touchend',[],[c,d]);
+            const percent=Number(document.getElementById('zoom-level').textContent.replace('%',''));
+            const before=img.style.transform;
+            const finger=pt(3,190,430),next=pt(3,255,430);
+            emit('touchstart',[finger],[finger]);
+            emit('touchmove',[next],[next]);
+            emit('touchend',[],[next]);
+            return {supported:true,percent,moved:img.style.transform!==before};
+          });
+          if(gesture.supported){
+            assert(gesture.percent>=250,'Pinch to zoom failed: '+JSON.stringify(gesture));
+            assert(gesture.moved,'Touch drag after pinch failed: '+JSON.stringify(gesture));
+          }
+        }
+
         await page.locator('#close-viewer').click();
         await page.waitForURL(url=>url.pathname==='/');
       }
