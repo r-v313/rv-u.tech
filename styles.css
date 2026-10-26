@@ -7594,3 +7594,50 @@ iframe{border:0}
   .hero.hero-unified .hero-quick-links{flex-wrap:wrap}
   #gallery-track,#research #reports-track{-webkit-overflow-scrolling:touch}
 }
+
+/* Tablet-specific selectors override modern clamp() rules with readable sizes. */
+@media (min-width:700px) and (max-width:950px) and (orientation:portrait){
+  #mentorship .mentorship-heading h2.section-dot-title,
+  #curriculum .section-heading h2.section-dot-title,
+  #outcomes .section-heading h2.section-dot-title,
+  #resources .section-heading h2.section-dot-title,
+  #fit .section-heading h2.section-dot-title,
+  #faq h2.section-dot-title,
+  #apply .apply-section h2.section-dot-title{font-size:34px;line-height:1.44;padding-right:30px}
+  html[lang=en] #mentorship h2.section-dot-title,
+  html[lang=en] #curriculum h2.section-dot-title,
+  html[lang=en] #outcomes h2.section-dot-title,
+  html[lang=en] #resources h2.section-dot-title,
+  html[lang=en] #fit h2.section-dot-title,
+  html[lang=en] #faq h2.section-dot-title,
+  html[lang=en] #apply h2.section-dot-title{font-size:30px;line-height:1.34}
+  html[dir=ltr] .section-dot-title{padding-left:30px;padding-right:0}
+  html[dir=rtl] .section-dot-title{padding-right:30px;padding-left:0}
+  #experience .gallery-heading h2,#research .section-heading h2{font-size:32px}
+  #mentorship .mentorship-heading h2.section-dot-title::before,
+  #curriculum .section-heading h2.section-dot-title::before,
+  #outcomes .section-heading h2.section-dot-title::before,
+  #resources .section-heading h2.section-dot-title::before,
+  #fit .section-heading h2.section-dot-title::before,
+  #faq h2.section-dot-title::before,
+  #apply .apply-section h2.section-dot-title::before{top:16px}
+}
+@media (min-width:951px) and (max-width:1366px) and (orientation:landscape){
+  #mentorship .mentorship-heading h2.section-dot-title,
+  #curriculum .section-heading h2.section-dot-title,
+  #outcomes .section-heading h2.section-dot-title,
+  #resources .section-heading h2.section-dot-title,
+  #fit .section-heading h2.section-dot-title,
+  #faq h2.section-dot-title,
+  #apply .apply-section h2.section-dot-title{font-size:41px;line-height:1.4;padding-right:32px}
+  html[lang=en] #mentorship h2.section-dot-title,
+  html[lang=en] #curriculum h2.section-dot-title,
+  html[lang=en] #outcomes h2.section-dot-title,
+  html[lang=en] #resources h2.section-dot-title,
+  html[lang=en] #fit h2.section-dot-title,
+  html[lang=en] #faq h2.section-dot-title,
+  html[lang=en] #apply h2.section-dot-title{font-size:39px;line-height:1.32}
+  html[dir=ltr] .section-dot-title{padding-left:32px;padding-right:0}
+  html[dir=rtl] .section-dot-title{padding-right:32px;padding-left:0}
+  #experience .gallery-heading h2,#research .section-heading h2{font-size:39px}
+}
