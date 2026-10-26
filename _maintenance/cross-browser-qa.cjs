@@ -85,15 +85,17 @@ const audit=async(page,label)=>{
           if(width===390){
             const first=page.locator('#reports-track [data-image="0"]');
             await first.scrollIntoViewIfNeeded();await first.click();
-            assert(await page.locator('#image-dialog').evaluate(d=>d.open),'Image dialog should open');
-            await page.waitForFunction(()=>document.getElementById('gallery-full-image').naturalWidth>0);
-            assert.equal(await page.locator('#image-zoom,#image-original').count(),0);
-            await page.keyboard.press('Escape');
+            assert.equal(new URL(page.url()).pathname,'/viewer.html','Report opens in standalone viewer');
+            await page.waitForFunction(()=>document.getElementById('full-image').naturalWidth>0);
+            await page.locator('#zoom-in').click();
+            assert.notEqual(await page.locator('#zoom-level').textContent(),'100%','Viewer supports zoom');
+            await page.locator('#close-viewer').click();
+            await page.waitForURL(url=>url.pathname==='/');
             const second=page.locator('#reports-track [data-image="1"]');
             await second.scrollIntoViewIfNeeded();await second.click();
-            assert.match(await page.locator('#gallery-full-image').getAttribute('src'),/poc-02-full\.webp/);
-            await page.keyboard.press('Escape');
-            assert.equal(await page.locator('#image-dialog').evaluate(d=>d.open),false,'Escape closes image');
+            assert.match(await page.locator('#full-image').getAttribute('src'),/poc-02-full\.webp/);
+            await page.locator('#close-viewer').click();
+            await page.waitForURL(url=>url.pathname==='/');
             await audit(page,engine+' Arabic main page');
           }
           await page.locator('#language').click();
