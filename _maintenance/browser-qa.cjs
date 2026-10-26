@@ -59,26 +59,31 @@ const server=http.createServer((req,res)=>{
       assert.equal(metrics.reports,6);
       assert.equal(metrics.ytFrames,0,'YouTube must stay unloaded until interaction');
       if ([390,850,1440].includes(width)) {
-        // Preview the third approved testimonial's responsive slot without publishing sample content.
         const styles=await page.evaluate(()=>{
           const roles=document.querySelector('.cover-roles');
           const underline=getComputedStyle(roles.querySelector('span'),'::after');
           const grid=document.querySelector('.student-feedback-grid');
-          const added=grid.firstElementChild.cloneNode(true);
-          added.removeAttribute('aria-labelledby');
-          added.querySelector('[id]')?.removeAttribute('id');
-          grid.append(added);
-          const columns=getComputedStyle(grid).gridTemplateColumns.trim().split(/\s+/).length;
-          added.remove();
+          const facts=document.querySelectorAll('.hero-benefits-inline span');
           return {roleCount:roles.querySelectorAll('span').length,
             borderStyle:getComputedStyle(roles).borderBottomStyle,
-            underlineHeight:underline.height,columns};
+            underlineHeight:underline.height,
+            columns:getComputedStyle(grid).gridTemplateColumns.trim().split(/\s+/).length,
+            reviews:grid.querySelectorAll('.student-feedback-card').length,
+            ghada:grid.lastElementChild.querySelector('h3').textContent,
+            facts:[...facts].map(el=>({value:el.textContent,pseudo:getComputedStyle(el,'::before').content})),
+            bioAccent:getComputedStyle(document.querySelector('.bio-name')).color,
+            bioRegular:getComputedStyle(document.querySelector('.cover-bio-copy p')).color};
         });
         assert.equal(styles.roleCount,3,'Profile must show all three career titles');
         assert.equal(styles.borderStyle,'solid','Profile credentials require an underline');
         assert.equal(styles.underlineHeight,'2px','Each career title has a clear orange underline');
+        assert.equal(styles.reviews,3,'All three genuine student reviews are published');
+        assert.equal(styles.ghada,'Ghada Abdelrahman');
         assert.equal(styles.columns,width===1440?3:width===850?2:1,
-          'A third student review must fit a responsive grid at '+width+'px');
+          'Three reviews must fit a responsive grid at '+width+'px');
+        assert.deepEqual(styles.facts.map(f=>f.value),['٦ أسابيع','متابعة 1:1']);
+        assert(styles.facts.every(f=>/^(none|normal)$/.test(f.pseudo)),'No dot pseudo-elements beside the hero facts');
+        assert.notEqual(styles.bioAccent,styles.bioRegular,'Instructor name has visible highlight color');
       }
       assert.equal(await page.locator('#reports-track .research-image img').first().evaluate(img=>getComputedStyle(img).objectFit),'contain','Report previews must preserve full original image');
       for(const target of ['.hero-copy','.hero-visual','.price-panel','.mentor-cover']){
