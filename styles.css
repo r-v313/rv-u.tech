@@ -7015,7 +7015,7 @@ html[lang=ar] .hero .eyebrow {
   max-width:100%;
   min-width:0;
   margin:0 auto;
-  padding:clamp(22px,3vw,33px) 0 0;
+  padding:clamp(9px,1.6vw,18px) 0 0;
   text-align:center;
 }
 .hero.hero-unified .hero-title{
@@ -7130,7 +7130,7 @@ html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(30px,4.9vw,60px)}
   .hero.hero-unified .cover-portrait{width:clamp(142px,39vw,185px);margin-bottom:15px}
   .hero.hero-unified .cover-bio{width:100%;grid-template-columns:minmax(0,1fr);gap:13px;padding:17px 0}
   .hero.hero-unified .cover-bio-links{flex-direction:row;justify-content:center}
-  .hero.hero-unified .hero-copy{width:100%;padding-top:23px}
+  .hero.hero-unified .hero-copy{width:100%;padding-top:12px}
   .hero.hero-unified .hero-title{font-size:clamp(30px,8.5vw,45px);line-height:1.5}
   html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(27px,7.8vw,39px);line-height:1.2}
   .hero.hero-unified .hero-problem{font-size:clamp(14px,3.6vw,16px)}
