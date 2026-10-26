@@ -6624,7 +6624,7 @@ html[lang=ar] .hero .eyebrow {
   gap:14px;
   min-width:0;
   padding:17px 0 18px;
-  border-bottom:1px solid #34363c;
+
   text-align:start;
 }
 .mentor-cover .cover-bio-copy {min-width:0}
@@ -7025,15 +7025,7 @@ html[lang=ar] .hero .eyebrow {
   text-wrap:balance;
 }
 html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(30px,4.9vw,60px)}
-.hero.hero-unified .hero-problem{
-  width:min(100%,710px);
-  max-width:100%;
-  margin:clamp(27px,4vw,39px) auto 0;
-  font-size:clamp(15px,1.6vw,19px);
-  line-height:1.95;
-  text-wrap:pretty;
-}
-.hero.hero-unified .hero-introduction{margin-top:clamp(15px,2.5vw,25px)}
+.hero.hero-unified .hero-introduction{margin-top:clamp(7px,1.4vw,15px)}
 .hero.hero-unified .hero-lead{
   width:min(100%,780px);
   max-width:100%;
@@ -7133,7 +7125,6 @@ html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(30px,4.9vw,60px)}
   .hero.hero-unified .hero-copy{width:100%;padding-top:12px}
   .hero.hero-unified .hero-title{font-size:clamp(30px,8.5vw,45px);line-height:1.5}
   html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(27px,7.8vw,39px);line-height:1.2}
-  .hero.hero-unified .hero-problem{font-size:clamp(14px,3.6vw,16px)}
   .hero.hero-unified .hero-lead,.hero.hero-unified .hero-lead-followup{font-size:clamp(13px,3.4vw,15px)}
   .hero.hero-unified .hero-benefits-inline{gap:8px 15px;font-size:clamp(12px,3.2vw,15px)}
   .hero.hero-unified .cohort-capacity{padding:13px 11px}
