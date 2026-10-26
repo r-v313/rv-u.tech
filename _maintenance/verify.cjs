@@ -56,7 +56,7 @@ function boot(success=true) {
   assert.equal(unifiedHero.querySelectorAll('.hero-copy').length,1);
   assert.equal(unifiedHero.querySelectorAll('.application-open-banner').length,1);
   const profile=unifiedHero.querySelector('.mentor-cover');
-  const ordered=['.cover-portrait','.cover-name','.cover-bio','.hero-title','.hero-lead','.hero-problem','.hero-lead-followup','.hero-benefits-inline','.cohort-capacity','.application-open-banner'];
+  const ordered=['.cover-portrait','.cover-name','.cover-bio','.hero-copy h1','.hero-lead','.hero-problem','.hero-lead-followup','.hero-benefits-inline','.cohort-capacity','.application-open-banner'];
   const nodes=ordered.map(selector=>profile.querySelector(selector));
   assert(nodes.every(Boolean),'Portrait, biography, story and fifth-cohort CTA must share one card');
   for(let i=1;i<nodes.length;i++)assert(nodes[i-1].compareDocumentPosition(nodes[i]) & w.Node.DOCUMENT_POSITION_FOLLOWING,'Hero sequence: '+ordered[i-1]+' before '+ordered[i]);
@@ -241,8 +241,10 @@ function boot(success=true) {
   assert.equal(d.querySelectorAll('#resources .resource-card').length,3);
   assert([...d.querySelectorAll('#resources .resource-card a')].every(a=>a.getAttribute('href').endsWith('-ar.pdf')),'All three guides remain Arabic only');
   assert.match(d.querySelector('.hero-problem').textContent,/الأساسيات/);
-  assert(d.querySelector('.hero h1 em'));
-  assert.match(d.querySelector('h1').textContent,/الـ Target/);
+  assert.equal(d.querySelector('.hero .hero-title'),null,'Remove old visible target headline');
+  assert.equal(d.querySelector('h1').textContent,'RVU Mentorship Camp — الدفعة الخامسة');
+  assert(d.querySelector('h1').classList.contains('sr-only'),'Keep main semantic heading accessible without displaying removed copy');
+  assert(!html.includes('افهم الـ Target')&&!html.includes('وابن</span>'),'Retired hero headline must not return');
   [...d.querySelectorAll('[data-apply]')].forEach(b=>assert(b.matches('button')&&b.type==='button','Every apply control must be a proper button'));
   assert(!/[\u064b-\u065f\u0670]/.test(d.body.textContent));
   assert(fs.readFileSync(path.join(root,'assets/ramez-signature.svg'),'utf8').includes('<title>Ramez Medhat</title>'));
@@ -301,7 +303,7 @@ function boot(success=true) {
   assert([...d.querySelectorAll('#resources .resource-card a')].every(a=>a.href.endsWith('-ar.pdf')));
   assert.match(d.querySelector('.camp-price').textContent,/4,000 EGP/);
   assert(!d.querySelector('[data-resource],[data-pdf-guide]'));
-  assert.match(d.querySelector('.hero h1').textContent,/Understand/);
+  assert.equal(d.querySelector('.hero h1').textContent,'RVU Mentorship Camp — Fifth Cohort');
   assert(d.querySelector('.signature-title img'),'Translation must retain signature');
   assert.equal(d.querySelector('.application-open-banner strong').textContent,'Applications are open now');
   assert.equal(d.querySelectorAll('summary .ui-toggle').length,d.querySelectorAll('details').length);
