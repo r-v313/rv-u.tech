@@ -6493,7 +6493,7 @@ html[lang=ar] .hero .eyebrow {
   align-items:center;
   gap:17px;
   width:min(100%,850px);
-  padding:12px 0 3px;
+  padding:12px 0 0;
   margin:0 auto;
 }
 .hero.hero-unified .cover-bio-copy p{
@@ -6518,7 +6518,7 @@ html[lang=ar] .hero .eyebrow {
   width:min(100%,850px);
   max-width:100%;
   min-width:0;
-  margin:8px auto 0;
+  margin:11px auto 0;
   padding:0;
   text-align:center;
 }
@@ -6618,7 +6618,7 @@ html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(30px,4.9vw,60px)}
   .hero.hero-unified .mentor-cover{padding:16px 14px 18px;border-radius:16px}
   .hero.hero-unified .cover-top{margin-bottom:15px}
   .hero.hero-unified .cover-portrait{width:clamp(142px,39vw,185px);margin-bottom:15px}
-  .hero.hero-unified .cover-bio{width:100%;grid-template-columns:minmax(0,1fr);gap:8px;padding:10px 0 3px}
+  .hero.hero-unified .cover-bio{width:100%;grid-template-columns:minmax(0,1fr);gap:8px;padding:10px 0 0}
   .hero.hero-unified .cover-bio-links{flex-direction:row;justify-content:center}
   .hero.hero-unified .hero-copy{width:100%;padding-top:0}
   .hero.hero-unified .hero-title{font-size:clamp(30px,8.5vw,45px);line-height:1.5}
