@@ -69,8 +69,16 @@ const server=http.createServer((req,res)=>{
             announcementToBanner:rect('.application-open-banner').top-rect('.hero-introduction').bottom,
             bannerToApplication:rect('.hero-actions').top-rect('.application-open-banner').bottom
           };
-          const orb=document.querySelector('.student-reviews-orb').getBoundingClientRect();
-          const link=document.querySelector('.student-reviews-jump');
+          const nav=document.querySelector('.hero-quick-links');
+          const items=[...nav.querySelectorAll('.hero-quick-link')];
+          const links=items.map(el=>{
+            const rect=el.getBoundingClientRect();
+            const shape=el.querySelector('.hero-quick-shape');
+            const box=shape.getBoundingClientRect(),style=getComputedStyle(shape);
+            return {href:el.getAttribute('href'),center:rect.left+rect.width/2,width:box.width,height:box.height,
+              radius:style.borderRadius,background:style.backgroundColor,color:style.color};
+          });
+          const reviewsLink=document.querySelector('.hero-quick-link-reviews');
           return {roleCount:roles.querySelectorAll('span').length,
             borderStyle:getComputedStyle(roles).borderBottomStyle,
             underlineHeight:underline.height,
@@ -78,15 +86,16 @@ const server=http.createServer((req,res)=>{
             reviews:grid.querySelectorAll('.student-feedback-card').length,
             ghada:grid.lastElementChild.querySelector('h3').textContent,
             removedCapacity:!document.querySelector('.cohort-capacity'),
-            reviewsJumpHref:link.getAttribute('href'),
-            reviewsJumpLabel:link.querySelector('.student-reviews-jump-label').textContent,
-            orb:{width:orb.width,height:orb.height,borderRadius:getComputedStyle(document.querySelector('.student-reviews-orb')).borderRadius},
+            quickLinks:links,
+            reviewsJumpLabel:reviewsLink.querySelector('.hero-quick-pill [data-en="Reviews"]').textContent,
+            reviewsArrow:reviewsLink.querySelector('.hero-quick-arrow').textContent,
+            noQuote:!nav.textContent.includes('“')&&!nav.textContent.includes('”'),
             deletedBlocks:!document.querySelector('.hero-benefits-inline,.hero-lead-followup'),
             bannerNextIsApplication:document.querySelector('.application-open-banner').nextElementSibling.classList.contains('hero-actions'),
             gaps,
             bioAccent:getComputedStyle(document.querySelector('.bio-name')).color,
             bioRegular:getComputedStyle(document.querySelector('.cover-bio-copy p')).color,
-            goalUnderline:(()=>{const line=getComputedStyle(document.querySelector('.cover-bio-goal'),'::after');return {content:line.content,display:line.display,height:line.height,background:line.backgroundImage,width:line.width};})()};
+            goalUnderline:(()=>{const line=getComputedStyle(document.querySelector('.cover-bio-goal'),'::after');return {content:line.content,display:line.display};})()};
         });
         assert.equal(styles.roleCount,3,'Profile must show all three career titles');
         assert.equal(styles.borderStyle,'solid','Profile credentials require an underline');
@@ -96,20 +105,29 @@ const server=http.createServer((req,res)=>{
         assert.equal(styles.columns,width===1440?3:width===850?2:1,
           'Three reviews must fit a responsive grid at '+width+'px');
         assert(styles.removedCapacity,'Deleted cohort stat strip must not render');
-        assert.equal(styles.reviewsJumpHref,'#voices','Reviews circle must link to student testimonials');
-        assert.equal(styles.reviewsJumpLabel,'آراء','Reviews circle must have Arabic label beneath');
-        assert(Math.abs(styles.orb.width-styles.orb.height)<1,'Reviews icon must be circular');
-        assert(styles.orb.width>=42&&styles.orb.width<=66,'Reviews circle must be appropriately sized on '+width+'px');
-        assert.equal(styles.orb.borderRadius,'50%');
+        assert.deepEqual(styles.quickLinks.map(l=>l.href),
+          ['https://www.linkedin.com/in/ramez-medhat-rvu/','#voices','#research']);
+        assert(styles.quickLinks[0].center>styles.quickLinks[1].center&&styles.quickLinks[1].center>styles.quickLinks[2].center,
+          'LinkedIn right, reviews centered and reports left at '+width+'px');
+        assert.equal(styles.reviewsJumpLabel,'الآراء');
+        assert.equal(styles.reviewsArrow,'↓');
+        assert(styles.noQuote,'Reviews pill must not display quotation marks');
+        assert(styles.quickLinks.every(l=>l.color==='rgb(255, 138, 18)'&&l.background==='rgb(8, 9, 11)'),
+          'All three controls must be dark with bright orange content');
+        assert(styles.quickLinks.every(l=>l.width>40&&l.width<135),
+          'All three quick links must fit responsively');
+        assert(Math.abs(styles.quickLinks[0].width-styles.quickLinks[0].height)<1);
+        assert(Math.abs(styles.quickLinks[2].width-styles.quickLinks[2].height)<1);
+        assert(styles.quickLinks[1].width>styles.quickLinks[1].height,
+          'Reviews control must be oval rather than circular');
+        assert(styles.quickLinks[1].radius==='999px');
         assert(styles.deletedBlocks,'Removed duplicate duration/features must not render');
         assert(styles.bannerNextIsApplication,'Application banner must be immediately above application buttons');
         for(const [name,gap] of Object.entries(styles.gaps))
           assert(gap>=-3&&gap<=38,'Excessive intro vertical gap '+name+' at '+width+'px: '+gap);
         assert.notEqual(styles.bioAccent,styles.bioRegular,'Instructor name has visible highlight color');
-        assert.equal(styles.goalUnderline.display,'block','Goal underline must be a visible block');
-        assert.equal(styles.goalUnderline.height,'2px','Goal underline must be 2px tall');
-        assert(styles.goalUnderline.background.includes('linear-gradient'),'Goal underline must use gold gradient styling');
-        assert(parseFloat(styles.goalUnderline.width)>40,'Goal underline must remain visible at '+width+'px');
+        assert(['none','normal'].includes(styles.goalUnderline.content),'Decorative line above thanks must be removed');
+        assert.equal(styles.goalUnderline.display,'inline','No decorative block should appear after the camp goal');
       }
       assert.equal(await page.locator('#reports-track .research-image img').first().evaluate(img=>getComputedStyle(img).objectFit),'contain','Report previews must preserve full original image');
       for(const target of ['.hero-copy','.hero-visual','.price-panel','.mentor-cover']){
@@ -117,7 +135,7 @@ const server=http.createServer((req,res)=>{
         assert(box.left>=-3&&box.right<=width+3,'Out-of-viewport primary content '+target+' at '+width+': '+JSON.stringify(box));
       }
       if(width===390){
-        const reviewsLink=page.locator('.student-reviews-jump');
+        const reviewsLink=page.locator('.hero-quick-link-reviews');
         assert.equal(await reviewsLink.getAttribute('href'),'#voices');
         await reviewsLink.click();
         await page.waitForFunction(()=>location.hash==='#voices');
