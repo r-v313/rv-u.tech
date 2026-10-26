@@ -166,6 +166,12 @@ function boot(success=true) {
   const reviews=[...reviewSection.querySelectorAll('.student-feedback-card')];
   assert.equal(reviews.length,3,'All three authentic student testimonials must be published');
   assert.deepEqual(reviews.map(card=>card.querySelector('h3').textContent),['Ahmed Alaa','Zain Ali','Ghada Abdelrahman']);
+  assert.deepEqual(reviews.map(card=>card.querySelector('.student-feedback-person > div > span').textContent),
+    ['طالب من الدفعة الرابعة','طالب من الدفعة الرابعة','طالبة من الدفعة الرابعة'],
+    'Testimonials must accurately identify students of cohort four');
+  assert(reviews.every(card=>card.querySelector('.student-feedback-person > div > span').getAttribute('data-en')==='Student from the fourth cohort'),
+    'English student labels must use the fourth cohort');
+  assert(!html.includes('طالب في الكامب')&&!html.includes('طالبة في الكامب'),'Old testimonial labels must not return');
   assert(reviews.every(card=>card.querySelector('h3').compareDocumentPosition(card.querySelector('blockquote')) & w.Node.DOCUMENT_POSITION_FOLLOWING),'Student name precedes the review');
   assert(reviews.every(card=>card.querySelector('blockquote').getAttribute('lang')==='ar'&&card.querySelector('blockquote').getAttribute('dir')==='rtl'),'Original Arabic reviews keep their language and direction');
   assert(reviews.every(card=>!card.querySelector('blockquote').hasAttribute('data-en')),'Do not replace authentic Arabic quotes with machine-generated translations');
@@ -179,7 +185,7 @@ function boot(success=true) {
     'الكامب رائع جدا و مهندس رامز متميز جدا فى توصيل المعلومات و المحتوى منظم جدا وكل اللى كان عنده تحدى فى اى حاجه كان بيلجأله وهو كان معانا علطول\n' +
     'الكورس معمول باحترافية شديدة ومحتاج متدربين متحمسين و منظمين وقتهم عشان يحققوا هدفهم من الكورس وشكرا لحضرتك يا بشمهندس');
   assert.equal(reviews[2].querySelector('h3').textContent,'Ghada Abdelrahman');
-  assert.equal(reviews[2].querySelector('.student-feedback-person > div > span').textContent,'طالبة في الكامب');
+  assert.equal(reviews[2].querySelector('.student-feedback-person > div > span').textContent,'طالبة من الدفعة الرابعة');
   assert(!html.includes('RVU STUDENT REVIEWS DISABLED')&&!html.includes('class="review-tile"'),'Retired placeholder testimonial markup must not remain');
   assert.equal(d.querySelectorAll('.student-voices,.reviews-grid,.review-tile,.demo-label').length,0,'Old illustrative review cards must not exist');
 
@@ -278,6 +284,8 @@ function boot(success=true) {
   assert.equal(d.querySelector('#student-feedback-title').textContent,'What my students say');
   assert.equal(d.querySelector('#review-ahmed-name').textContent,'Ahmed Alaa');
   assert.equal(d.querySelector('#review-ghada-name').textContent,'Ghada Abdelrahman');
+  assert.deepEqual([...d.querySelectorAll('.student-feedback-card .student-feedback-person > div > span')].map(el=>el.textContent),
+    ['Student from the fourth cohort','Student from the fourth cohort','Student from the fourth cohort']);
   assert.equal(d.querySelector('.cover-bio-copy .bio-goal-title').textContent,'The aim of the camp');
   assert.equal(d.querySelector('.cover-bio-copy .bio-name').textContent,'Ramez Medhat');
   assert.equal(d.querySelector('.student-feedback-card:last-child blockquote').getAttribute('lang'),'ar');
