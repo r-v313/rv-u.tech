@@ -6861,3 +6861,4 @@ html[dir=ltr] #experience .arrow-next svg,html[dir=ltr] #research .arrow-next sv
   #journey .history-stats article{border-top:0!important;border-bottom:0!important;border-inline-start:0!important}
   #journey .history-stats article+article{border-top:1px solid #444046!important;border-inline-start:0!important}
 }
+#journey.camp-history,#journey .history-stats,#journey .history-stats::before,#journey .history-stats::after,#journey .history-stats article:first-child{border-top:0!important;box-shadow:none!important}
