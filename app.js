@@ -248,7 +248,7 @@
     const moveTo=(offset,smooth=false)=>{
       const clamped=Math.min(max(),Math.max(0,offset));
       const signed=clamped*(rtl()?-1:1);
-      track.scrollTo({left:signed,behavior:smooth&&!matchMedia('(prefers-reduced-motion: reduce)').matches?'smooth':'instant'});
+      track.scrollTo({left:signed,behavior:smooth&&!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches?'smooth':'instant'});
     };
     function update(){
       const distance=max();
