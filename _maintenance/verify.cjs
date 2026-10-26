@@ -42,7 +42,7 @@ function boot(success=true) {
   assert.equal(d.querySelectorAll('img[src^="./assets/ramez-medhat-480.webp"]').length,1);
   assert(!html.includes('IBM+Plex+Mono:wght'),'No redundant monospaced Google Font request');
   assert(fs.readFileSync(path.join(root,'measurement.js'),'utf8').includes('requestIdleCallback'));
-  assert.equal(d.querySelector('.hero-problem').textContent,'لو عندك الأساسيات وعندك معلومات بس أول ما تفتح Target حقيقي بتقف ومش بتكون عارف تعمل ايه او تبدأ منين يبقى انت اللي الكامب بيستهدفه');
+  assert.equal(d.querySelector('.hero-problem'),null,'Target qualification paragraph must be completely removed');
   assert.equal(d.querySelector('.hero-lead').textContent,'بشكر ربنا على نجاح الدفعة الرابعة من الكامب والأولى أونلاين.. وبعلن عن الدفعة الخامسة من RVU Mentorship Camp وهي الثانية أونلاين والتقديم للانترفيو مفتوح دلوقتي لأي بشمهندس حابب يطور من نفسه.');
   assert.equal(d.querySelector('.hero-lead .thanks-oval').textContent,'بشكر ربنا');
   assert.equal(d.querySelectorAll('.hero-lead .thanks-oval').length,1,'Thank-you oval appears once');
@@ -56,7 +56,7 @@ function boot(success=true) {
   assert.equal(unifiedHero.querySelectorAll('.hero-copy').length,1);
   assert.equal(unifiedHero.querySelectorAll('.application-open-banner').length,1);
   const profile=unifiedHero.querySelector('.mentor-cover');
-  const ordered=['.cover-portrait','.cover-name','.cover-bio','.hero-copy h1','.hero-lead','.hero-problem','.hero-lead-followup','.hero-benefits-inline','.cohort-capacity','.application-open-banner'];
+  const ordered=['.cover-portrait','.cover-name','.cover-bio','.hero-copy h1','.hero-lead','.hero-lead-followup','.hero-benefits-inline','.cohort-capacity','.application-open-banner'];
   const nodes=ordered.map(selector=>profile.querySelector(selector));
   assert(nodes.every(Boolean),'Portrait, biography, story and fifth-cohort CTA must share one card');
   for(let i=1;i<nodes.length;i++)assert(nodes[i-1].compareDocumentPosition(nodes[i]) & w.Node.DOCUMENT_POSITION_FOLLOWING,'Hero sequence: '+ordered[i-1]+' before '+ordered[i]);
@@ -107,6 +107,8 @@ function boot(success=true) {
   assert.equal(d.querySelectorAll('.mentor-cover .cover-top .live-dot').length,0,'Portrait heading must not have a glowing dot');
   const styles=fs.readFileSync(path.join(root,'styles.css'),'utf8');
   assert(!styles.includes('.hero.hero-unified .hero-benefits-inline span::before'),'The two orange dots under the intro must be removed');
+  assert(!styles.includes('border-bottom:1px solid #34363c;'),'Mentor biography divider must be removed');
+  assert(!styles.includes('.hero.hero-unified .hero-problem{'),'Deleted target paragraph must not retain hero-specific CSS');
   assert.match(styles,/\.hero\.hero-unified \.hero-lead \.thanks-oval\s*\{/,'Oval thank-you label must be styled');
   assert.match(styles,/\.hero\.hero-unified \.hero-lead-followup \.duration-underline\s*\{/,'Six-week underline must be styled');
   assert.match(styles,/\.hero\.hero-unified \.cover-bio-copy \.bio-accent\s*\{/,'Highlighted biography labels must be styled');
@@ -240,7 +242,7 @@ function boot(success=true) {
   assert.equal(d.querySelectorAll('[data-pdf-guide],[data-resource],.resource-note').length,0);
   assert.equal(d.querySelectorAll('#resources .resource-card').length,3);
   assert([...d.querySelectorAll('#resources .resource-card a')].every(a=>a.getAttribute('href').endsWith('-ar.pdf')),'All three guides remain Arabic only');
-  assert.match(d.querySelector('.hero-problem').textContent,/الأساسيات/);
+  assert(!html.includes('لو عندك الأساسيات وعندك معلومات بس أول ما تفتح Target حقيقي'),'Old target prompt must not remain in page');
   assert.equal(d.querySelector('.hero .hero-title'),null,'Remove old visible target headline');
   assert.equal(d.querySelector('h1').textContent,'RVU Mentorship Camp — الدفعة الخامسة');
   assert(d.querySelector('h1').classList.contains('sr-only'),'Keep main semantic heading accessible without displaying removed copy');
