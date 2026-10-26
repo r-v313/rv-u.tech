@@ -28,7 +28,11 @@ const server=http.createServer((req,res)=>{
       const width=pair[0],height=pair[1],page=await browser.newPage({viewport:{width,height},deviceScaleFactor:1});
       const errors=[];
       page.on('pageerror',err=>errors.push(err.message));
-      await page.route('**/*',route=>route.request().url().startsWith(base)?route.continue():route.abort());
+      await page.route('**/*',route=>{
+        const url=route.request().url();
+        const portrait='https://d2ol7oe51mr4n9.cloudfront.net/user_3JUngcUhRYYa2eBXLpGvHnUaQyO/62b3565b-2cb2-45c3-b47a-654990b640cc.png';
+        return url.startsWith(base)||url===portrait?route.continue():route.abort();
+      });
       await page.goto(base+'/?layout-review=1',{waitUntil:'domcontentloaded'});
       await page.locator('.cover-portrait img').waitFor();
       await page.waitForFunction(()=>document.querySelector('.cover-portrait img').complete);
