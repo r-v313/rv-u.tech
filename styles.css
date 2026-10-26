@@ -7010,6 +7010,15 @@ html[lang=ar] .hero .eyebrow {
   display:inline;
   color:#ffb36c;
 }
+.hero.hero-unified .cover-bio-copy p.cover-bio-goal::after{
+  content:"";
+  display:block;
+  width:min(100%,620px);
+  height:2px;
+  margin:13px auto 0;
+  border-radius:999px;
+  background:linear-gradient(90deg,transparent 0%,#b86c35 18%,#ffb46e 50%,#b86c35 82%,transparent 100%);
+}
 .hero.hero-unified .hero-copy{
   width:min(100%,850px);
   max-width:100%;
