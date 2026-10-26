@@ -6884,3 +6884,21 @@ html[dir=ltr] #experience .arrow-next svg,html[dir=ltr] #research .arrow-next sv
     border-inline-start:1px solid #444046!important;
   }
 }
+
+/* Statistics: no outer frame or top rules; retain only the two inter-item dividers. */
+#journey.camp-history,
+#journey .history-stats,
+#journey .history-stats::before,
+#journey .history-stats::after {
+  border:0!important;
+  box-shadow:none!important;
+}
+#journey .history-stats article {
+  border-top:0!important;
+  border-bottom:0!important;
+  border-inline-start:0!important;
+}
+#journey .history-stats article + article {
+  border-top:0!important;
+  border-inline-start:1px solid #444046!important;
+}
