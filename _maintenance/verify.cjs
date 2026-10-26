@@ -45,8 +45,10 @@ function boot(success=true) {
   assert.equal(d.querySelector('.hero-problem'),null,'Target qualification paragraph must be completely removed');
   assert.equal(d.querySelector('.hero-lead .thanks-details').textContent,'على نجاح الدفعة الرابعة من الكامب والأولى أونلاين.. وبعلن عن الدفعة الخامسة من RVU Mentorship Camp والتقديم للانترفيو مفتوح لأي حد حابب يطور من نفسه.');
   assert.equal(d.querySelector('.hero-lead .thanks-plain').textContent,'اشكر ربنا');
-  assert.equal(d.querySelectorAll('.hero-lead .thanks-plain').length,1,'One standalone thank-you heading appears');
-  assert.equal(d.querySelector('.hero-lead .thanks-plain').nextElementSibling.className,'thanks-details','Announcement begins below the gratitude line');
+  assert.equal(d.querySelectorAll('.hero-lead .thanks-plain').length,1,'One highlighted thank-you phrase appears inline');
+  assert.equal(d.querySelector('.hero-lead .thanks-plain').nextElementSibling.className,'thanks-details','Announcement continues in the same paragraph');
+  assert.equal(d.querySelector('.hero-lead').textContent,'اشكر ربنا على نجاح الدفعة الرابعة من الكامب والأولى أونلاين.. وبعلن عن الدفعة الخامسة من RVU Mentorship Camp والتقديم للانترفيو مفتوح لأي حد حابب يطور من نفسه.','Both spans should form one uninterrupted sentence');
+  assert.equal(d.querySelector('.hero-lead').childElementCount,2);
   assert.equal(d.querySelectorAll('.hero-lead .thanks-oval').length,0,'Remove the oval gratitude badge');
   assert.equal(d.querySelector('.hero-lead-followup'),null,'Remove redundant long six-week promise');
   assert.equal(d.querySelector('.hero-benefits-inline'),null,'Remove duplicate duration and personal-mentoring row');
@@ -132,7 +134,7 @@ function boot(success=true) {
   assert(!styles.includes('.hero.hero-unified .hero-benefits-inline span::before'),'The two orange dots under the intro must be removed');
   assert(!styles.includes('border-bottom:1px solid #34363c;'),'Mentor biography divider must be removed');
   assert(!styles.includes('.hero.hero-unified .hero-problem{'),'Deleted target paragraph must not retain hero-specific CSS');
-  assert.match(styles,/\.hero\.hero-unified \.hero-lead \.thanks-plain\s*\{/,'Standalone thanks must have its own styling');
+  assert.match(styles,/\.hero\.hero-unified \.hero-lead \.thanks-plain\s*\{/,'Inline thanks must retain its orange styling');
   assert(!styles.includes('.thanks-underline'),'Retired gratitude underline CSS must be deleted');
   assert.match(styles,/#mentorship \.mentorship-heading::after\{content:none;display:none\}/,'Underline below section heading must be absent');
   assert.match(styles,/\.hero\.hero-unified \.hero-quick-pill\s*\{/,'Reviews link must be an oval black and orange control');
