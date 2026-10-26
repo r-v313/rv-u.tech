@@ -7641,3 +7641,75 @@ iframe{border:0}
   html[dir=rtl] .section-dot-title{padding-right:32px;padding-left:0}
   #experience .gallery-heading h2,#research .section-heading h2{font-size:39px}
 }
+
+/* Research heading and divider: equal, intentional space on each side. */
+#research .section-heading h2.section-dot-title{
+  position:relative;
+  display:block;
+  max-width:100%;
+  width:auto;
+  padding-inline-start:clamp(23px,2.3vw,32px);
+  font-family:"RVU Headline","IBM Plex Sans Arabic",sans-serif;
+  font-size:clamp(29px,3.4vw,46px);
+  font-weight:700;
+  line-height:1.42;
+  letter-spacing:0;
+  text-align:start;
+  color:#fff0db;
+  overflow-wrap:break-word;
+}
+#research .section-heading h2.section-dot-title::before{
+  content:"";
+  display:block;
+  position:absolute;
+  inset-inline-start:0;
+  top:.69em;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#ff8525;
+  box-shadow:0 0 0 4px #ff852518,0 0 12px #ff852549;
+}
+html[lang=en] #research .section-heading h2.section-dot-title{
+  font-family:"Outfit","Manrope",sans-serif;
+  font-size:clamp(26px,3.15vw,42px);
+  letter-spacing:-.015em;
+  line-height:1.32;
+}
+#outcomes.section{padding-bottom:38px}
+#research.section{padding-top:38px}
+#research .section-heading{margin-bottom:clamp(20px,2.6vw,30px)}
+/* After removing the journey subtitle, keep the statistics without an empty heading gap. */
+#journey.camp-history{
+  padding-top:15px;
+  padding-bottom:22px;
+}
+#journey .history-stats{margin-top:0}
+@media (min-width:700px) and (max-width:950px) and (orientation:portrait){
+  #research .section-heading h2.section-dot-title{font-size:34px;line-height:1.44}
+  html[lang=en] #research .section-heading h2.section-dot-title{font-size:30px;line-height:1.34}
+  #research .section-heading h2.section-dot-title::before{top:16px}
+  #journey.camp-history{padding-top:15px;padding-bottom:22px}
+}
+@media (min-width:951px) and (max-width:1366px) and (orientation:landscape){
+  #research .section-heading h2.section-dot-title{font-size:41px;line-height:1.4}
+  html[lang=en] #research .section-heading h2.section-dot-title{font-size:39px;line-height:1.32}
+}
+@media (max-width:600px){
+  #outcomes.section{padding-bottom:30px}
+  #research.section{padding-top:30px}
+  #research .section-heading h2.section-dot-title{
+    font-size:clamp(25px,7.1vw,34px);
+    padding-inline-start:23px;
+    line-height:1.45;
+  }
+  #research .section-heading h2.section-dot-title::before{top:.69em;width:8px;height:8px}
+  html[lang=en] #research .section-heading h2.section-dot-title{font-size:clamp(23px,6.5vw,32px)}
+  #journey.camp-history{padding-top:12px;padding-bottom:18px}
+}
+@media (min-width:700px) and (max-width:1366px){
+  html[dir=rtl] #research .section-heading h2.section-dot-title{padding-right:30px;padding-left:0}
+  html[dir=ltr] #research .section-heading h2.section-dot-title{padding-left:30px;padding-right:0}
+  html[dir=rtl] #research .section-heading h2.section-dot-title::before{right:0;left:auto}
+  html[dir=ltr] #research .section-heading h2.section-dot-title::before{left:0;right:auto}
+}
