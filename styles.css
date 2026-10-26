@@ -7074,3 +7074,106 @@ html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(30px,4.9vw,60px)}
 @media(prefers-reduced-motion:reduce){
   .hero.hero-unified .hero-primary-apply:hover{transform:none}
 }
+
+/* 05 / 11: understated editorial camp masthead and deadline panel. */
+.hero.hero-unified .hero-visual-unified > .cover-top{
+  width:100%;
+  max-width:100%;
+  margin:0 auto clamp(11px,1.8vw,19px);
+  padding:0;
+  border:0;
+  background:transparent;
+  box-shadow:none;
+}
+.hero.hero-unified .hero-visual-unified > .cover-top .mono{
+  display:block;
+  width:100%;
+  max-width:100%;
+  margin:0;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  color:#ffba78;
+  font-family:"Cormorant Garamond",Georgia,serif;
+  font-size:clamp(28px,3.3vw,43px);
+  font-style:italic;
+  font-weight:500;
+  line-height:1.22;
+  letter-spacing:.025em;
+  text-transform:none;
+  text-align:center;
+  text-shadow:none;
+  overflow-wrap:normal;
+  text-wrap:balance;
+}
+.hero.hero-unified .hero-apply-dates{
+  position:relative;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  align-items:center;
+  width:min(100%,660px);
+  margin:clamp(17px,2.5vw,25px) auto 10px;
+  padding:clamp(13px,1.7vw,19px) clamp(10px,2.3vw,22px);
+  border:1px solid #513017;
+  border-radius:14px;
+  background:linear-gradient(115deg,#0b0a0b,#11100f 52%,#0b0a0b);
+  box-shadow:0 8px 25px #0004,inset 0 1px #ffad3914;
+  color:#ffac5f;
+  text-align:center;
+}
+.hero.hero-unified .hero-apply-dates::before{
+  content:"";
+  position:absolute;
+  inset-block:18%;
+  inset-inline-start:50%;
+  width:1px;
+  background:linear-gradient(transparent,#7a421d,transparent);
+  pointer-events:none;
+}
+.hero.hero-unified .hero-apply-date-item{
+  display:flex;
+  min-width:0;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:5px;
+  padding-inline:8px;
+}
+.hero.hero-unified .hero-apply-date-label{
+  color:#f7a65e;
+  font-size:clamp(12px,1.25vw,15px);
+  font-weight:650;
+  line-height:1.6;
+}
+.hero.hero-unified .hero-apply-date-value{
+  display:block;
+  color:#ffba7c;
+  font-family:"Manrope",sans-serif;
+  font-size:clamp(19px,2.3vw,27px);
+  font-weight:800;
+  line-height:1.25;
+  letter-spacing:.015em;
+  white-space:nowrap;
+  unicode-bidi:isolate;
+}
+.hero.hero-unified .hero-apply-dates + .hero-actions{
+  margin-top:10px;
+}
+@media(max-width:600px){
+  .hero.hero-unified .hero-visual-unified > .cover-top .mono{
+    font-size:clamp(22px,5.9vw,31px);
+    line-height:1.24;
+    letter-spacing:.01em;
+    overflow-wrap:normal;
+  }
+  .hero.hero-unified .hero-apply-dates{
+    margin-top:17px;
+    padding:14px 8px;
+    border-radius:12px;
+  }
+  .hero.hero-unified .hero-apply-date-item{padding-inline:5px}
+  .hero.hero-unified .hero-apply-date-label{font-size:clamp(12px,3.3vw,14px)}
+  .hero.hero-unified .hero-apply-date-value{font-size:clamp(18px,5.4vw,23px)}
+}
