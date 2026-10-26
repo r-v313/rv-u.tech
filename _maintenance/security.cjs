@@ -20,7 +20,8 @@ for(const name of ['measurement.js','app.js','experience.js'])w.eval(fs.readFile
  assert(!/بجهز للدفعة الثانية|Coming next · announcement|Official announcement on 1 November/.test(html),'No postponed announcement copy');
  assert(d.querySelector('.application-open-banner[data-apply]'),'Application CTA banner must exist');
  assert.equal(d.querySelector('.application-open-banner strong').textContent,'التقديم مفتوح الآن');
- assert.equal(d.querySelector('.mentor-cover .cover-top .mono').textContent.trim(),'RVU MENTORSHIP · ONLINE BUG BOUNTY CAMP');
+ assert.equal(d.querySelector('.hero-visual-unified > .cover-top .mono').textContent.trim(),'RVU MENTORSHIP · ONLINE BUG BOUNTY CAMP');
+ assert.equal(d.querySelector('.mentor-cover .cover-top'),null,'Camp title must be outside the portrait card');
  assert(!d.querySelector('.hero-camp-label'),'Duplicate badge must not render');
  assert(!d.querySelector('.mentor-cover .live-dot'),'No glowing dot near the portrait heading');
  assert(!html.includes('MENTORSHIP في BUG BOUNTY · أونلاين'));
