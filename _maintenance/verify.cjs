@@ -114,12 +114,16 @@ function boot(success=true) {
   assert(reportsLink&&reportsLink.getAttribute('href')==='#research');
   assert.equal(d.querySelectorAll('.hero-quick-link svg[aria-hidden=true]').length,2);
   assert.equal(bio.querySelector('.cover-bio-links'),null,'Old LinkedIn/reports buttons must not stay beside the biography');
-  const portraitHeading=d.querySelector('.mentor-cover .cover-top .mono');
-  assert(portraitHeading,'Mentor card heading exists');
+  const titleAboveCard=d.querySelector('.hero-visual-unified > .cover-top');
+  const portraitHeading=titleAboveCard?.querySelector('.mono');
+  assert(portraitHeading,'Camp heading must sit above the entire mentor card');
   assert.equal(portraitHeading.textContent.trim(),'RVU MENTORSHIP · ONLINE BUG BOUNTY CAMP');
-  assert.equal(d.querySelector('.mentor-cover .cover-top').getAttribute('dir'),'ltr');
+  assert.equal(titleAboveCard.getAttribute('dir'),'ltr');
+  assert(titleAboveCard.compareDocumentPosition(d.querySelector('.mentor-cover')) & w.Node.DOCUMENT_POSITION_FOLLOWING);
+  assert.equal(d.querySelector('.mentor-cover .cover-top'),null,'Heading must not be inside the photo card');
+  assert.equal(d.querySelector('.cover-name > .eyebrow'),null,'Remove redundant step-by-step slogan under portrait');
   assert.equal(d.querySelectorAll('.hero-camp-label,.hero-camp-label .live-dot').length,0,'Remove duplicate hero badge and glow');
-  assert.equal(d.querySelectorAll('.mentor-cover .cover-top .live-dot').length,0,'Portrait heading must not have a glowing dot');
+  assert.equal(d.querySelectorAll('.hero-visual-unified > .cover-top .live-dot').length,0,'External camp heading must not have a glowing dot');
   const styles=fs.readFileSync(path.join(root,'styles.css'),'utf8');
   assert(!styles.includes('.hero.hero-unified .cover-bio-copy p.cover-bio-goal::after'),'Line above the thank-you message must be removed');
   assert(!styles.includes('.hero.hero-unified .hero-benefits-inline span::before'),'The two orange dots under the intro must be removed');
@@ -137,8 +141,8 @@ function boot(success=true) {
   assert.match(styles,/.hero-visual \.mentor-cover \.cover-roles span::after/,'Orange underline on role labels must remain styled');
   assert.match(styles,/.student-feedback-grid:has\(> \.student-feedback-card:nth-child\(3\)\)/,
     'Three real student reviews must fit a desktop row');
-  assert.match(styles,/\.mentor-cover \.cover-top\s*\{[\s\S]*?justify-content:center;/);
-  assert.match(styles,/\.mentor-cover \.cover-top \.mono\s*\{[\s\S]*?background:none;/);
+  assert.match(styles,/\.hero\.hero-unified \.hero-visual-unified>\.cover-top\s*\{/,'External title must have dedicated layout styles');
+  assert.match(styles,/\.hero\.hero-unified \.hero-visual-unified>\.cover-top \.mono\s*\{/,'Camp title must have prominent typography');
   assert(!styles.includes('Standalone hero label:'),'Retired hero badge styles must be gone');
   assert.equal(d.querySelectorAll('#application-ready,#save-title,#save-status,#edit-application,#application-whatsapp').length,0,'Private save UI was removed');
   assert.equal(d.querySelectorAll('.brand-wordmark .brand-name').length,1);
@@ -156,6 +160,12 @@ function boot(success=true) {
   }
   assert.deepEqual([...d.querySelectorAll('#gallery-track>[data-kind]')].map(x=>x.dataset.kind),['videos','videos','videos','videos']);
   assert.equal(d.querySelectorAll('#reports-track [data-image]').length,6);
+  assert.equal(d.querySelector('#reports-scrollbar').getAttribute('type'),'range','Reports must have a draggable scrollbar');
+  assert.equal(d.querySelector('#reports-scrollbar').getAttribute('max'),'1000');
+  assert.equal(d.querySelector('.reports-scroll-ui label').textContent,'اسحب الشريط أو مرر للتقارير التالية');
+  assert.equal(d.querySelector('.reports-carousel-shell #reports-track')?.getAttribute('role'),'list');
+  assert.equal(d.querySelector('#research .section-heading .eyebrow'),null,'Reports should never display step numbering');
+  assert.match(styles,/Horizontal report shelf:/,'Swipeable report carousel CSS must be present');
   const approvedLessons=['xZR5-4iXnI0','0O1a8Uv2RIs','CZx_WauYbcI','FDWt0pSoFTA'];
   const lessonButtons=[...d.querySelectorAll('#gallery-track button[data-video]')];
   assert.deepEqual(lessonButtons.map(el=>el.dataset.video),approvedLessons);
@@ -221,7 +231,10 @@ function boot(success=true) {
 
   const cohortBanner=d.querySelector('.application-open-banner');
   assert(cohortBanner&&cohortBanner.hasAttribute('data-apply'),'Application banner must remain actionable');
-  assert.equal(cohortBanner.querySelector('.application-open-label').textContent,'الدفعة الخامسة · باب التقديم مفتوح');
+  assert.equal(cohortBanner.querySelector('.application-open-label').textContent,'الدفعة الخامسة');
+  assert.equal(cohortBanner.querySelector('.application-open-label').dataset.en,'COHORT 05');
+  assert(!cohortBanner.querySelector('.application-open-label').textContent.includes('باب التقديم مفتوح'));
+  assert.match(styles,/\.hero\.hero-unified \.application-open-label\s*\{/,'Cohort label must be centered');
   assert.equal(cohortBanner.querySelector('strong').textContent,'التقديم مفتوح الآن');
   assert.match(styles,/\.hero-visual \.application-open-banner strong/);
   assert.equal(d.querySelectorAll('summary .ui-toggle').length,d.querySelectorAll('details').length);
@@ -317,7 +330,7 @@ function boot(success=true) {
   assert.equal(d.querySelectorAll('.cohort-capacity').length,0);
   assert.equal(d.querySelector('.mobile-cta > span').textContent,'Only 12 students + 1:1 mentoring');
   assert.equal(d.querySelector('.history-next p').textContent,'Applications are open now');
-  assert.equal(d.querySelector('.mentor-cover .cover-top .mono').textContent.trim(),'RVU MENTORSHIP · ONLINE BUG BOUNTY CAMP');
+  assert.equal(d.querySelector('.hero-visual-unified > .cover-top .mono').textContent.trim(),'RVU MENTORSHIP · ONLINE BUG BOUNTY CAMP');
   assert.equal(d.querySelector('#student-feedback-title').textContent,'What my students say');
   assert.equal(d.querySelector('#review-ahmed-name').textContent,'Ahmed Alaa');
   assert.equal(d.querySelector('#review-ghada-name').textContent,'Ghada Abdelrahman');
@@ -333,6 +346,9 @@ function boot(success=true) {
   assert.equal(d.querySelector('.hero h1').textContent,'RVU Mentorship Camp — Fifth Cohort');
   assert(d.querySelector('.signature-title img'),'Translation must retain signature');
   assert.equal(d.querySelector('.application-open-banner strong').textContent,'Applications are open now');
+  assert.equal(d.querySelector('.application-open-label').textContent,'COHORT 05');
+  assert.equal(d.querySelector('.reports-scroll-ui label').textContent,'Drag the bar or swipe to see more reports');
+  assert.equal(d.querySelector('#reports-scrollbar').getAttribute('aria-label'),'Scroll through reports');
   assert.equal(d.querySelectorAll('summary .ui-toggle').length,d.querySelectorAll('details').length);
 
   d.getElementById('language').click();assert.equal(d.documentElement.dir,'rtl');
