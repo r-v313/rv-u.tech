@@ -325,7 +325,7 @@ function boot(success=true) {
   assert.equal(d.documentElement.lang,'en');assert.equal(d.documentElement.dir,'ltr');
   assert.match(d.querySelector('.fit-yes').textContent,/You know the fundamentals and have plenty of information/);
   assert.match(d.querySelector('.fit-yes').textContent,/make time to practise alongside the sessions/);
-  assert.match(d.querySelector('.hero-lead').textContent,/interview applications are now open to anyone who wants to improve their skills/i);
+  assert.match(d.querySelector('.hero-lead').textContent,/interviews are open to anyone who wants to improve their skills/i);
   assert.equal(d.querySelector('.hero-lead .thanks-underline').textContent,'I thank God');
   assert.equal(d.querySelector('.hero-lead-followup'),null);
   assert.equal(d.querySelector('.hero-benefits-inline'),null);
