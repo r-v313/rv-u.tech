@@ -21,9 +21,6 @@ const server=http.createServer((req,res)=>{
     if(!filename.startsWith(root+path.sep)){res.writeHead(403);res.end();return;}
     fs.readFile(filename,(err,body)=>{
       if(err){res.writeHead(404);res.end();return;}
-      // Production is HTTPS. WebKit upgrades HTTP localhost subresources with
-      // CSP upgrade-insecure-requests, unlike Firefox/Chromium; for HTTP-based
-      // test fixtures omit ONLY that directive. All other CSP stays intact.
       if(path.extname(filename)==='.html'){
         body=Buffer.from(body.toString('utf8').replace(/; upgrade-insecure-requests/g,''));
       }
@@ -90,12 +87,10 @@ const audit=async(page,label)=>{
             await first.scrollIntoViewIfNeeded();await first.click();
             assert(await page.locator('#image-dialog').evaluate(d=>d.open),'Image dialog should open');
             await page.waitForFunction(()=>document.getElementById('gallery-full-image').naturalWidth>0);
-            await page.locator('#image-zoom').click();
-            assert.equal(await page.locator('#image-zoom').getAttribute('aria-pressed'),'true');
+            assert.equal(await page.locator('#image-zoom,#image-original').count(),0);
             await page.keyboard.press('Escape');
             const second=page.locator('#reports-track [data-image="1"]');
             await second.scrollIntoViewIfNeeded();await second.click();
-            assert.equal(await page.locator('#image-zoom').getAttribute('aria-pressed'),'false');
             assert.match(await page.locator('#gallery-full-image').getAttribute('src'),/poc-02-full\.webp/);
             await page.keyboard.press('Escape');
             assert.equal(await page.locator('#image-dialog').evaluate(d=>d.open),false,'Escape closes image');
