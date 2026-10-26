@@ -60,7 +60,7 @@ const server=http.createServer((req,res)=>{
         assert(new URL(page.url()).pathname==='/viewer.html','Dedicated report page did not open');
         await page.waitForFunction(()=>document.getElementById('full-image').naturalWidth>0);
         assert(/poc-01-full\.webp/.test(await page.locator('#full-image').getAttribute('src')));
-        assert.equal(await page.locator('#close-viewer').evaluate(el=>Math.round(el.getBoundingClientRect().left)<width/3),true,'Close X must be top left');
+        assert.equal(await page.locator('#close-viewer').evaluate(el=>Math.round(el.getBoundingClientRect().left)<window.innerWidth/3),true,'Close X must be top left');
         await page.locator('#zoom-in').click();
         assert(await page.locator('#zoom-level').textContent()!=='100%','Image zoom must work');
         await page.locator('#close-viewer').click();
