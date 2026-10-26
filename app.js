@@ -237,6 +237,105 @@
   }
   const shelves=[createShelf('gallery-track','gallery')];
 
+  // Reports gallery: native touch swipe, mouse drag, keyboard and a visible range scrollbar.
+  function setupReportsCarousel() {
+    const track=$('reports-track'),bar=$('reports-scrollbar');
+    if(!track||!bar)return {reset(){}};
+    let frame=null,drag=null,suppressUntil=0,barDragging=false;
+    const rtl=()=>getComputedStyle(track).direction==='rtl';
+    const max=()=>Math.max(0,track.scrollWidth-track.clientWidth);
+    const position=()=>Math.min(max(),Math.max(0,Math.abs(track.scrollLeft)));
+    const moveTo=(offset,smooth=false)=>{
+      const clamped=Math.min(max(),Math.max(0,offset));
+      const signed=clamped*(rtl()?-1:1);
+      track.scrollTo({left:signed,behavior:smooth&&!matchMedia('(prefers-reduced-motion: reduce)').matches?'smooth':'instant'});
+    };
+    function update(){
+      const distance=max();
+      const val=distance?Math.round(position()/distance*1000):0;
+      if(!barDragging)bar.value=String(val);
+      bar.style.setProperty('--reports-progress',val/10+'%');
+      bar.disabled=distance<4;
+    }
+    const schedule=()=>{
+      if(frame!==null)return;
+      frame=requestAnimationFrame(()=>{frame=null;update()});
+    };
+    track.addEventListener('scroll',schedule,{passive:true});
+    window.addEventListener('resize',schedule,{passive:true});
+    if('ResizeObserver' in window)new ResizeObserver(schedule).observe(track);
+    bar.addEventListener('pointerdown',()=>{barDragging=true;track.classList.add('is-dragging')});
+    bar.addEventListener('input',()=>{
+      const val=Number(bar.value);
+      track.classList.add('is-dragging');
+      bar.style.setProperty('--reports-progress',val/10+'%');
+      moveTo(max()*val/1000);
+    });
+    const releaseBar=()=>{
+      if(!barDragging)return;
+      barDragging=false;
+      track.classList.remove('is-dragging');
+      schedule();
+    };
+    bar.addEventListener('change',releaseBar);
+    bar.addEventListener('pointerup',releaseBar);
+    bar.addEventListener('pointercancel',releaseBar);
+    bar.addEventListener('blur',releaseBar);
+    track.addEventListener('pointerdown',event=>{
+      if(event.pointerType==='mouse'&&event.button===0)
+        drag={id:event.pointerId,startX:event.clientX,scroll:track.scrollLeft,moved:false};
+    });
+    track.addEventListener('pointermove',event=>{
+      if(!drag||drag.id!==event.pointerId)return;
+      const delta=event.clientX-drag.startX;
+      if(!drag.moved&&Math.abs(delta)<7)return;
+      if(!drag.moved){
+        drag.moved=true;
+        track.classList.add('is-dragging');
+        track.setPointerCapture(event.pointerId);
+      }
+      event.preventDefault();
+      const bound=max(),newPos=drag.scroll-delta;
+      track.scrollLeft=rtl()?Math.max(-bound,Math.min(0,newPos)):Math.max(0,Math.min(bound,newPos));
+      schedule();
+    });
+    const finish=event=>{
+      if(!drag||drag.id!==event.pointerId)return;
+      const moved=drag.moved;
+      drag=null;
+      track.classList.remove('is-dragging');
+      if(track.hasPointerCapture?.(event.pointerId))track.releasePointerCapture(event.pointerId);
+      if(moved){suppressUntil=performance.now()+350;schedule()}
+    };
+    window.addEventListener('pointerup',finish);
+    window.addEventListener('pointercancel',finish);
+    track.addEventListener('lostpointercapture',finish);
+    track.addEventListener('dragstart',event=>event.preventDefault());
+    track.addEventListener('click',event=>{
+      if(performance.now()<suppressUntil&&event.detail!==0){
+        event.preventDefault();event.stopImmediatePropagation();
+      }
+    },true);
+    track.addEventListener('keydown',event=>{
+      if(event.target!==track)return;
+      const cards=[...track.querySelectorAll('.research-card')];
+      const step=(cards[0]?.getBoundingClientRect().width||300)+(parseFloat(getComputedStyle(track).gap)||12);
+      let dest=null;
+      if(event.key==='Home')dest=0;
+      else if(event.key==='End')dest=max();
+      else if(event.key==='ArrowLeft')dest=position()+(rtl()?step:-step);
+      else if(event.key==='ArrowRight')dest=position()+(rtl()?-step:step);
+      if(dest===null)return;
+      event.preventDefault();
+      moveTo(dest,true);
+    });
+    requestAnimationFrame(update);
+    return {reset(){barDragging=false;track.classList.remove('is-dragging');moveTo(0);update()}};
+  }
+  const reportCarousel=setupReportsCarousel();
+  shelves.push(reportCarousel);
+
+
   const researchImages = [
     ['Account Takeover','Account Takeover'],
     ['Information Disclosure','Information Disclosure'],
