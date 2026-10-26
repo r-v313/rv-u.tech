@@ -63,14 +63,23 @@ const server=http.createServer((req,res)=>{
           const roles=document.querySelector('.cover-roles');
           const underline=getComputedStyle(roles.querySelector('span'),'::after');
           const grid=document.querySelector('.student-feedback-grid');
-          const facts=document.querySelectorAll('.hero-benefits-inline span');
+          const rect=selector=>document.querySelector(selector).getBoundingClientRect();
+          const gaps={
+            bioToAnnouncement:rect('.hero-introduction').top-rect('.cover-bio').bottom,
+            announcementToCapacity:rect('.cohort-capacity').top-rect('.hero-introduction').bottom,
+            capacityToBanner:rect('.application-open-banner').top-rect('.cohort-capacity').bottom,
+            bannerToApplication:rect('.hero-actions').top-rect('.application-open-banner').bottom
+          };
           return {roleCount:roles.querySelectorAll('span').length,
             borderStyle:getComputedStyle(roles).borderBottomStyle,
             underlineHeight:underline.height,
             columns:getComputedStyle(grid).gridTemplateColumns.trim().split(/\s+/).length,
             reviews:grid.querySelectorAll('.student-feedback-card').length,
             ghada:grid.lastElementChild.querySelector('h3').textContent,
-            facts:[...facts].map(el=>({value:el.textContent,pseudo:getComputedStyle(el,'::before').content})),
+            mergedCapacity:document.querySelector('.cohort-capacity strong').textContent,
+            deletedBlocks:!document.querySelector('.hero-benefits-inline,.hero-lead-followup'),
+            bannerNextIsApplication:document.querySelector('.application-open-banner').nextElementSibling.classList.contains('hero-actions'),
+            gaps,
             bioAccent:getComputedStyle(document.querySelector('.bio-name')).color,
             bioRegular:getComputedStyle(document.querySelector('.cover-bio-copy p')).color};
         });
@@ -81,8 +90,11 @@ const server=http.createServer((req,res)=>{
         assert.equal(styles.ghada,'Ghada Abdelrahman');
         assert.equal(styles.columns,width===1440?3:width===850?2:1,
           'Three reviews must fit a responsive grid at '+width+'px');
-        assert.deepEqual(styles.facts.map(f=>f.value),['٦ أسابيع','متابعة 1:1']);
-        assert(styles.facts.every(f=>/^(none|normal)$/.test(f.pseudo)),'No dot pseudo-elements beside the hero facts');
+        assert.equal(styles.mergedCapacity,'الدفعة 12 طالب فقط + متابعة 1:1 + ٦ أسابيع');
+        assert(styles.deletedBlocks,'Removed duplicate duration/features must not render');
+        assert(styles.bannerNextIsApplication,'Application banner must be immediately above application buttons');
+        for(const [name,gap] of Object.entries(styles.gaps))
+          assert(gap>=-3&&gap<=38,'Excessive intro vertical gap '+name+' at '+width+'px: '+gap);
         assert.notEqual(styles.bioAccent,styles.bioRegular,'Instructor name has visible highlight color');
       }
       assert.equal(await page.locator('#reports-track .research-image img').first().evaluate(img=>getComputedStyle(img).objectFit),'contain','Report previews must preserve full original image');
