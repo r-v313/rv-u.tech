@@ -6826,7 +6826,7 @@ html[lang=ar] .hero .eyebrow {
 
 .hero-introduction{margin-top:22px;min-width:0}
 .hero-introduction .hero-lead{margin:0;max-width:100%;line-height:1.92}
-.hero-introduction .hero-lead-followup{margin:16px 0 0;padding:12px 18px;border-inline-start:3px solid #ff8f39;border-radius:8px;background:linear-gradient(110deg,#ff8c281a,#ff8c2805);color:#f2e9df;font-size:clamp(14px,1.35vw,17px);line-height:1.95;font-weight:500;overflow-wrap:break-word}
+
 #research #reports-track{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;max-width:100%;min-width:0;align-items:stretch;gap:18px;padding:0;margin:0;overflow:visible;scroll-snap-type:none;touch-action:auto}
 #research #reports-track .research-card{box-sizing:border-box;display:flex;flex-direction:column;flex:auto;width:100%;max-width:100%;min-width:0;min-height:0;height:auto;padding:15px;border-radius:12px}
 #research #reports-track .research-image{width:100%;height:clamp(185px,18vw,260px);min-height:0;margin:0;padding:8px}
@@ -6836,7 +6836,7 @@ html[lang=ar] .hero .eyebrow {
 
 #image-dialog .image-dialog-footer{justify-content:space-between}
 @media(max-width:950px){#research #reports-track{grid-template-columns:repeat(2,minmax(0,1fr))}#research #reports-track .research-image{height:clamp(205px,28vw,265px)}}
-@media(max-width:600px){.hero-introduction .hero-lead,.hero-introduction .hero-lead-followup{font-size:clamp(14px,3.7vw,16px);line-height:1.92}#research #reports-track{grid-template-columns:minmax(0,1fr);gap:15px}#research #reports-track .research-card{padding:14px}#research #reports-track .research-image{height:clamp(220px,64vw,305px)}#research #reports-track .gallery-card-info h3{font-size:18px}}
+@media(max-width:600px){.hero-introduction .hero-lead{font-size:clamp(14px,3.7vw,16px);line-height:1.92}#research #reports-track{grid-template-columns:minmax(0,1fr);gap:15px}#research #reports-track .research-card{padding:14px}#research #reports-track .research-image{height:clamp(220px,64vw,305px)}#research #reports-track .gallery-card-info h3{font-size:18px}}
 
 
 
@@ -7028,12 +7028,12 @@ html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(30px,4.9vw,60px)}
 .hero.hero-unified .hero-problem{
   width:min(100%,710px);
   max-width:100%;
-  margin:0 auto 18px;
+  margin:clamp(27px,4vw,39px) auto 0;
   font-size:clamp(15px,1.6vw,19px);
   line-height:1.95;
   text-wrap:pretty;
 }
-.hero.hero-unified .hero-introduction{margin-top:16px}
+.hero.hero-unified .hero-introduction{margin-top:clamp(15px,2.5vw,25px)}
 .hero.hero-unified .hero-lead{
   width:min(100%,780px);
   max-width:100%;
@@ -7043,8 +7043,42 @@ html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(30px,4.9vw,60px)}
 }
 .hero.hero-unified .hero-lead-followup{
   width:min(100%,790px);
-  margin:19px auto 0;
+  margin:18px auto 0;
+  padding:clamp(13px,2vw,19px) clamp(13px,2.2vw,23px);
   text-align:start;
+  border-inline-start:3px solid #ff9b48;
+  border-radius:12px;
+  background:linear-gradient(115deg,#ff902719,#ff902705);
+  color:#f5ebe2;
+  font-size:clamp(14px,1.48vw,18px);
+  font-weight:650;
+  line-height:1.95;
+  overflow-wrap:break-word;
+}
+.hero.hero-unified .hero-lead .thanks-oval{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  vertical-align:middle;
+  white-space:nowrap;
+  margin:2px 2px 3px 6px;
+  padding:2px 17px 4px;
+  border:1px solid #e59a54;
+  border-radius:999px;
+  color:#ffc087;
+  background:linear-gradient(135deg,#ffb15f1f,#e784380f);
+  box-shadow:inset 0 0 0 1px #ffc68519,0 3px 16px #ef873217;
+  font-weight:800;
+  line-height:1.6;
+}
+.hero.hero-unified .hero-lead-followup .duration-underline{
+  color:#ffbd83;
+  font-weight:850;
+  text-decoration-line:underline;
+  text-decoration-color:#ffa651;
+  text-decoration-thickness:2px;
+  text-underline-offset:5px;
+  text-decoration-skip-ink:auto;
 }
 .hero.hero-unified .hero-benefits-inline{
   display:flex;
