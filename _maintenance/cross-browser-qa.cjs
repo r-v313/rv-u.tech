@@ -57,7 +57,13 @@ const audit=async(page,label)=>{
           const page=await context.newPage();
           const errors=[];
           page.on('pageerror',err=>errors.push(err.message));
-          await page.route('**/*',r=>r.request().url().startsWith(base)?r.continue():r.abort());
+          await page.route('**/*',route=>{
+            const url=route.request().url();
+            const portrait='https://d2ol7oe51mr4n9.cloudfront.net/user_3JUngcUhRYYa2eBXLpGvHnUaQyO/62b3565b-2cb2-45c3-b47a-654990b640cc.png';
+            if(url.startsWith(base)) return route.continue();
+            if(url===portrait) return route.fulfill({path:path.join(root,'assets/ramez-medhat-640.webp'),contentType:'image/webp'});
+            return route.abort();
+          });
           await page.goto(base+'/',{waitUntil:'load'});
           await page.locator('.cover-portrait img').waitFor();
           await page.waitForFunction(()=>{
