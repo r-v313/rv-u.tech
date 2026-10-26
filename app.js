@@ -28,6 +28,8 @@
       else el.textContent = el.dataset.en;
     });
     document.querySelectorAll('[data-label-en]').forEach(el => el.setAttribute('aria-label', el.dataset[ar ? 'labelAr' : 'labelEn']));
+    document.querySelectorAll('blockquote[data-en]').forEach(quote => {quote.lang = lang;quote.dir = ar ? 'rtl' : 'ltr';});
+    document.querySelectorAll('[data-alt-en]').forEach(img => img.alt = ar ? img.dataset.altAr : img.dataset.altEn);
     language.textContent = ar ? 'EN' : 'AR';
     language.setAttribute('aria-label', ar ? 'Switch to English' : 'التبديل إلى العربية');
     document.title = ar ? 'الدفعة الخامسة — التقديم مفتوح الآن | RVU Mentorship Camp' : 'Cohort 05 — Applications Open | RVU Mentorship Camp';
