@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Create high-quality WebP evidence and a retina-sized portrait for RVU Camp.
-The lossless PNG originals are retained as a fallback and historical archive.
+PNG sources are optional: checked-in WebP is sufficient for routine deployments.
 Run from the repository root after installing Pillow >= 10.
 """
 from pathlib import Path
@@ -12,6 +12,11 @@ def optimize_evidence():
     for number in range(1, 7):
         original = ROOT / f"poc-{number:02d}.png"
         output = ROOT / f"poc-{number:02d}-full.webp"
+        if not original.exists():
+            if not output.is_file():
+                raise FileNotFoundError(f"Missing both optimized and source image: {number:02d}")
+            print(f"{output.name}: existing optimized asset retained")
+            continue
         with Image.open(original) as im:
             img = ImageOps.exif_transpose(im)
             img = img.convert("RGBA") if "A" in img.getbands() else img.convert("RGB")
