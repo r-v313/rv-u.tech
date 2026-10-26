@@ -6878,3 +6878,9 @@ html[dir=ltr] #experience .arrow-next svg,html[dir=ltr] #research .arrow-next sv
     border-top:1px solid #444046!important;
   }
 }
+
+@media (min-width:601px) {
+  #journey .history-stats article + article {
+    border-inline-start:1px solid #444046!important;
+  }
+}
