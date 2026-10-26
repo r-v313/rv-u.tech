@@ -92,6 +92,7 @@ function boot(success=true) {
   assert.equal(bioParagraphs[1].querySelector('.bio-goal-title').textContent,'الهدف من الكامب','The goal headline must be highlighted');
   assert(bioParagraphs[0].querySelector('.bio-name').matches('strong'));
   assert(bioParagraphs[1].querySelector('.bio-goal-title').matches('strong'));
+  assert.equal(bioParagraphs[1].className,'cover-bio-goal','Only goal paragraph receives decorative underline');
   assert(!bio.textContent.includes('قدمت ٣ كامبات أوفلاين وكامب أونلاين'),'Retired instructor biography must not return');
   const profileLink=bio.querySelector('a[href^="https://www.linkedin.com/"]');
   assert(profileLink&&profileLink.href==='https://www.linkedin.com/in/ramez-medhat-rvu/');
@@ -106,6 +107,8 @@ function boot(success=true) {
   assert.equal(d.querySelectorAll('.hero-camp-label,.hero-camp-label .live-dot').length,0,'Remove duplicate hero badge and glow');
   assert.equal(d.querySelectorAll('.mentor-cover .cover-top .live-dot').length,0,'Portrait heading must not have a glowing dot');
   const styles=fs.readFileSync(path.join(root,'styles.css'),'utf8');
+  assert.match(styles,/\.hero\.hero-unified \.cover-bio-copy p\.cover-bio-goal::after\s*\{/,'The camp goal must have a decorative underline');
+  assert.match(styles,/\.hero\.hero-unified \.cover-bio-copy p\.cover-bio-goal::after\s*\{[^}]*height:2px;[^}]*linear-gradient\(/,'Underline should be a subtle gold gradient line');
   assert(!styles.includes('.hero.hero-unified .hero-benefits-inline span::before'),'The two orange dots under the intro must be removed');
   assert(!styles.includes('border-bottom:1px solid #34363c;'),'Mentor biography divider must be removed');
   assert(!styles.includes('.hero.hero-unified .hero-problem{'),'Deleted target paragraph must not retain hero-specific CSS');
