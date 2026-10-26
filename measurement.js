@@ -47,6 +47,6 @@
     else if (target.matches('[data-video]')) window.rvuTrack('Teaching_Video_Open');
     else if (target.matches('[data-resource]')) window.rvuTrack('Guide_Download');
     else if (target.matches('[data-pdf-guide]')) window.rvuTrack('PDF_Open');
-    else if (target.href?.startsWith('https://wa.me/')) window.rvuTrack('WhatsApp_Click');
+    else if ((target.href && target.href.indexOf('https://wa.me/') === 0)) window.rvuTrack('WhatsApp_Click');
   });
 })();
