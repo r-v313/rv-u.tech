@@ -60,7 +60,7 @@ function boot() {
   assert(!html.includes('poc-01.png'));
   assert(/border-top:0/.test(css),'Statistics top border removed');
   assert(/#journey\s+\.history-stats\s+article\s*\+\s*article\s*\{\s*border-inline-start:1px solid #444046!important;?\s*\}/.test(css),'Desktop statistic dividers must remain between cards');
-  assert(/#journey\s+\.history-stats\s+article\s*\+\s*article\s*\{\s*border-top:1px solid #444046!important;?\s*\}/.test(css),'Mobile statistic dividers must remain between cards');
+  assert(/#journey \.history-stats article \+ article \{\s*border-top:0!important;\s*border-inline-start:1px solid #444046!important;\s*\}\s*$/.test(css),'Statistics must show only vertical dividers between the three items');
   assert.equal(d.querySelector('meta[property="og:image"]').content,d.querySelector('.cover-portrait img').src,'Social preview must match the displayed portrait');
   assert(d.querySelector('meta[name="description"]').content.includes('RVU Mentorship Camp'),'SEO description must be present and reference the camp');
   assert(d.querySelector('meta[property="og:description"]').content.includes('RVU Mentorship Camp'),'Social description must be present and reference the camp');
