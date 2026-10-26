@@ -81,7 +81,8 @@ const server=http.createServer((req,res)=>{
             bannerNextIsApplication:document.querySelector('.application-open-banner').nextElementSibling.classList.contains('hero-actions'),
             gaps,
             bioAccent:getComputedStyle(document.querySelector('.bio-name')).color,
-            bioRegular:getComputedStyle(document.querySelector('.cover-bio-copy p')).color};
+            bioRegular:getComputedStyle(document.querySelector('.cover-bio-copy p')).color,
+            goalUnderline:(()=>{const line=getComputedStyle(document.querySelector('.cover-bio-goal'),'::after');return {content:line.content,display:line.display,height:line.height,background:line.backgroundImage,width:line.width};})()};
         });
         assert.equal(styles.roleCount,3,'Profile must show all three career titles');
         assert.equal(styles.borderStyle,'solid','Profile credentials require an underline');
@@ -96,6 +97,10 @@ const server=http.createServer((req,res)=>{
         for(const [name,gap] of Object.entries(styles.gaps))
           assert(gap>=-3&&gap<=38,'Excessive intro vertical gap '+name+' at '+width+'px: '+gap);
         assert.notEqual(styles.bioAccent,styles.bioRegular,'Instructor name has visible highlight color');
+        assert.equal(styles.goalUnderline.display,'block','Goal underline must be a visible block');
+        assert.equal(styles.goalUnderline.height,'2px','Goal underline must be 2px tall');
+        assert(styles.goalUnderline.background.includes('linear-gradient'),'Goal underline must use gold gradient styling');
+        assert(parseFloat(styles.goalUnderline.width)>40,'Goal underline must remain visible at '+width+'px');
       }
       assert.equal(await page.locator('#reports-track .research-image img').first().evaluate(img=>getComputedStyle(img).objectFit),'contain','Report previews must preserve full original image');
       for(const target of ['.hero-copy','.hero-visual','.price-panel','.mentor-cover']){
