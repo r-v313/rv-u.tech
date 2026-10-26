@@ -1,7 +1,6 @@
 'use strict';
 (() => {
   const $ = id => document.getElementById(id);
-  // Compatible with the older Chromium engines bundled with Galaxy Tab A6.
   function replaceChildrenCompat(node, children) {
     while (node.firstChild) node.removeChild(node.firstChild);
     children.forEach(child => node.appendChild(child));
@@ -119,8 +118,6 @@
     url.searchParams.set('text', message);
     return url.href;
   }
-  // Visitor goes straight to WhatsApp. Keepalive may finish the form POST
-  // after page unload, but does not guarantee server receipt.
   let submitting = false;
   form.addEventListener('submit', event => {
     event.preventDefault();
@@ -157,7 +154,6 @@
       for (const key of ['utm_source','utm_medium','utm_campaign','utm_content','utm_term']) {
         payload[key] = (params.get(key) || '').slice(0,200);
       }
-      // Form-encoded avoids JSON CORS preflight and fits the 64 KiB keepalive cap.
       const request = fetch('https://formspree.io/f/xoeqykpq', {
         method:'POST',
         headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8',Accept:'application/json'},
@@ -170,7 +166,6 @@
         }
       }).catch(() => {});
     } catch (_) {
-      // WhatsApp remains available even when the background POST cannot start.
     }
     const link = document.createElement('a');
     link.href = whatsappUrl;
@@ -250,8 +245,6 @@
   }
   const shelves=[createShelf('gallery-track','gallery')];
 
-  // Reports reuse the exact video controls and carousel logic:
-  // rounded arrows, native touch swipe, mouse dragging, RTL keyboard support.
   shelves.push(createShelf('reports-track', 'reports'));
 
   const researchImages = [
@@ -267,22 +260,13 @@
     activeImage = (index + researchImages.length) % researchImages.length;
     const title = researchImages[activeImage][isArabic() ? 0 : 1];
     const path = `/poc-0${activeImage+1}-full.webp`;
-    const original = `/poc-0${activeImage+1}.png`;
     $('image-title').textContent = title;
-    $('image-original').href = original;
     $('gallery-full-image').alt = title;
     $('image-error').hidden = true;
     $('gallery-full-image').hidden = false;
-    $('image-stage').classList.remove('is-zoomed');
-    $('image-zoom').setAttribute('aria-pressed', 'false');
     $('image-stage').scrollTop = 0; $('image-stage').scrollLeft = 0;
     $('gallery-full-image').src = path;
   }
-  $('image-zoom').addEventListener('click', () => {
-    const zoomed = $('image-stage').classList.toggle('is-zoomed');
-    $('image-zoom').setAttribute('aria-pressed',String(zoomed));
-    $('image-stage').scrollTop = 0; $('image-stage').scrollLeft = 0;
-  });
   $('gallery-full-image').addEventListener('error', () => { $('image-error').hidden = false; $('gallery-full-image').hidden = true; });
   document.querySelectorAll('[data-image]').forEach(button => button.addEventListener('click', () => {showResearchImage(Number(button.dataset.image));openDialog($('image-dialog'));}));
 })();
