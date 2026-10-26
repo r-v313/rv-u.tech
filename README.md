@@ -15,8 +15,8 @@ A single-page bilingual website served by GitHub Pages. The published files are 
 
 ## Production quality and performance (Cohort 05)
 
-- Keep `styles.css` readable as the **source**. After editing it, run `node _maintenance/minify-css.cjs` and commit both `styles.css` and `styles.min.css`. The page loads the minified version.
-- Security-report screenshots are kept as `poc-01.png` through `poc-06.png` for full-fidelity reference. `poc-0N-full.webp` are the default high-quality, reduced-transfer display versions. Rebuild via `python _maintenance/optimize_assets.py` (requires Pillow); a GitHub Action also regenerates WebP when source screenshots change.
+- Keep `styles.css` readable as the **source**. After editing it, run `node _maintenance/minify-css.cjs` and commit both `styles.css` and `styles.min.css`. The page loads the minified version. Dead CSS rules are removed only after confirming they do not correspond to current HTML or JavaScript states.
+- Report evidence is served as optimized thumbnail and full-resolution WebP. Large source PNGs are not published; Git history retains prior versions. If a new original PNG is supplied, `python _maintenance/optimize_assets.py` can regenerate its WebP (requires Pillow).
 - `assets/ramez-medhat-480.webp` and `assets/ramez-medhat-640.webp` are responsive portrait candidates. Poster thumbnails and full-resolution proof images should not be loaded until needed.
 - On `main` pushes, the **RVU site quality** workflow checks the HTML, URL/local-asset validity, form mocks, CSS source equivalence, security properties, page budget, and responsive Chromium layouts; separate Firefox/WebKit and automated WCAG 2.1 AA checks cover additional viewports and language modes.
 - To run locally: `npm install --prefix _maintenance`, then `npm test --prefix _maintenance` and `npm run test:browser --prefix _maintenance` (requires Chrome/Chromium).
