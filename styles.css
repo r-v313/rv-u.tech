@@ -7177,3 +7177,79 @@ html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(30px,4.9vw,60px)}
   .hero.hero-unified .hero-apply-date-label{font-size:clamp(12px,3.3vw,14px)}
   .hero.hero-unified .hero-apply-date-value{font-size:clamp(18px,5.4vw,23px)}
 }
+
+/* Editorial neon masthead: matches the reference without using an image as text. */
+.hero.hero-unified .hero-visual-unified > .cover-top .camp-masthead{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:clamp(7px,1.1vw,12px);
+  width:100%;
+  max-width:100%;
+  padding:clamp(7px,1.4vw,15px) 0 clamp(9px,1.3vw,14px);
+  margin:0 auto;
+  border:0;
+  border-radius:0;
+  background:none;
+  box-shadow:none;
+  font-style:normal;
+  text-transform:none;
+  white-space:normal;
+  text-align:center;
+}
+.hero.hero-unified .camp-masthead-main{
+  display:block;
+  max-width:100%;
+  color:#ff821f;
+  font-family:"Outfit","Manrope",sans-serif;
+  font-size:clamp(25px,3.8vw,43px);
+  font-weight:700;
+  line-height:1.17;
+  letter-spacing:.22em;
+  text-shadow:0 0 9px #ff701c80,0 0 24px #ff610e55,0 0 42px #ff610e2e;
+  text-wrap:balance;
+}
+.hero.hero-unified .camp-masthead-sub{
+  display:block;
+  max-width:100%;
+  color:#ffd3ac;
+  font-family:"Manrope","Outfit",sans-serif;
+  font-size:clamp(11px,1.5vw,17px);
+  font-style:normal;
+  font-weight:500;
+  line-height:1.4;
+  letter-spacing:.27em;
+  text-shadow:0 0 12px #ff943939;
+  text-wrap:balance;
+}
+.hero.hero-unified .camp-masthead::after{
+  content:"";
+  display:block;
+  align-self:center;
+  width:min(58%,480px);
+  height:1px;
+  margin-top:clamp(4px,.9vw,9px);
+  background:linear-gradient(90deg,transparent,#fd6c0ca8 35%,#ff9d43 50%,#fd6c0ca8 65%,transparent);
+  box-shadow:0 0 9px #f60b,0 0 20px #f607;
+}
+@media(max-width:600px){
+  .hero.hero-unified .hero-visual-unified > .cover-top .camp-masthead{
+    gap:7px;
+    padding:6px 0 9px;
+  }
+  .hero.hero-unified .camp-masthead-main{
+    font-size:clamp(19px,5.5vw,30px);
+    letter-spacing:.12em;
+    line-height:1.24;
+  }
+  .hero.hero-unified .camp-masthead-sub{
+    font-size:clamp(10px,2.7vw,13px);
+    letter-spacing:.11em;
+    line-height:1.45;
+  }
+  .hero.hero-unified .camp-masthead::after{
+    width:72%;
+    margin-top:4px;
+  }
+}
