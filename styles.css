@@ -7713,3 +7713,40 @@ html[lang=en] #research .section-heading h2.section-dot-title{
   html[dir=rtl] #research .section-heading h2.section-dot-title::before{right:0;left:auto}
   html[dir=ltr] #research .section-heading h2.section-dot-title::before{left:0;right:auto}
 }
+
+/* Report carousel uses the same accessible circular arrow controls as videos.
+   Keep existing native touch swiping and mouse-drag behavior. */
+#research .reports-footer{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:12px;
+  margin-top:12px;
+  padding:0;
+}
+#research .reports-footer .gallery-arrows{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin-inline-start:auto;
+}
+#research .reports-footer .gallery-arrows button{
+  display:grid;
+  place-items:center;
+  width:44px;
+  height:44px;
+  min-width:44px;
+  min-height:44px;
+  padding:0;
+  border-radius:50%;
+  touch-action:manipulation;
+}
+#research .reports-footer .gallery-arrows svg{
+  display:block;
+  width:20px;
+  height:20px;
+}
+@media (max-width:600px){
+  #research .reports-footer{margin-top:10px}
+  #research .reports-footer .gallery-arrows{gap:7px}
+}
