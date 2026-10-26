@@ -35,7 +35,7 @@
     document.title = ar ? 'الدفعة الخامسة — التقديم مفتوح الآن | RVU Mentorship Camp' : 'Cohort 05 — Applications Open | RVU Mentorship Camp';
     $('form-error').hidden = true;
     shelves.forEach(shelf => shelf.reset());
-    if ($('image-dialog').open) showResearchImage(activeImage);
+    document.querySelectorAll('a[data-image]').forEach(link => {link.href='/viewer.html?image='+(Number(link.dataset.image)+1)+(ar?'':'&lang=en');});
   }
   language.addEventListener('click', () => setLanguage(isArabic() ? 'en' : 'ar'));
   const nav = $('navigation');
@@ -61,7 +61,6 @@
   document.querySelectorAll('dialog').forEach(dialog => {
     dialog.addEventListener('close', () => {
       if (dialog.id === 'video-dialog') replaceChildrenCompat($('video-mount'), []);
-      if (dialog.id === 'image-dialog') $('gallery-full-image').removeAttribute('src');
       document.body.classList.remove('modal-open');
       if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus({preventScroll:true});
     });
@@ -249,26 +248,4 @@
 
   shelves.push(createShelf('reports-track', 'reports'));
 
-  const researchImages = [
-    ['Account Takeover','Account Takeover'],
-    ['Information Disclosure','Information Disclosure'],
-    ['API Authorization','API Authorization'],
-    ['Access Control','Access Control'],
-    ['Stored XSS','Stored XSS'],
-    ['Report Accepted','Report Accepted']
-  ];
-  let activeImage = 0;
-  function showResearchImage(index) {
-    activeImage = (index + researchImages.length) % researchImages.length;
-    const title = researchImages[activeImage][isArabic() ? 0 : 1];
-    const path = `/poc-0${activeImage+1}-full.webp`;
-    $('image-title').textContent = title;
-    $('gallery-full-image').alt = title;
-    $('image-error').hidden = true;
-    $('gallery-full-image').hidden = false;
-    $('image-stage').scrollTop = 0; $('image-stage').scrollLeft = 0;
-    $('gallery-full-image').src = path;
-  }
-  $('gallery-full-image').addEventListener('error', () => { $('image-error').hidden = false; $('gallery-full-image').hidden = true; });
-  document.querySelectorAll('[data-image]').forEach(button => button.addEventListener('click', () => {showResearchImage(Number(button.dataset.image));openDialog($('image-dialog'));}));
 })();
