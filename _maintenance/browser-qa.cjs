@@ -88,7 +88,7 @@ const server=http.createServer((req,res)=>{
             singleApply:document.querySelectorAll('.hero-actions .hero-primary-apply').length===1&&
               !document.querySelector('.application-open-banner'),
             applyText:document.querySelector('.hero-primary-apply').textContent,
-            thanks:(()=>{const el=document.querySelector('.thanks-plain');const details=document.querySelector('.thanks-details');const heading=el.getBoundingClientRect(),body=details.getBoundingClientRect();const css=getComputedStyle(el);return {line:css.textDecorationLine,border:css.borderTopWidth,display:css.display,headingBottom:heading.bottom,bodyTop:body.top,headingRight:heading.right,bodyRight:body.right,headingLeft:heading.left,bodyLeft:body.left};})(),
+            thanks:(()=>{const el=document.querySelector('.thanks-plain');const details=document.querySelector('.thanks-details');const css=getComputedStyle(el);const bio=document.querySelector('.cover-bio');const goal=document.querySelector('.cover-bio-goal');return {line:css.textDecorationLine,border:css.borderTopWidth,display:css.display,detailsDisplay:getComputedStyle(details).display,paragraphChildren:document.querySelector('.hero-lead').childElementCount,text:document.querySelector('.hero-lead').textContent,referenceParagraphGap:parseFloat(getComputedStyle(goal).marginTop),bioBottomPadding:parseFloat(getComputedStyle(bio).paddingBottom)};})(),
             bigTitle:(()=>{const el=document.querySelector('.hero-visual-unified > .cover-top .mono');return {size:parseFloat(getComputedStyle(el).fontSize),font:getComputedStyle(el).fontFamily}})(),
             mentorshipTitle:document.querySelector('#mentorship .mentorship-heading h2').textContent,
             mentorshipLabel:document.querySelector('#mentorship .mentorship-index').textContent,
@@ -125,10 +125,12 @@ const server=http.createServer((req,res)=>{
         assert.equal(styles.applyText,'قدم لانترفيو الكامب الخامس ↗');
         assert.equal(styles.thanks.line,'none','Gratitude words should not have an underline');
         assert.equal(styles.thanks.border,'0px','Gratitude should not have a border');
-        assert.equal(styles.thanks.display,'block','Gratitude should occupy a separate line');
-        assert(styles.thanks.bodyTop>=styles.thanks.headingBottom-2,'Announcement must start on the next line');
-        assert(Math.abs(styles.thanks.headingRight-styles.thanks.bodyRight)<=3 ||
-          Math.abs(styles.thanks.headingLeft-styles.thanks.bodyLeft)<=3,'Gratitude and next sentence must share a text starting edge');
+        assert.equal(styles.thanks.display,'inline','Gratitude and announcement must flow in one paragraph');
+        assert.equal(styles.thanks.detailsDisplay,'inline','No forced line break after gratitude phrase');
+        assert.equal(styles.thanks.paragraphChildren,2,'Keep the highlighted phrase and the sentence in one paragraph');
+        assert(styles.thanks.text.startsWith('اشكر ربنا على نجاح الدفعة الرابعة'),'Use the approved unified announcement copy');
+        assert(Math.abs(styles.gaps.bioToAnnouncement+styles.thanks.bioBottomPadding-styles.thanks.referenceParagraphGap)<=3,
+          'Spacing before gratitude should match the gap between instructor bio paragraphs at '+width+'px');
         assert(styles.bigTitle.size>=19,'RVU camp title should be at least twice as large as before');
         assert(styles.bigTitle.font.includes('Outfit'),'The new RVU title should use Outfit');
         assert.equal(styles.mentorshipTitle,'متابعة شخصية وتطبيق عملي');
