@@ -91,7 +91,7 @@ const server=http.createServer((req,res)=>{
         assert.equal(styles.ghada,'Ghada Abdelrahman');
         assert.equal(styles.columns,width===1440?3:width===850?2:1,
           'Three reviews must fit a responsive grid at '+width+'px');
-        assert.equal(styles.mergedCapacity,'الدفعة 12 طالب فقط + متابعة 1:1 + ٦ أسابيع');
+        assert.equal(styles.mergedCapacity,'6 اسابيع - 12 طالب - متابعة 1:1');
         assert(styles.deletedBlocks,'Removed duplicate duration/features must not render');
         assert(styles.bannerNextIsApplication,'Application banner must be immediately above application buttons');
         for(const [name,gap] of Object.entries(styles.gaps))
