@@ -240,6 +240,8 @@ function boot(success=true) {
   }
   assert(!d.querySelector('#reports-prev,#reports-next,#reports-position,#reports-help,#image-prev,#image-next,#image-position'));
   assert(!d.querySelector('#research .gallery-toolbar,#research .gallery-footer'));
+  assert.equal(d.querySelector('#research .section-heading h2').textContent,'جزء من شغلي');
+  assert.equal(d.querySelector('#research .section-heading .eyebrow'),null,'Do not number the security research section');
   assert.match(d.querySelector('.faq-list').textContent,/دور الكامب انه يطور مهاراتك/);
   assert(d.querySelector('.legal').textContent.includes('١٧٥'));
   const price=[...d.querySelectorAll('.faq-list details')].find(x=>x.textContent.includes('٤٠٠٠'));
