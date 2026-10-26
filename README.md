@@ -8,12 +8,12 @@ A single-page bilingual website served by GitHub Pages. The published files are 
 
 - Run `python _maintenance/check_structure.py` and the JavaScript regression/security checks before publishing.
 - PDF dependencies are listed in `_maintenance/requirements.txt`. Run `python _maintenance/build_guides.py` to regenerate the three public Arabic field guides. Arabic source text lives in `_maintenance/content`, and the font license notices are retained.
-- The live student testimonials are Ahmed Alaa and Zain Ali. The third review is pending its actual student name and exact approved text; no placeholder or fabricated testimonial is published. The layout automatically supports three cards across wide screens when a third real review is added.
+- The live student testimonials are Ahmed Alaa and Zain Ali. The third female student’s exact original feedback and name could not be recovered from the available context, so it has deliberately not been fabricated. Once supplied, her card will join the same three-column desktop grid. The new fifth overall cohort is the second online cohort after three offline and one completed online cohorts.
 - The application form sends a best-effort background POST to Formspree before opening WhatsApp with a prefilled application message. YouTube loads only when a teaching video is opened. Analytics events exclude application field values and the application dialog is masked.
 - Deployment and rollback use Git history. No duplicate or legacy website is published.
 
 
-## Production quality and performance (Cohort 02)
+## Production quality and performance (Cohort 05)
 
 - Keep `styles.css` readable as the **source**. After editing it, run `node _maintenance/minify-css.cjs` and commit both `styles.css` and `styles.min.css`. The page loads the minified version.
 - Security-report screenshots are kept as `poc-01.png` through `poc-06.png` for full-fidelity reference. `poc-0N-full.webp` are the default high-quality, reduced-transfer display versions. Rebuild via `python _maintenance/optimize_assets.py` (requires Pillow); a GitHub Action also regenerates WebP when source screenshots change.
