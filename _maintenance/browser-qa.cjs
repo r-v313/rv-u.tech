@@ -66,8 +66,7 @@ const server=http.createServer((req,res)=>{
           const rect=selector=>document.querySelector(selector).getBoundingClientRect();
           const gaps={
             bioToAnnouncement:rect('.hero-introduction').top-rect('.cover-bio').bottom,
-            announcementToBanner:rect('.application-open-banner').top-rect('.hero-introduction').bottom,
-            bannerToApplication:rect('.hero-actions').top-rect('.application-open-banner').bottom
+            announcementToApplication:rect('.hero-actions').top-rect('.hero-introduction').bottom
           };
           const nav=document.querySelector('.hero-quick-links');
           const items=[...nav.querySelectorAll('.hero-quick-link')];
@@ -86,8 +85,13 @@ const server=http.createServer((req,res)=>{
           const bar=document.querySelector('#reports-scrollbar');
           return {externalTitleAbovePhoto:title.bottom<=portraitCard.top+1,
             sloganAbsent:!document.querySelector('.cover-name > .eyebrow'),
-            centeredCohort:getComputedStyle(document.querySelector('.application-open-label')).textAlign==='center',
-            cohortText:document.querySelector('.application-open-label').textContent,
+            singleApply:document.querySelectorAll('.hero-actions .hero-primary-apply').length===1&&
+              !document.querySelector('.application-open-banner'),
+            applyText:document.querySelector('.hero-primary-apply').textContent,
+            introUnderline:(()=>{const el=document.querySelector('.thanks-underline');const style=getComputedStyle(el);return {line:style.textDecorationLine,border:style.borderTopWidth,bg:style.backgroundColor};})(),
+            bigTitle:(()=>{const el=document.querySelector('.hero-visual-unified > .cover-top .mono');return {size:parseFloat(getComputedStyle(el).fontSize),font:getComputedStyle(el).fontFamily}})(),
+            mentorshipTitle:document.querySelector('#mentorship .mentorship-heading h2').textContent,
+            videosTitle:document.querySelector('#experience .gallery-heading h2').textContent,
             reportShelf:{display:getComputedStyle(reports).display,maxScroll:reports.scrollWidth-reports.clientWidth,
               cardWidth:reportCards[0].getBoundingClientRect().width,trackWidth:reports.getBoundingClientRect().width,
               cardCount:reportCards.length,rangeVisible:bar.getBoundingClientRect().width>0,
@@ -104,7 +108,8 @@ const server=http.createServer((req,res)=>{
             reviewsArrow:reviewsLink.querySelector('.hero-quick-arrow').textContent,
             noQuote:!nav.textContent.includes('“')&&!nav.textContent.includes('”'),
             deletedBlocks:!document.querySelector('.hero-benefits-inline,.hero-lead-followup'),
-            bannerNextIsApplication:document.querySelector('.application-open-banner').nextElementSibling.classList.contains('hero-actions'),
+            removedVideoKickers:!document.querySelector('#gallery-track .card-kicker'),
+            removedGalleryPromo:!document.querySelector('.gallery-next-step'),
             gaps,
             bioAccent:getComputedStyle(document.querySelector('.bio-name')).color,
             bioRegular:getComputedStyle(document.querySelector('.cover-bio-copy p')).color,
@@ -113,8 +118,15 @@ const server=http.createServer((req,res)=>{
         assert.equal(styles.roleCount,3,'Profile must show all three career titles');
         assert(styles.externalTitleAbovePhoto,'RVU camp title must be above the portrait card');
         assert(styles.sloganAbsent,'Old step-by-step slogan must be removed under portrait');
-        assert(styles.centeredCohort,'Fifth cohort label must be centered');
-        assert.equal(styles.cohortText,'الدفعة الخامسة');
+        assert(styles.singleApply,'Only one highlighted camp application button should exist');
+        assert.equal(styles.applyText,'قدم لانترفيو الكامب الخامس ↗');
+        assert(styles.introUnderline.line.includes('underline'),'Thank-you words must have an underline');
+        assert(styles.introUnderline.border==='0px','Thank-you must not have an oval border');
+        assert(styles.bigTitle.size>=19,'RVU camp title should be at least twice as large as before');
+        assert(styles.bigTitle.font.includes('Outfit'),'The new RVU title should use Outfit');
+        assert.equal(styles.mentorshipTitle,'نظام المتابعة والتطبيق');
+        assert.equal(styles.videosTitle,'بص دي من شرح الكامب');
+        assert(styles.removedVideoKickers&&styles.removedGalleryPromo,'Video cards must lose numbering and extra CTA');
         assert.equal(styles.reportShelf.display,'flex','Reports must be placed in one horizontal row');
         assert.equal(styles.reportShelf.cardCount,6);
         assert(styles.reportShelf.maxScroll>100,'Reports must have horizontal overflow for swiping');
@@ -147,7 +159,7 @@ const server=http.createServer((req,res)=>{
           'Reviews control must be oval rather than circular');
         assert(styles.quickLinks[1].radius==='999px');
         assert(styles.deletedBlocks,'Removed duplicate duration/features must not render');
-        assert(styles.bannerNextIsApplication,'Application banner must be immediately above application buttons');
+        assert(styles.singleApply,'No application banner above CTA buttons');
         for(const [name,gap] of Object.entries(styles.gaps))
           assert(gap>=-3&&gap<=38,'Excessive intro vertical gap '+name+' at '+width+'px: '+gap);
         assert.notEqual(styles.bioAccent,styles.bioRegular,'Instructor name has visible highlight color');
