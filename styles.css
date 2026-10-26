@@ -6518,7 +6518,7 @@ html[lang=ar] .hero .eyebrow {
   width:min(100%,850px);
   max-width:100%;
   min-width:0;
-  margin:0 auto;
+  margin:8px auto 0;
   padding:0;
   text-align:center;
 }
@@ -6929,21 +6929,17 @@ html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(30px,4.9vw,60px)}
   line-height:1.95;
 }
 .hero.hero-unified .hero-lead .thanks-plain{
-  display:block;
-  width:100%;
-  margin:0 0 3px;
+  display:inline;
+  margin:0;
   padding:0;
   border:0;
   background:none;
   color:#ffb15e;
   font-weight:850;
-  text-align:start;
   text-decoration:none;
 }
 .hero.hero-unified .hero-lead .thanks-details{
-  display:block;
-  width:100%;
-  text-align:start;
+  display:inline;
 }
 .hero.hero-unified .hero-actions{
   margin:12px auto 0;
