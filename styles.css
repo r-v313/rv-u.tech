@@ -6736,3 +6736,186 @@ html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(30px,4.9vw,60px)}
   .hero.hero-unified .hero-quick-arrow{font-size:18px}
   .hero.hero-unified .hero-quick-caption{font-size:12px}
 }
+
+/* Fifth cohort title stays above, not inside, the portrait card. */
+.hero.hero-unified .hero-visual-unified>.cover-top{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  width:min(100%,900px);
+  margin:0 auto 12px;
+  padding:0;
+  text-align:center;
+}
+.hero.hero-unified .hero-visual-unified>.cover-top .mono{
+  display:block;
+  max-width:100%;
+  padding:10px clamp(12px,3vw,30px);
+  border:1px solid #6d421e;
+  border-radius:999px;
+  background:#0b0a0a;
+  box-shadow:inset 0 0 0 1px #ff8a1b12,0 8px 22px #0005;
+  color:#ffa342;
+  font:800 clamp(10px,1.15vw,14px)/1.6 "Manrope",sans-serif;
+  letter-spacing:.055em;
+  text-align:center;
+  overflow-wrap:anywhere;
+  text-wrap:balance;
+}
+.hero.hero-unified .application-open-label{
+  display:block;
+  width:100%;
+  text-align:center;
+}
+
+/* Horizontal report shelf: a card peek on phones and a permanently visible drag bar. */
+#research .reports-carousel-shell{
+  position:relative;
+  width:100%;
+  min-width:0;
+}
+#research #reports-track{
+  display:flex;
+  flex-flow:row nowrap;
+  align-items:stretch;
+  gap:16px;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding:4px 0 15px;
+  scroll-snap-type:x mandatory;
+  scroll-snap-stop:normal;
+  scroll-behavior:smooth;
+  overscroll-behavior-inline:contain;
+  touch-action:pan-x pan-y;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+  cursor:grab;
+}
+#research #reports-track::-webkit-scrollbar{display:none}
+#research #reports-track.is-dragging{
+  scroll-snap-type:none;
+  scroll-behavior:auto;
+  cursor:grabbing;
+}
+#research #reports-track .research-card{
+  flex:0 0 clamp(280px,36%,385px);
+  width:clamp(280px,36%,385px);
+  max-width:none;
+  min-width:0;
+  height:auto;
+  scroll-snap-align:start;
+  user-select:none;
+  -webkit-user-select:none;
+}
+#research #reports-track .research-card img{
+  pointer-events:none;
+  -webkit-user-drag:none;
+}
+#research .reports-scroll-ui{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  max-width:640px;
+  margin:10px auto 0;
+  padding:4px 12px;
+}
+#research .reports-scroll-ui label{
+  color:#ffae6f;
+  text-align:center;
+  font-size:clamp(12px,1.2vw,14px);
+  font-weight:700;
+  line-height:1.55;
+  cursor:pointer;
+}
+#research #reports-scrollbar{
+  -webkit-appearance:none;
+  appearance:none;
+  display:block;
+  width:100%;
+  height:32px;
+  min-height:32px;
+  padding:0;
+  margin:0;
+  border:0;
+  border-radius:0;
+  outline-offset:2px;
+  background:transparent;
+  cursor:ew-resize;
+  touch-action:none;
+  --reports-progress:0%;
+}
+#research #reports-scrollbar::-webkit-slider-runnable-track{
+  height:9px;
+  border:1px solid #61391e;
+  border-radius:999px;
+  background:linear-gradient(to right,#ff8a12 0%,#ff8a12 var(--reports-progress),#29201b var(--reports-progress),#29201b 100%);
+}
+#research #reports-scrollbar::-moz-range-track{
+  height:9px;
+  border:1px solid #61391e;
+  border-radius:999px;
+  background:#29201b;
+}
+#research #reports-scrollbar::-moz-range-progress{
+  height:9px;
+  border-radius:999px;
+  background:#ff8a12;
+}
+#research #reports-scrollbar::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  appearance:none;
+  width:52px;
+  height:23px;
+  margin-top:-8px;
+  border:2px solid #ffae6e;
+  border-radius:999px;
+  background:#ff8612;
+  box-shadow:0 2px 12px #ff7a1a55;
+}
+#research #reports-scrollbar::-moz-range-thumb{
+  width:52px;
+  height:23px;
+  border:2px solid #ffae6e;
+  border-radius:999px;
+  background:#ff8612;
+  box-shadow:0 2px 12px #ff7a1a55;
+}
+#research #reports-scrollbar:focus-visible{outline:3px solid #ffa34e;border-radius:12px}
+#research #reports-scrollbar:disabled{opacity:.4;cursor:default}
+@media(max-width:950px){
+  #research #reports-track{gap:14px}
+  #research #reports-track .research-card{flex-basis:47%;width:47%}
+}
+@media(max-width:600px){
+  .hero.hero-unified .hero-visual-unified>.cover-top{margin-bottom:11px}
+  .hero.hero-unified .hero-visual-unified>.cover-top .mono{
+    padding:9px 11px;
+    font-size:clamp(9px,2.5vw,12px);
+    letter-spacing:.015em;
+  }
+  #research #reports-track{
+    gap:12px;
+    padding-bottom:12px;
+  }
+  #research #reports-track .research-card{
+    flex:0 0 82%;
+    width:82%;
+    scroll-snap-align:start;
+  }
+  #research .reports-scroll-ui{
+    gap:8px;
+    margin-top:8px;
+    padding:4px 4px 10px;
+  }
+  #research #reports-scrollbar::-webkit-slider-runnable-track{height:11px}
+  #research #reports-scrollbar::-moz-range-track{height:11px}
+  #research #reports-scrollbar::-webkit-slider-thumb{width:65px;height:26px;margin-top:-9px}
+  #research #reports-scrollbar::-moz-range-thumb{width:65px;height:26px}
+}
+@media(prefers-reduced-motion:reduce){
+  #research #reports-track{scroll-behavior:auto}
+}
