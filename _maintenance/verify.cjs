@@ -55,7 +55,7 @@ function boot(success=true) {
   assert.equal(unifiedHero.querySelectorAll('.hero-copy').length,1);
   assert.equal(unifiedHero.querySelectorAll('.application-open-banner').length,1);
   const profile=unifiedHero.querySelector('.mentor-cover');
-  const ordered=['.cover-portrait','.cover-name','.cover-bio','.hero-copy h1','.hero-lead','.cohort-capacity','.application-open-banner','.hero-actions','.cover-sample'];
+  const ordered=['.cover-portrait','.cover-name','.cover-bio','.hero-copy h1','.hero-lead','.cohort-capacity','.application-open-banner','.hero-actions'];
   const nodes=ordered.map(selector=>profile.querySelector(selector));
   assert(nodes.every(Boolean),'Portrait, biography, story and fifth-cohort CTA must share one card');
   for(let i=1;i<nodes.length;i++)assert(nodes[i-1].compareDocumentPosition(nodes[i]) & w.Node.DOCUMENT_POSITION_FOLLOWING,'Hero sequence: '+ordered[i-1]+' before '+ordered[i]);
@@ -255,8 +255,11 @@ function boot(success=true) {
   assert(!/[\u064b-\u065f\u0670]/.test(d.body.textContent));
   assert(fs.readFileSync(path.join(root,'assets/ramez-signature.svg'),'utf8').includes('<title>Ramez Medhat</title>'));
 
-  assert(!d.querySelector('#workbench .feedback-disclosure,.curriculum-note,.cover-method'));
-  assert(!d.querySelector('#workbench .section-heading > p,#workbench .sample-chip'),'Do not display removed example disclaimers');
+  assert.equal(d.getElementById('workbench'),null,'Obsolete demo workbench section must be fully removed');
+  assert.equal(d.querySelector('a[href="#workbench"]'),null,'Hero must not link to deleted demo');
+  assert.equal(d.querySelector('[data-work],#work-content,#work-filename'),null,'Demo controls must not remain');
+  assert.equal(d.querySelector('.fit-note'),null,'Uncertain-level interview note must be removed');
+  assert(!html.includes('03 / YOUR WORK, MADE VISIBLE')&&!html.includes('target-map.md')&&!html.includes('لو محتار في مستواك'),'Obsolete demo copy must be absent');
   assert(!/5 لـ 7 ساعات في الأسبوع|5 to 7 hours weekly|اشتغلت بالبرب بس بتقف/.test(html),'Removed weekly-hour quotas and outdated fit copy must remain absent');
   assert.match(d.querySelector('.fit-yes').textContent,/عندك الأساسيات وعندك معلومات كتير/);
   assert.match(d.querySelector('.fit-yes').textContent,/مستعد تخصص وقت للتطبيق/);
@@ -313,9 +316,8 @@ function boot(success=true) {
   assert.equal(d.querySelector('.application-open-banner strong').textContent,'Applications are open now');
   assert.equal(d.querySelectorAll('summary .ui-toggle').length,d.querySelectorAll('details').length);
 
-  d.querySelector('[data-work=report]').click();assert.match(d.getElementById('work-content').textContent,/reproducible/);
   d.getElementById('language').click();assert.equal(d.documentElement.dir,'rtl');
-  assert.match(d.getElementById('work-content').textContent,/تقرير/);
+  assert.equal(d.getElementById('workbench'),null,'Deleted demo must stay absent after language switching');
   d.querySelector('[data-video="xZR5-4iXnI0"]').click();
   assert(d.getElementById('video-dialog').open);
   assert.match(d.querySelector('#video-mount iframe').src,/youtube-nocookie.com\/embed\/xZR5-4iXnI0/);
