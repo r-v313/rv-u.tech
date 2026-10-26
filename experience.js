@@ -15,7 +15,8 @@
       const fragment = document.createDocumentFragment();
       const pattern = /[A-Za-z][A-Za-z0-9]*(?:[ /+.-][A-Za-z][A-Za-z0-9]*)*/g;
       let start = 0;
-      for (const match of text.nodeValue.matchAll(pattern)) {
+      let match;
+      while ((match = pattern.exec(text.nodeValue)) !== null) {
         fragment.append(document.createTextNode(text.nodeValue.slice(start, match.index)));
         const term = document.createElement('bdi');
         term.dir = 'ltr'; term.textContent = match[0]; fragment.append(term);
