@@ -78,9 +78,13 @@ function boot(success=true) {
   assert(!html.includes('أربع فيديوهات من شرحي في الكامب'));
   const bio=d.querySelector('.mentor-cover .cover-bio#mentor');
   assert(bio,'Instructor biography must be inside the mentor portrait card');
-  assert.equal(bio.querySelectorAll('.cover-bio-copy p').length,2);
-  assert.match(bio.querySelector('.cover-bio-copy p').textContent,/Bug Bounty سنة ٢٠٢٢/);
-  assert.match(bio.querySelectorAll('.cover-bio-copy p')[1].textContent,/٣ كامبات أوفلاين/);
+  const bioParagraphs=[...bio.querySelectorAll('.cover-bio-copy p')];
+  assert.equal(bioParagraphs.length,2);
+  assert.deepEqual(bioParagraphs.map(p=>p.textContent),[
+    'أنا Ramez Medhat بدأت رحلتي في Bug Bounty سنة ٢٠٢٢ وقدمت تقارير لبرامج عامة وخاصة وبنيت الكامب على الفهم والتطبيق ومراجعة طريقة التفكير',
+    'قدمت ٣ كامبات أوفلاين وكامب أونلاين وبكمل الرحلة معاك بنفس الهدف تبني طريقة شغل تفهمها وتقدر تطورها بنفسك'
+  ],'Approved instructor biography must remain word for word');
+  assert(!bio.textContent.includes('هدفي إنك تبني منهجية واضحة'),'Previously substituted instructor copy must not return');
   const profileLink=bio.querySelector('a[href^="https://www.linkedin.com/"]');
   assert(profileLink&&profileLink.href==='https://www.linkedin.com/in/ramez-medhat-rvu/');
   assert.equal(profileLink.getAttribute('target'),'_blank');
