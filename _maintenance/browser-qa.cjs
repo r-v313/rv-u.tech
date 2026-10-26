@@ -79,7 +79,20 @@ const server=http.createServer((req,res)=>{
               radius:style.borderRadius,background:style.backgroundColor,color:style.color};
           });
           const reviewsLink=document.querySelector('.hero-quick-link-reviews');
-          return {roleCount:roles.querySelectorAll('span').length,
+          const reports=document.querySelector('#reports-track');
+          const reportCards=[...reports.querySelectorAll('.research-card')];
+          const title=document.querySelector('.hero-visual-unified > .cover-top').getBoundingClientRect();
+          const portraitCard=document.querySelector('.mentor-cover').getBoundingClientRect();
+          const bar=document.querySelector('#reports-scrollbar');
+          return {externalTitleAbovePhoto:title.bottom<=portraitCard.top+1,
+            sloganAbsent:!document.querySelector('.cover-name > .eyebrow'),
+            centeredCohort:getComputedStyle(document.querySelector('.application-open-label')).textAlign==='center',
+            cohortText:document.querySelector('.application-open-label').textContent,
+            reportShelf:{display:getComputedStyle(reports).display,maxScroll:reports.scrollWidth-reports.clientWidth,
+              cardWidth:reportCards[0].getBoundingClientRect().width,trackWidth:reports.getBoundingClientRect().width,
+              cardCount:reportCards.length,rangeVisible:bar.getBoundingClientRect().width>0,
+              rangeMax:bar.max,rangeType:bar.type},
+            roleCount:roles.querySelectorAll('span').length,
             borderStyle:getComputedStyle(roles).borderBottomStyle,
             underlineHeight:underline.height,
             columns:getComputedStyle(grid).gridTemplateColumns.trim().split(/\s+/).length,
@@ -98,6 +111,18 @@ const server=http.createServer((req,res)=>{
             goalUnderline:(()=>{const line=getComputedStyle(document.querySelector('.cover-bio-goal'),'::after');return {content:line.content,display:line.display};})()};
         });
         assert.equal(styles.roleCount,3,'Profile must show all three career titles');
+        assert(styles.externalTitleAbovePhoto,'RVU camp title must be above the portrait card');
+        assert(styles.sloganAbsent,'Old step-by-step slogan must be removed under portrait');
+        assert(styles.centeredCohort,'Fifth cohort label must be centered');
+        assert.equal(styles.cohortText,'الدفعة الخامسة');
+        assert.equal(styles.reportShelf.display,'flex','Reports must be placed in one horizontal row');
+        assert.equal(styles.reportShelf.cardCount,6);
+        assert(styles.reportShelf.maxScroll>100,'Reports must have horizontal overflow for swiping');
+        assert(styles.reportShelf.rangeVisible,'Interactive progress bar must be visible');
+        assert.equal(styles.reportShelf.rangeType,'range');
+        assert.equal(styles.reportShelf.rangeMax,'1000');
+        if(width===390)assert(styles.reportShelf.cardWidth<styles.reportShelf.trackWidth,
+          'Mobile must show part of next report as a swipe hint');
         assert.equal(styles.borderStyle,'solid','Profile credentials require an underline');
         assert.equal(styles.underlineHeight,'2px','Each career title has a clear orange underline');
         assert.equal(styles.reviews,3,'All three genuine student reviews are published');
@@ -135,6 +160,14 @@ const server=http.createServer((req,res)=>{
         assert(box.left>=-3&&box.right<=width+3,'Out-of-viewport primary content '+target+' at '+width+': '+JSON.stringify(box));
       }
       if(width===390){
+        const positionBefore=await page.locator('#reports-track').evaluate(el=>Math.abs(el.scrollLeft));
+        await page.locator('#reports-scrollbar').evaluate(el=>{
+          el.value='620';
+          el.dispatchEvent(new Event('input',{bubbles:true}));
+        });
+        await page.waitForFunction(()=>Math.abs(document.querySelector('#reports-track').scrollLeft)>80);
+        const positionAfter=await page.locator('#reports-track').evaluate(el=>Math.abs(el.scrollLeft));
+        assert(positionAfter>positionBefore+50,'Dragging reports slider must move the reports');
         const reviewsLink=page.locator('.hero-quick-link-reviews');
         assert.equal(await reviewsLink.getAttribute('href'),'#voices');
         await reviewsLink.click();
