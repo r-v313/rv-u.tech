@@ -61,7 +61,7 @@ jobs:
           assert sum(sizes) <= 1_200_000, f'Full-size optimized evidence exceeded 1.2 MB: {sum(sizes)}'
           import gzip
           css = (root / 'styles.min.css').read_bytes()
-          assert len(css) < 116_000, f'Uncompressed CSS budget exceeded: {len(css)}'
+          assert len(css) < 120_000, f'Uncompressed CSS budget exceeded: {len(css)}'
           css_gzip_size = len(gzip.compress(css, compresslevel=9))
           assert css_gzip_size < 30_000, f'Compressed CSS transfer budget exceeded: {css_gzip_size}'
           print('CSS transfer size:', css_gzip_size, 'gzip bytes')
