@@ -7463,3 +7463,29 @@ iframe{border:0}
   .hero.hero-unified .hero-actions>*+*{margin-inline-start:10px}
   .hero.hero-unified .hero-quick-links>*+*{margin-inline-start:10px}
 }
+
+/* Removed explanatory subtitles and the setup note: keep a consistent
+   compact rhythm with no leftover border or empty card-sized region. */
+#curriculum > .section-heading,
+#outcomes > .section-heading,
+#resources > .section-heading,
+#fit > .section-heading{
+  margin-bottom:clamp(20px,2.6vw,30px);
+  gap:0;
+}
+#journey .history-intro{
+  margin-bottom:clamp(14px,2vw,20px);
+  gap:0;
+}
+#fit.section{
+  padding-bottom:clamp(22px,3vw,38px);
+}
+@media (max-width:600px){
+  #curriculum > .section-heading,
+  #outcomes > .section-heading,
+  #resources > .section-heading,
+  #fit > .section-heading{
+    margin-bottom:20px;
+  }
+  #fit.section{padding-bottom:22px}
+}
