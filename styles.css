@@ -6514,15 +6514,6 @@ html[lang=ar] .hero .eyebrow {
   display:inline;
   color:#ffb36c;
 }
-.hero.hero-unified .cover-bio-copy p.cover-bio-goal::after{
-  content:"";
-  display:block;
-  width:min(100%,620px);
-  height:2px;
-  margin:13px auto 0;
-  border-radius:999px;
-  background:linear-gradient(90deg,transparent 0%,#b86c35 18%,#ffb46e 50%,#b86c35 82%,transparent 100%);
-}
 .hero.hero-unified .hero-copy{
   width:min(100%,850px);
   max-width:100%;
@@ -6640,4 +6631,108 @@ html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(30px,4.9vw,60px)}
   .hero.hero-unified .hero-actions{flex-direction:column;align-items:stretch;width:100%}
   .hero.hero-unified .hero-actions .button{max-width:100%;width:100%;min-height:48px}
   .hero.hero-unified .application-open-banner{margin-top:8px}
+}
+
+/* Compact dark quick links beneath the cohort announcement */
+.hero.hero-unified .cover-bio{
+  grid-template-columns:minmax(0,1fr);
+  gap:0;
+}
+.hero.hero-unified .hero-introduction{
+  flex-direction:column;
+  align-items:center;
+  gap:12px;
+}
+.hero.hero-unified .hero-introduction .hero-lead{
+  flex:none;
+  min-width:0;
+  width:100%;
+  max-width:100%;
+  margin:0;
+  text-align:center;
+}
+.hero.hero-unified .hero-quick-links{
+  display:flex;
+  direction:rtl;
+  flex-direction:row;
+  align-items:flex-start;
+  justify-content:center;
+  gap:clamp(17px,3vw,32px);
+  width:100%;
+  margin:0 auto;
+  padding:0;
+}
+.hero.hero-unified .hero-quick-link{
+  display:flex;
+  flex:0 0 auto;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  gap:6px;
+  min-width:75px;
+  color:#ff8a12;
+  font-weight:800;
+  text-decoration:none;
+  transition:color .18s ease,transform .18s ease;
+}
+.hero.hero-unified .hero-quick-shape{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:64px;
+  height:64px;
+  border:1.5px solid #934b16;
+  border-radius:50%;
+  background:#08090b;
+  box-shadow:inset 0 0 0 1px #ff861214,0 5px 13px #0004;
+  color:#ff8a12;
+  transition:border-color .18s ease,background .18s ease,box-shadow .18s ease;
+}
+.hero.hero-unified .hero-quick-shape svg{
+  display:block;
+  width:27px;
+  height:27px;
+}
+.hero.hero-unified .hero-quick-linkedin .hero-quick-shape svg{fill:currentColor}
+.hero.hero-unified .hero-quick-link:hover{color:#ffb05a;transform:translateY(-2px)}
+.hero.hero-unified .hero-quick-link:hover .hero-quick-shape{
+  border-color:#ff901e;
+  background:#0d0d0f;
+  box-shadow:0 0 0 2px #ff891b18,0 6px 20px #0005;
+}
+.hero.hero-unified .hero-quick-link:focus-visible{
+  outline:3px solid #ffa24b;
+  outline-offset:5px;
+  border-radius:12px;
+}
+.hero.hero-unified .hero-quick-caption{
+  color:inherit;
+  font-size:clamp(12px,1.1vw,14px);
+  font-weight:800;
+  line-height:1.3;
+}
+.hero.hero-unified .hero-quick-pill{
+  width:125px;
+  height:64px;
+  padding:0 15px;
+  border-radius:999px;
+  gap:9px;
+  white-space:nowrap;
+  font-size:clamp(15px,1.6vw,18px);
+  font-weight:850;
+}
+.hero.hero-unified .hero-quick-arrow{
+  font-size:20px;
+  font-weight:800;
+  line-height:1;
+}
+@media(max-width:600px){
+  .hero.hero-unified .hero-introduction{gap:10px}
+  .hero.hero-unified .hero-quick-links{gap:clamp(12px,4vw,24px)}
+  .hero.hero-unified .hero-quick-link{gap:5px;min-width:65px}
+  .hero.hero-unified .hero-quick-shape{width:54px;height:54px}
+  .hero.hero-unified .hero-quick-shape svg{width:24px;height:24px}
+  .hero.hero-unified .hero-quick-pill{width:112px;height:54px;padding:0 10px;font-size:15px;gap:7px}
+  .hero.hero-unified .hero-quick-arrow{font-size:18px}
+  .hero.hero-unified .hero-quick-caption{font-size:12px}
 }
