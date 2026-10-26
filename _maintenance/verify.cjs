@@ -46,9 +46,8 @@ function boot(success=true) {
   assert.equal(d.querySelector('.hero-lead').textContent,'بشكر ربنا على نجاح الدفعة الرابعة من الكامب والأولى أونلاين.. وبعلن عن الدفعة الخامسة من RVU Mentorship Camp وهي الثانية أونلاين والتقديم للانترفيو مفتوح دلوقتي لأي بشمهندس حابب يطور من نفسه.');
   assert.equal(d.querySelector('.hero-lead .thanks-oval').textContent,'بشكر ربنا');
   assert.equal(d.querySelectorAll('.hero-lead .thanks-oval').length,1,'Thank-you oval appears once');
-  assert.equal(d.querySelector('.hero-lead-followup').textContent,'خلال ٦ أسابيع هنشتغل على منهجيتك بشكل عملي وهنطور طريقة تفكيرك مع بعض وأنا هتابع معاك بنفسي خطوة بخطوة.');
-  assert.equal(d.querySelector('.hero-lead-followup .duration-underline').textContent,'٦ أسابيع');
-  assert.equal(d.querySelectorAll('.hero-lead-followup .duration-underline').length,1,'Six-week underline appears once');
+  assert.equal(d.querySelector('.hero-lead-followup'),null,'Remove redundant long six-week promise');
+  assert.equal(d.querySelector('.hero-benefits-inline'),null,'Remove duplicate duration and personal-mentoring row');
   assert.equal(d.querySelector('.hero-facts-featured'),null,'Removed large hero metric boxes must not return');
   const unifiedHero=d.querySelector('section.hero.hero-unified');
   assert(unifiedHero,'Hero must use one full-width unified card');
@@ -56,11 +55,12 @@ function boot(success=true) {
   assert.equal(unifiedHero.querySelectorAll('.hero-copy').length,1);
   assert.equal(unifiedHero.querySelectorAll('.application-open-banner').length,1);
   const profile=unifiedHero.querySelector('.mentor-cover');
-  const ordered=['.cover-portrait','.cover-name','.cover-bio','.hero-copy h1','.hero-lead','.hero-lead-followup','.hero-benefits-inline','.cohort-capacity','.application-open-banner'];
+  const ordered=['.cover-portrait','.cover-name','.cover-bio','.hero-copy h1','.hero-lead','.cohort-capacity','.application-open-banner','.hero-actions','.cover-sample'];
   const nodes=ordered.map(selector=>profile.querySelector(selector));
   assert(nodes.every(Boolean),'Portrait, biography, story and fifth-cohort CTA must share one card');
   for(let i=1;i<nodes.length;i++)assert(nodes[i-1].compareDocumentPosition(nodes[i]) & w.Node.DOCUMENT_POSITION_FOLLOWING,'Hero sequence: '+ordered[i-1]+' before '+ordered[i]);
-  assert.deepEqual([...profile.querySelectorAll('.hero-benefits-inline span')].map(x=>x.textContent),['٦ أسابيع','متابعة 1:1']);
+  assert.equal(profile.querySelector('.application-open-banner').nextElementSibling.className,'hero-actions','Enrollment banner must sit directly above application controls');
+  assert.equal(profile.querySelector('.cohort-capacity').nextElementSibling.className,'application-open-banner','Cohort strip must sit directly above the application banner');
   assert.equal(d.querySelector('h1').closest('.mentor-cover'),profile,'The main headline follows the instructor profile in the same card');
   assert.equal(d.querySelector('.history-next .history-number').textContent,'05');
   assert.match(d.querySelector('.history-next h3').textContent,/الدفعة الخامسة/);
@@ -68,7 +68,7 @@ function boot(success=true) {
   assert.match(d.querySelector('title').textContent,/الدفعة الخامسة/);
   assert.equal(d.querySelector('meta[property="og:title"]').content,'RVU Mentorship Camp — Cohort 05 | Applications Open');
   assert(!/الدفعة الثانية|COHORT 02|Cohort 02|cohort 02/.test(html),'Stale overall cohort numbering must not survive');
-  assert.equal(d.querySelector('.cohort-capacity strong').textContent,'الدفعة 12 طالب فقط + متابعة 1:1');
+  assert.equal(d.querySelector('.cohort-capacity strong').textContent,'الدفعة 12 طالب فقط + متابعة 1:1 + ٦ أسابيع');
   assert.equal(d.querySelector('.cohort-capacity > span').textContent,'علشان أتابع شغل كل واحد معاه');
   assert.equal(d.querySelector('.mobile-cta > span').textContent,'الدفعة 12 طالب فقط + متابعة 1:1');
   assert.match(d.querySelector('.hero-lead').textContent,/التقديم للانترفيو مفتوح/);
@@ -110,7 +110,8 @@ function boot(success=true) {
   assert(!styles.includes('border-bottom:1px solid #34363c;'),'Mentor biography divider must be removed');
   assert(!styles.includes('.hero.hero-unified .hero-problem{'),'Deleted target paragraph must not retain hero-specific CSS');
   assert.match(styles,/\.hero\.hero-unified \.hero-lead \.thanks-oval\s*\{/,'Oval thank-you label must be styled');
-  assert.match(styles,/\.hero\.hero-unified \.hero-lead-followup \.duration-underline\s*\{/,'Six-week underline must be styled');
+  assert(!styles.includes('.hero.hero-unified .hero-lead-followup'),'Deleted paragraph CSS must not remain');
+  assert(!styles.includes('.hero.hero-unified .hero-benefits-inline'),'Deleted standalone feature row CSS must not remain');
   assert.match(styles,/\.hero\.hero-unified \.cover-bio-copy \.bio-accent\s*\{/,'Highlighted biography labels must be styled');
   assert.deepEqual([...d.querySelectorAll('.mentor-cover .cover-roles span')].map(x=>x.textContent),
     ['Application Security Researcher','Bug Bounty Hunter','Instructor']);
@@ -282,13 +283,12 @@ function boot(success=true) {
   assert.match(d.querySelector('.fit-yes').textContent,/You know the fundamentals and have plenty of information/);
   assert.match(d.querySelector('.fit-yes').textContent,/make time to practise alongside the sessions/);
   assert.match(d.querySelector('.hero-lead').textContent,/applications for the free interview are open now/i);
-  assert.match(d.querySelector('.hero-lead-followup').textContent,/develop your methodology through practical work/i);
   assert.equal(d.querySelector('.hero-lead .thanks-oval').textContent,'I thank God');
-  assert.equal(d.querySelector('.hero-lead-followup .duration-underline').textContent,'6 weeks');
+  assert.equal(d.querySelector('.hero-lead-followup'),null);
+  assert.equal(d.querySelector('.hero-benefits-inline'),null);
   assert.equal(d.querySelector('.hero-facts-featured'),null);
-  assert.deepEqual([...d.querySelectorAll('.hero-benefits-inline span')].map(x=>x.textContent),['6 weeks','Personal 1:1 feedback']);
   assert.match(d.querySelector('.hero-lead').textContent,/fifth RVU Mentorship Camp cohort, our second online cohort/);
-  assert.equal(d.querySelector('.cohort-capacity strong').textContent,'Only 12 students in this cohort + 1:1 mentoring');
+  assert.equal(d.querySelector('.cohort-capacity strong').textContent,'Only 12 students in this cohort + 1:1 mentoring + 6 weeks');
   assert.equal(d.querySelector('.cohort-capacity > span').textContent,'So I can personally follow up on each student’s work');
   assert.equal(d.querySelector('.mobile-cta > span').textContent,'Only 12 students + 1:1 mentoring');
   assert.equal(d.querySelector('.history-next p').textContent,'Applications are open now');
