@@ -6988,7 +6988,7 @@ html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(30px,4.9vw,60px)}
   text-wrap:balance;
 }
 #experience.gallery-section{
-  padding-bottom:clamp(30px,4.2vw,55px);
+  padding-bottom:0;
   border-bottom:0;
 }
 #experience .container::after{
@@ -6996,7 +6996,7 @@ html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(30px,4.9vw,60px)}
   display:block;
   width:min(85%,720px);
   height:2px;
-  margin:clamp(27px,3.5vw,45px) auto 0;
+  margin:clamp(22px,3vw,38px) auto 0;
   border-radius:999px;
   background:linear-gradient(90deg,transparent,#8f4f24 25%,#ff9b3d 50%,#8f4f24 75%,transparent);
 }
@@ -7005,7 +7005,7 @@ html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(30px,4.9vw,60px)}
 #experience .gallery-heading h2{margin:0;text-align:center}
 #experience .media-card .gallery-poster{margin-top:0}
 #voices.section.student-feedback{
-  padding-top:clamp(30px,4.2vw,55px);
+  padding-top:clamp(22px,3vw,38px);
   border-top:0;
 }
 #mentorship .rhythm-refined{row-gap:clamp(26px,3.3vw,38px)}
@@ -7066,8 +7066,8 @@ html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(30px,4.9vw,60px)}
     min-height:54px;
     font-size:clamp(14px,3.65vw,17px);
   }
-  #experience.gallery-section{padding-bottom:28px}
-  #voices.section.student-feedback{padding-top:29px}
+  #experience.gallery-section{padding-bottom:0}
+  #voices.section.student-feedback{padding-top:clamp(22px,3vw,38px)}
   #mentorship .mentorship-heading{margin-bottom:0;gap:7px 14px}
   #mentorship .mentorship-heading .mentorship-index{font-size:13px}
 }
