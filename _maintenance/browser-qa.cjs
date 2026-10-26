@@ -88,9 +88,12 @@ const server=http.createServer((req,res)=>{
             singleApply:document.querySelectorAll('.hero-actions .hero-primary-apply').length===1&&
               !document.querySelector('.application-open-banner'),
             applyText:document.querySelector('.hero-primary-apply').textContent,
-            introUnderline:(()=>{const el=document.querySelector('.thanks-underline');const style=getComputedStyle(el);return {line:style.textDecorationLine,border:style.borderTopWidth,bg:style.backgroundColor};})(),
+            thanks:(()=>{const el=document.querySelector('.thanks-plain');const details=document.querySelector('.thanks-details');const heading=el.getBoundingClientRect(),body=details.getBoundingClientRect();const css=getComputedStyle(el);return {line:css.textDecorationLine,border:css.borderTopWidth,display:css.display,headingBottom:heading.bottom,bodyTop:body.top,headingRight:heading.right,bodyRight:body.right,headingLeft:heading.left,bodyLeft:body.left};})(),
             bigTitle:(()=>{const el=document.querySelector('.hero-visual-unified > .cover-top .mono');return {size:parseFloat(getComputedStyle(el).fontSize),font:getComputedStyle(el).fontFamily}})(),
             mentorshipTitle:document.querySelector('#mentorship .mentorship-heading h2').textContent,
+            mentorshipLabel:document.querySelector('#mentorship .mentorship-index').textContent,
+            mentorshipLayout:(()=>{const heading=document.querySelector('#mentorship .mentorship-heading');const css=getComputedStyle(heading);const title=heading.querySelector('h2').getBoundingClientRect(),badge=heading.querySelector('.mentorship-index').getBoundingClientRect();const sep=getComputedStyle(heading,'::after');return {display:css.display,after:sep.content,titleY:title.y,badgeY:badge.y,headingWidth:heading.getBoundingClientRect().width};})(),
+            curriculumLabel:document.querySelector('#curriculum .eyebrow').textContent,
             videosTitle:document.querySelector('#experience .gallery-heading h2').textContent,
             reportShelf:{display:getComputedStyle(reports).display,maxScroll:reports.scrollWidth-reports.clientWidth,
               cardWidth:reportCards[0].getBoundingClientRect().width,trackWidth:reports.getBoundingClientRect().width,
@@ -120,11 +123,19 @@ const server=http.createServer((req,res)=>{
         assert(styles.sloganAbsent,'Old step-by-step slogan must be removed under portrait');
         assert(styles.singleApply,'Only one highlighted camp application button should exist');
         assert.equal(styles.applyText,'قدم لانترفيو الكامب الخامس ↗');
-        assert(styles.introUnderline.line.includes('underline'),'Thank-you words must have an underline');
-        assert(styles.introUnderline.border==='0px','Thank-you must not have an oval border');
+        assert.equal(styles.thanks.line,'none','Gratitude words should not have an underline');
+        assert.equal(styles.thanks.border,'0px','Gratitude should not have a border');
+        assert.equal(styles.thanks.display,'block','Gratitude should occupy a separate line');
+        assert(styles.thanks.bodyTop>=styles.thanks.headingBottom-2,'Announcement must start on the next line');
+        assert(Math.abs(styles.thanks.headingRight-styles.thanks.bodyRight)<=3 ||
+          Math.abs(styles.thanks.headingLeft-styles.thanks.bodyLeft)<=3,'Gratitude and next sentence must share a text starting edge');
         assert(styles.bigTitle.size>=19,'RVU camp title should be at least twice as large as before');
         assert(styles.bigTitle.font.includes('Outfit'),'The new RVU title should use Outfit');
-        assert.equal(styles.mentorshipTitle,'نظام المتابعة والتطبيق');
+        assert.equal(styles.mentorshipTitle,'متابعة شخصية وتطبيق عملي');
+        assert.equal(styles.mentorshipLabel,'04 / نظام المتابعة والتطبيق');
+        assert.equal(styles.mentorshipLayout.display,'flex');
+        assert(['none','normal'].includes(styles.mentorshipLayout.after),'No ornamental underline below mentorship heading');
+        assert.equal(styles.curriculumLabel,'05 / منهج الكامب');
         assert.equal(styles.videosTitle,'بص دي من شرح الكامب');
         assert(styles.removedVideoKickers&&styles.removedGalleryPromo,'Video cards must lose numbering and extra CTA');
         assert.equal(styles.reportShelf.display,'flex','Reports must be placed in one horizontal row');
