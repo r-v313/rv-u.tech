@@ -66,17 +66,21 @@ const server=http.createServer((req,res)=>{
           const rect=selector=>document.querySelector(selector).getBoundingClientRect();
           const gaps={
             bioToAnnouncement:rect('.hero-introduction').top-rect('.cover-bio').bottom,
-            announcementToCapacity:rect('.cohort-capacity').top-rect('.hero-introduction').bottom,
-            capacityToBanner:rect('.application-open-banner').top-rect('.cohort-capacity').bottom,
+            announcementToBanner:rect('.application-open-banner').top-rect('.hero-introduction').bottom,
             bannerToApplication:rect('.hero-actions').top-rect('.application-open-banner').bottom
           };
+          const orb=document.querySelector('.student-reviews-orb').getBoundingClientRect();
+          const link=document.querySelector('.student-reviews-jump');
           return {roleCount:roles.querySelectorAll('span').length,
             borderStyle:getComputedStyle(roles).borderBottomStyle,
             underlineHeight:underline.height,
             columns:getComputedStyle(grid).gridTemplateColumns.trim().split(/\s+/).length,
             reviews:grid.querySelectorAll('.student-feedback-card').length,
             ghada:grid.lastElementChild.querySelector('h3').textContent,
-            mergedCapacity:document.querySelector('.cohort-capacity strong').textContent,
+            removedCapacity:!document.querySelector('.cohort-capacity'),
+            reviewsJumpHref:link.getAttribute('href'),
+            reviewsJumpLabel:link.querySelector('.student-reviews-jump-label').textContent,
+            orb:{width:orb.width,height:orb.height,borderRadius:getComputedStyle(document.querySelector('.student-reviews-orb')).borderRadius},
             deletedBlocks:!document.querySelector('.hero-benefits-inline,.hero-lead-followup'),
             bannerNextIsApplication:document.querySelector('.application-open-banner').nextElementSibling.classList.contains('hero-actions'),
             gaps,
@@ -91,7 +95,12 @@ const server=http.createServer((req,res)=>{
         assert.equal(styles.ghada,'Ghada Abdelrahman');
         assert.equal(styles.columns,width===1440?3:width===850?2:1,
           'Three reviews must fit a responsive grid at '+width+'px');
-        assert.equal(styles.mergedCapacity,'6 اسابيع - 12 طالب - متابعة 1:1');
+        assert(styles.removedCapacity,'Deleted cohort stat strip must not render');
+        assert.equal(styles.reviewsJumpHref,'#voices','Reviews circle must link to student testimonials');
+        assert.equal(styles.reviewsJumpLabel,'آراء','Reviews circle must have Arabic label beneath');
+        assert(Math.abs(styles.orb.width-styles.orb.height)<1,'Reviews icon must be circular');
+        assert(styles.orb.width>=42&&styles.orb.width<=66,'Reviews circle must be appropriately sized on '+width+'px');
+        assert.equal(styles.orb.borderRadius,'50%');
         assert(styles.deletedBlocks,'Removed duplicate duration/features must not render');
         assert(styles.bannerNextIsApplication,'Application banner must be immediately above application buttons');
         for(const [name,gap] of Object.entries(styles.gaps))
@@ -108,6 +117,11 @@ const server=http.createServer((req,res)=>{
         assert(box.left>=-3&&box.right<=width+3,'Out-of-viewport primary content '+target+' at '+width+': '+JSON.stringify(box));
       }
       if(width===390){
+        const reviewsLink=page.locator('.student-reviews-jump');
+        assert.equal(await reviewsLink.getAttribute('href'),'#voices');
+        await reviewsLink.click();
+        await page.waitForFunction(()=>location.hash==='#voices');
+        assert.equal(await page.locator('#voices .student-feedback-card').count(),3);
         const preview=page.locator('#reports-track .research-image').first();
         await preview.scrollIntoViewIfNeeded();
         await preview.click();
