@@ -20,7 +20,6 @@
     language.setAttribute('aria-label', ar ? 'Switch to English' : 'التبديل إلى العربية');
     document.title = ar ? 'الدفعة الخامسة — التقديم مفتوح الآن | RVU Mentorship Camp' : 'Cohort 05 — Applications Open | RVU Mentorship Camp';
     $('form-error').hidden = true;
-    renderWork();
     shelves.forEach(shelf => shelf.reset());
     if ($('image-dialog').open) showResearchImage(activeImage);
   }
@@ -170,51 +169,6 @@
     if (event.persisted) submitting = false;
   });
 
-  const samples = {
-    ar: {
-      map: {file:'target-map.md', title:'خريطة تطبيق تجريبي', intro:'ابدأ بالوظائف والحسابات وحدود الصلاحيات. حدد سؤالا واضحا لكل جزء.', headers:['الجزء','إيه اللي نفهمه؟','سؤال الاختبار'], rows:[['الحسابات','زائر · عميل A · عميل B','مين يقدر يشوف أو يعدل إيه؟'],['الطلبات','إنشاء الطلب · عرضه · إلغاؤه','هل الملكية بتتراجع في كل خطوة؟'],['الـAPI','المسارات · المعرفات · الجلسة','هل الصلاحيات متطابقة مع الواجهة؟']], note:'الأولوية: ابدأ بالوظائف الحساسة داخل الـScope  وسجل اللي لسه مش فاهمه.'},
-      plan: {file:'test-plan.md', title:'من سؤال لفرضية اختبار', intro:'مثال: مراجعة صلاحيات عرض الطلبات بين حسابين اختباريين تملكهم.', headers:['الخطوة','التطبيق','الدليل المطلوب'], rows:[['Baseline','اعرض طلب A من حساب A','استجابة متوقعة ومرجع للمقارنة'],['الاختبار','اطلب مورد B من جلسة A','تحديد المورد والحساب بوضوح'],['التحقق','قارن البيانات والصلاحيات','رفض الوصول أم تسريب بيانات فعلية؟']], note:'كود 200 وحده لا يثبت الثغرة. وثق النتيجة حتى لو النظام منع الوصول بشكل صحيح.'},
-      report: {file:'finding-draft.md', title:'تقرير يسهل إعادة الاختبار', intro:'هيكل تعليمي لتقرير محتمل  لا يزعم وجود ثغرة أو نتيجة فعلية.', items:[['الملخص','حدد الوظيفة والسلوك غير المتوقع والشرط اللازم لحدوثه.'],['الخطوات','اذكر الحسابات التجريبية  الطلب المرجعي  والتغيير الواحد الذي اختبرته.'],['الدليل','اربط كل خطوة باستجابة مناسبة بعد إخفاء البيانات الحساسة.'],['الأثر','اشرح الوصول غير المصرح به الذي أثبته فقط  وحدود ما اختبرته.']], note:'قبل الإرسال: راجع الـScope  وأزل الأسرار  وتأكد إن شخص تاني يقدر يعيد الخطوات.'}
-    },
-    en: {
-      map: {file:'target-map.md',title:'Map a sample application',intro:'Start with features, accounts and authorization boundaries. Give each area a specific question.',headers:['Area','Understand','Test question'],rows:[['Accounts','Guest · customer A · customer B','Who can view or change what?'],['Orders','Create · view · cancel','Is ownership checked at every step?'],['API','Routes · identifiers · sessions','Are permissions consistent with the UI?']],note:'Prioritize sensitive, in-scope features. Record what you do not yet understand.'},
-      plan: {file:'test-plan.md',title:'Turn a question into a test',intro:'Example: review order-viewing permissions using two test accounts you own.',headers:['Step','Action','Evidence'],rows:[['Baseline','View order A as account A','Expected response for comparison'],['Test','Request B’s resource as A','Clearly identify account and resource'],['Verify','Compare data and permissions','Access denied, or actual data exposure?']],note:'HTTP 200 alone proves nothing. Document the result even when access is correctly denied.'},
-      report: {file:'finding-draft.md',title:'Make your test reproducible',intro:'An educational outline for a potential report; not a claim of an actual vulnerability or result.',items:[['Summary','Identify the feature, unexpected behavior and required conditions.'],['Steps','Describe test accounts, the baseline request and the one change you tested.'],['Evidence','Link each step to an appropriate response, with sensitive information removed.'],['Impact','Describe only the unauthorized access you demonstrated and the limits of your testing.']],note:'Before submitting: check scope, remove secrets and ensure someone else can reproduce your steps.'}
-    }
-  };
-  let activeWork = 'map';
-  function node(tag, text, className) {
-    const el = document.createElement(tag);
-    el.textContent = text;
-    if (className) el.className = className;
-    return el;
-  }
-  function renderWork() {
-    const sample = samples[isArabic() ? 'ar' : 'en'][activeWork];
-    $('work-filename').textContent = sample.file;
-    const content = $('work-content');
-    content.replaceChildren(node('h3', sample.title), node('p', sample.intro, 'sample-intro'));
-    if (sample.rows) {
-      const table = document.createElement('table'); table.className = 'sample-table';
-      const caption = node('caption',sample.title,'sr-only'); table.append(caption);
-      const head = document.createElement('thead'), row = document.createElement('tr');
-      sample.headers.forEach(text => { const th = node('th',text); th.scope = 'col'; row.append(th); });
-      head.append(row); table.append(head);
-      const body = document.createElement('tbody');
-      sample.rows.forEach(cells => { const tr = document.createElement('tr'); cells.forEach(text => tr.append(node('td',text))); body.append(tr); });
-      table.append(body); content.append(table);
-    } else {
-      const report = document.createElement('div'); report.className = 'sample-report';
-      sample.items.forEach(([label,copy]) => { const article = document.createElement('article'); article.append(node('strong',label),node('span',copy)); report.append(article); });
-      content.append(report);
-    }
-    content.append(node('p',sample.note,'sample-note'));
-  }
-  document.querySelectorAll('[data-work]').forEach(button => button.addEventListener('click', () => {
-    activeWork = button.dataset.work;
-    document.querySelectorAll('[data-work]').forEach(b => { b.classList.toggle('active', b === button); b.setAttribute('aria-pressed', String(b === button)); });
-    renderWork();
-  }));
   function createShelf(trackId, prefix) {
     const track = $(trackId);
     let frame = null, drag = null, suppressUntil = 0;
@@ -314,5 +268,4 @@
   });
   $('gallery-full-image').addEventListener('error', () => { $('image-error').hidden = false; $('gallery-full-image').hidden = true; });
   document.querySelectorAll('[data-image]').forEach(button => button.addEventListener('click', () => {showResearchImage(Number(button.dataset.image));openDialog($('image-dialog'));}));
-  renderWork();
 })();
