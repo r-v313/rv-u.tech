@@ -68,8 +68,8 @@ function boot(success=true) {
   assert.match(d.querySelector('title').textContent,/الدفعة الخامسة/);
   assert.equal(d.querySelector('meta[property="og:title"]').content,'RVU Mentorship Camp — Cohort 05 | Applications Open');
   assert(!/الدفعة الثانية|COHORT 02|Cohort 02|cohort 02/.test(html),'Stale overall cohort numbering must not survive');
-  assert.equal(d.querySelector('.cohort-capacity strong').textContent,'الدفعة 12 طالب فقط + متابعة 1:1 + ٦ أسابيع');
-  assert.equal(d.querySelector('.cohort-capacity > span').textContent,'علشان أتابع شغل كل واحد معاه');
+  assert.equal(d.querySelector('.cohort-capacity strong').textContent,'6 اسابيع - 12 طالب - متابعة 1:1');
+  assert.equal(d.querySelector('.cohort-capacity > span'),null,'Cohort card must contain no secondary explanatory line');
   assert.equal(d.querySelector('.mobile-cta > span').textContent,'الدفعة 12 طالب فقط + متابعة 1:1');
   assert.match(d.querySelector('.hero-lead').textContent,/التقديم للانترفيو مفتوح/);
   assert.equal(d.querySelector('.history-next p').textContent,'التقديم مفتوح الآن');
@@ -291,8 +291,8 @@ function boot(success=true) {
   assert.equal(d.querySelector('.hero-benefits-inline'),null);
   assert.equal(d.querySelector('.hero-facts-featured'),null);
   assert.match(d.querySelector('.hero-lead').textContent,/fifth RVU Mentorship Camp cohort, our second online cohort/);
-  assert.equal(d.querySelector('.cohort-capacity strong').textContent,'Only 12 students in this cohort + 1:1 mentoring + 6 weeks');
-  assert.equal(d.querySelector('.cohort-capacity > span').textContent,'So I can personally follow up on each student’s work');
+  assert.equal(d.querySelector('.cohort-capacity strong').textContent,'6 weeks - 12 students - 1:1 mentoring');
+  assert.equal(d.querySelector('.cohort-capacity > span'),null,'No extra cohort subtitle when switched to English');
   assert.equal(d.querySelector('.mobile-cta > span').textContent,'Only 12 students + 1:1 mentoring');
   assert.equal(d.querySelector('.history-next p').textContent,'Applications are open now');
   assert.equal(d.querySelector('.mentor-cover .cover-top .mono').textContent.trim(),'RVU MENTORSHIP · ONLINE BUG BOUNTY CAMP');
