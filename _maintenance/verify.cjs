@@ -43,9 +43,10 @@ function boot(success=true) {
   assert(!html.includes('IBM+Plex+Mono:wght'),'No redundant monospaced Google Font request');
   assert(fs.readFileSync(path.join(root,'measurement.js'),'utf8').includes('requestIdleCallback'));
   assert.equal(d.querySelector('.hero-problem'),null,'Target qualification paragraph must be completely removed');
-  assert.equal(d.querySelector('.hero-lead').textContent,'بشكر ربنا على نجاح الدفعة الرابعة من الكامب والأولى أونلاين.. وبعلن عن الدفعة الخامسة من RVU Mentorship Camp والتقديم للانترفيو مفتوح دلوقتي لأي حد حابب يطور من نفسه.');
-  assert.equal(d.querySelector('.hero-lead .thanks-oval').textContent,'بشكر ربنا');
-  assert.equal(d.querySelectorAll('.hero-lead .thanks-oval').length,1,'Thank-you oval appears once');
+  assert.equal(d.querySelector('.hero-lead').textContent,'اشكر ربنا على نجاح الدفعة الرابعة من الكامب والأولى أونلاين.. وبعلن عن الدفعة الخامسة من RVU Mentorship Camp والتقديم للانترفيو مفتوح لأي حد حابب يطور من نفسه.');
+  assert.equal(d.querySelector('.hero-lead .thanks-underline').textContent,'اشكر ربنا');
+  assert.equal(d.querySelectorAll('.hero-lead .thanks-underline').length,1,'One underlined thanks phrase appears');
+  assert.equal(d.querySelectorAll('.hero-lead .thanks-oval').length,0,'Remove the oval gratitude badge');
   assert.equal(d.querySelector('.hero-lead-followup'),null,'Remove redundant long six-week promise');
   assert.equal(d.querySelector('.hero-benefits-inline'),null,'Remove duplicate duration and personal-mentoring row');
   assert.equal(d.querySelector('.hero-facts-featured'),null,'Removed large hero metric boxes must not return');
@@ -53,14 +54,15 @@ function boot(success=true) {
   assert(unifiedHero,'Hero must use one full-width unified card');
   assert.equal(unifiedHero.querySelectorAll('.mentor-cover').length,1);
   assert.equal(unifiedHero.querySelectorAll('.hero-copy').length,1);
-  assert.equal(unifiedHero.querySelectorAll('.application-open-banner').length,1);
+  assert.equal(unifiedHero.querySelectorAll('.application-open-banner').length,0);
+  assert.equal(unifiedHero.querySelectorAll('.hero-primary-apply').length,1);
   const profile=unifiedHero.querySelector('.mentor-cover');
-  const ordered=['.cover-portrait','.cover-name','.cover-bio','.hero-copy h1','.hero-lead','.hero-quick-links','.application-open-banner','.hero-actions'];
+  const ordered=['.cover-portrait','.cover-name','.cover-bio','.hero-copy h1','.hero-lead','.hero-quick-links','.hero-actions'];
   const nodes=ordered.map(selector=>profile.querySelector(selector));
   assert(nodes.every(Boolean),'Portrait, biography, story and fifth-cohort CTA must share one card');
   for(let i=1;i<nodes.length;i++)assert(nodes[i-1].compareDocumentPosition(nodes[i]) & w.Node.DOCUMENT_POSITION_FOLLOWING,'Hero sequence: '+ordered[i-1]+' before '+ordered[i]);
-  assert.equal(profile.querySelector('.application-open-banner').nextElementSibling.className,'hero-actions','Enrollment banner must sit directly above application controls');
-  assert.equal(profile.querySelector('.hero-introduction').nextElementSibling.className,'application-open-banner','The application banner must directly follow the announcement and reviews jump');
+  assert.equal(profile.querySelector('.hero-introduction').nextElementSibling.className,'hero-actions','Only one primary application CTA remains');
+  assert.equal(profile.querySelector('.hero-actions .hero-primary-apply').textContent,'قدم لانترفيو الكامب الخامس ↗');
   assert.equal(profile.querySelector('.cohort-capacity'),null,'Remove obsolete six-week/twelve-student stat strip');
   const quickNav=profile.querySelector('.hero-quick-links');
   assert(quickNav&&quickNav.closest('.hero-introduction'),'Quick links must sit below the gratitude announcement');
@@ -97,10 +99,10 @@ function boot(success=true) {
   const bioParagraphs=[...bio.querySelectorAll('.cover-bio-copy p')];
   assert.equal(bioParagraphs.length,2);
   assert.deepEqual(bioParagraphs.map(p=>p.textContent),[
-    'أنا Ramez Medhat بدأت رحلتي في Bug Bounty سنة ٢٠٢٢ وقدمت تقارير لـ Public and Private Programs وكمان لـ External Companies جوه وبره مصر وقررت ابني الكامب ده علشان اساعد الشباب اللي حابه المجال ومحتاجه حد يكون معاها خطوة بخطوة لحد ما يبقوا قادرين يكملوا لوحدهم',
+    'أنا رامز مدحت وبدأت كــ Bug Bounty من ٢٠٢٢ واشتغلت علي Public and Private Programs و علي External Companies جوه وبره مصر وقررت ابني الكامب ده علشان اساعد الشباب اللي حابه المجال ومحتاجه حد يكون معاها خطوة بخطوة لحد ما يبقوا قادرين يكملوا لوحدهم',
     'الهدف من الكامب هو الفهم والتطبيق العملي وكمان هنشتغل Live Hunting مع بعض وهراجع طريقة تفكير كل واحد بنفسي وهيكون في متابعه شخصية مع كل مهندس كل اسبوعين علي الاقل علشان اعرف مستوى تقدمة واعرف ومحتاج ايه بالظبط'
   ],'Approved new instructor biography must remain word for word');
-  assert.equal(bioParagraphs[0].querySelector('.bio-name').textContent,'Ramez Medhat','Instructor name must be highlighted');
+  assert.equal(bioParagraphs[0].querySelector('.bio-name').textContent,'رامز مدحت','Instructor name must be highlighted in Arabic');
   assert.equal(bioParagraphs[1].querySelector('.bio-goal-title').textContent,'الهدف من الكامب','The goal headline must be highlighted');
   assert(bioParagraphs[0].querySelector('.bio-name').matches('strong'));
   assert(bioParagraphs[1].querySelector('.bio-goal-title').matches('strong'));
@@ -129,7 +131,7 @@ function boot(success=true) {
   assert(!styles.includes('.hero.hero-unified .hero-benefits-inline span::before'),'The two orange dots under the intro must be removed');
   assert(!styles.includes('border-bottom:1px solid #34363c;'),'Mentor biography divider must be removed');
   assert(!styles.includes('.hero.hero-unified .hero-problem{'),'Deleted target paragraph must not retain hero-specific CSS');
-  assert.match(styles,/\.hero\.hero-unified \.hero-lead \.thanks-oval\s*\{/,'Oval thank-you label must be styled');
+  assert.match(styles,/\.hero\.hero-unified \.hero-lead \.thanks-underline\s*\{/,'Underlined thanks must have its own styling');
   assert.match(styles,/\.hero\.hero-unified \.hero-quick-pill\s*\{/,'Reviews link must be an oval black and orange control');
   assert.match(styles,/\.hero\.hero-unified \.hero-quick-shape\s*\{/,'Side links must be black and orange circles');
   assert(!styles.includes('.cohort-capacity'),'Removed cohort stat strip must not retain CSS');
@@ -159,6 +161,15 @@ function boot(success=true) {
     assert(fs.existsSync(resolved),`Missing asset ${value}`);
   }
   assert.deepEqual([...d.querySelectorAll('#gallery-track>[data-kind]')].map(x=>x.dataset.kind),['videos','videos','videos','videos']);
+  assert.equal(d.querySelector('#experience .gallery-heading h2').textContent,'بص دي من شرح الكامب');
+  assert.equal(d.querySelectorAll('#gallery-track .card-kicker').length,0,'No numbered video headers');
+  assert.equal(d.querySelectorAll('#gallery-track .lesson-tag').length,4);
+  assert([...d.querySelectorAll('#gallery-track .lesson-tag')].every(x=>!/\s\/\s\d/.test(x.textContent)),'No numbering inside the video tags');
+  assert.equal(d.querySelector('.gallery-next-step'),null,'Remove redundant video-to-mentorship promotion');
+  assert.equal(d.querySelector('#mentorship .mentorship-heading h2').textContent,'نظام المتابعة والتطبيق');
+  assert(d.querySelector('#mentorship .mentorship-heading').compareDocumentPosition(d.querySelector('#mentorship .camp-format')) & w.Node.DOCUMENT_POSITION_FOLLOWING);
+  assert.match(styles,/#experience \.container::after\s*\{/,'Video-to-reviews divider must be styled');
+  assert.match(styles,/\.hero\.hero-unified \.hero-visual-unified>\.cover-top \.mono\s*\{/,'External title must be styled with a large font');
   assert.equal(d.querySelectorAll('#reports-track [data-image]').length,6);
   assert.equal(d.querySelector('#reports-scrollbar').getAttribute('type'),'range','Reports must have a draggable scrollbar');
   assert.equal(d.querySelector('#reports-scrollbar').getAttribute('max'),'1000');
@@ -229,14 +240,11 @@ function boot(success=true) {
 
 
 
-  const cohortBanner=d.querySelector('.application-open-banner');
-  assert(cohortBanner&&cohortBanner.hasAttribute('data-apply'),'Application banner must remain actionable');
-  assert.equal(cohortBanner.querySelector('.application-open-label').textContent,'الدفعة الخامسة');
-  assert.equal(cohortBanner.querySelector('.application-open-label').dataset.en,'COHORT 05');
-  assert(!cohortBanner.querySelector('.application-open-label').textContent.includes('باب التقديم مفتوح'));
-  assert.match(styles,/\.hero\.hero-unified \.application-open-label\s*\{/,'Cohort label must be centered');
-  assert.equal(cohortBanner.querySelector('strong').textContent,'التقديم مفتوح الآن');
-  assert.match(styles,/\.hero-visual \.application-open-banner strong/);
+  assert.equal(d.querySelector('.application-open-banner'),null,'Removed duplicated application banner');
+  const applyAction=d.querySelector('.hero-primary-apply');
+  assert(applyAction&&applyAction.hasAttribute('data-apply'),'Single visible camp interview action must work');
+  assert.equal(applyAction.textContent,'قدم لانترفيو الكامب الخامس ↗');
+  assert.match(styles,/\.hero\.hero-unified \.hero-primary-apply\s*\{/,'Prominent application button needs its own styling');
   assert.equal(d.querySelectorAll('summary .ui-toggle').length,d.querySelectorAll('details').length);
   assert.equal(d.querySelectorAll('.close-button.ui-close').length,3);
   assert.equal(d.querySelectorAll('.close-button').length,3);
@@ -318,7 +326,7 @@ function boot(success=true) {
   assert.match(d.querySelector('.fit-yes').textContent,/You know the fundamentals and have plenty of information/);
   assert.match(d.querySelector('.fit-yes').textContent,/make time to practise alongside the sessions/);
   assert.match(d.querySelector('.hero-lead').textContent,/interview applications are now open to anyone who wants to improve their skills/i);
-  assert.equal(d.querySelector('.hero-lead .thanks-oval').textContent,'I thank God');
+  assert.equal(d.querySelector('.hero-lead .thanks-underline').textContent,'I thank God');
   assert.equal(d.querySelector('.hero-lead-followup'),null);
   assert.equal(d.querySelector('.hero-benefits-inline'),null);
   assert.equal(d.querySelector('.hero-facts-featured'),null);
@@ -338,6 +346,8 @@ function boot(success=true) {
     ['Student from the fourth cohort','Student from the fourth cohort','Student from the fourth cohort']);
   assert.equal(d.querySelector('.cover-bio-copy .bio-goal-title').textContent,'The aim of the camp');
   assert.equal(d.querySelector('.cover-bio-copy .bio-name').textContent,'Ramez Medhat');
+  assert.equal(d.querySelector('#experience .gallery-heading h2').textContent,'A look at my camp teaching');
+  assert.equal(d.querySelector('#mentorship .mentorship-heading h2').textContent,'Mentorship & practical learning');
   assert.equal(d.querySelector('.student-feedback-card:last-child blockquote').getAttribute('lang'),'ar');
   assert.match(d.querySelector('#review-zain-name').closest('article').querySelector('blockquote').textContent,/رأيى بكل صراحة/);
   assert([...d.querySelectorAll('#resources .resource-card a')].every(a=>a.href.endsWith('-ar.pdf')));
@@ -345,8 +355,7 @@ function boot(success=true) {
   assert(!d.querySelector('[data-resource],[data-pdf-guide]'));
   assert.equal(d.querySelector('.hero h1').textContent,'RVU Mentorship Camp — Fifth Cohort');
   assert(d.querySelector('.signature-title img'),'Translation must retain signature');
-  assert.equal(d.querySelector('.application-open-banner strong').textContent,'Applications are open now');
-  assert.equal(d.querySelector('.application-open-label').textContent,'COHORT 05');
+  assert.equal(d.querySelector('.hero-primary-apply').textContent,'Apply for the fifth camp interview ↗');
   assert.equal(d.querySelector('.reports-scroll-ui label').textContent,'Drag the bar or swipe to see more reports');
   assert.equal(d.querySelector('#reports-scrollbar').getAttribute('aria-label'),'Scroll through reports');
   assert.equal(d.querySelectorAll('summary .ui-toggle').length,d.querySelectorAll('details').length);
