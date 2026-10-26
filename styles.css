@@ -6919,3 +6919,137 @@ html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(30px,4.9vw,60px)}
 @media(prefers-reduced-motion:reduce){
   #research #reports-track{scroll-behavior:auto}
 }
+
+/* Fifth-cohort refinement: one clear CTA, underlined gratitude, quiet section rhythm. */
+.hero.hero-unified .hero-lead .thanks-underline{
+  display:inline;
+  padding:0 1px 3px;
+  margin:0;
+  border:0;
+  border-radius:0;
+  background:none;
+  box-shadow:none;
+  color:#ffb15e;
+  font-weight:850;
+  text-decoration-line:underline;
+  text-decoration-color:#ff902b;
+  text-decoration-thickness:3px;
+  text-underline-offset:6px;
+  text-decoration-skip-ink:auto;
+}
+.hero.hero-unified .hero-actions{
+  margin:12px auto 0;
+  gap:clamp(9px,2vw,15px);
+}
+.hero.hero-unified .hero-primary-apply{
+  flex:1 1 300px;
+  max-width:475px;
+  min-height:61px;
+  padding:14px clamp(15px,2.8vw,28px);
+  border-radius:13px;
+  background:linear-gradient(112deg,#ffad39,#ff7911 63%,#ff5e0d);
+  color:#160c06;
+  font-weight:850;
+  font-size:clamp(15px,1.65vw,19px);
+  line-height:1.5;
+  box-shadow:0 10px 28px #ff7a191b;
+  text-align:center;
+}
+.hero.hero-unified .hero-primary-apply:hover{filter:brightness(1.07);box-shadow:0 14px 34px #ff7a1933}
+.hero.hero-unified .hero-visual-unified>.cover-top{
+  width:100%;
+  max-width:100%;
+  margin-bottom:clamp(14px,2vw,22px);
+}
+.hero.hero-unified .hero-visual-unified>.cover-top .mono{
+  display:block;
+  width:100%;
+  max-width:100%;
+  padding:clamp(13px,2vw,21px) clamp(10px,3vw,34px);
+  border:1px solid #8b4d20;
+  border-radius:18px;
+  background:linear-gradient(110deg,#130d09,#08090b 45%,#170e08);
+  box-shadow:0 9px 30px #0005,inset 0 1px #ffbc5935;
+  color:#ff9b31;
+  font-family:"Outfit","Manrope",sans-serif;
+  font-size:clamp(20px,2.55vw,36px);
+  font-weight:850;
+  line-height:1.28;
+  letter-spacing:.035em;
+  text-transform:uppercase;
+  text-shadow:0 1px 16px #ff9b1718;
+  text-align:center;
+  white-space:normal;
+  overflow-wrap:normal;
+  text-wrap:balance;
+}
+#experience.gallery-section{
+  padding-bottom:clamp(30px,4.2vw,55px);
+  border-bottom:0;
+}
+#experience .container::after{
+  content:"";
+  display:block;
+  width:min(85%,720px);
+  height:2px;
+  margin:clamp(27px,3.5vw,45px) auto 0;
+  border-radius:999px;
+  background:linear-gradient(90deg,transparent,#8f4f24 25%,#ff9b3d 50%,#8f4f24 75%,transparent);
+}
+#experience .gallery-heading{margin-bottom:clamp(16px,2.7vw,27px);text-align:center}
+#experience .gallery-heading>div{width:100%}
+#experience .gallery-heading h2{margin:0;text-align:center}
+#experience .media-card .gallery-poster{margin-top:0}
+#voices.section.student-feedback{
+  padding-top:clamp(30px,4.2vw,55px);
+  border-top:0;
+}
+#mentorship .rhythm-refined{row-gap:clamp(26px,3.3vw,38px)}
+#mentorship .mentorship-heading{
+  grid-column:1/-1;
+  margin:0 0 -8px;
+  text-align:center;
+}
+#mentorship .mentorship-heading>div{width:100%}
+#mentorship .mentorship-heading h2{
+  display:inline-block;
+  max-width:100%;
+  margin:0 auto;
+  color:#fff2dc;
+  font-size:clamp(27px,3.4vw,43px);
+  font-weight:800;
+  line-height:1.4;
+  text-wrap:balance;
+}
+#mentorship .mentorship-heading::after{
+  content:"";
+  display:block;
+  width:min(260px,55%);
+  height:2px;
+  margin:10px auto 0;
+  border-radius:100px;
+  background:linear-gradient(90deg,transparent,#ff912b,transparent);
+}
+@media(max-width:600px){
+  .hero.hero-unified .hero-visual-unified>.cover-top .mono{
+    padding:13px 11px;
+    border-radius:12px;
+    font-size:clamp(19px,5.3vw,28px);
+    line-height:1.3;
+    letter-spacing:0;
+    overflow-wrap:anywhere;
+  }
+  .hero.hero-unified .hero-primary-apply{
+    flex-basis:auto;
+    max-width:none;
+    width:100%;
+    min-height:54px;
+    font-size:clamp(14px,3.65vw,17px);
+  }
+  #experience.gallery-section{padding-bottom:28px}
+  #voices.section.student-feedback{padding-top:29px}
+  #mentorship .mentorship-heading{margin-bottom:-4px}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero.hero-unified .hero-primary-apply:hover{transform:none}
+}
