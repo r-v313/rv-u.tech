@@ -67,6 +67,8 @@ const server=http.createServer((req,res)=>{
       assert.equal(await page.locator('html').getAttribute('lang'),'en');
       assert.equal(await page.locator('html').getAttribute('dir'),'ltr');
       assert.equal(await page.locator('#voices h2').textContent(),'Feedback from the fourth camp');
+      assert.equal(await page.locator('#voices blockquote').first().getAttribute('lang'),'en');
+      assert.equal(await page.locator('#voices blockquote').first().getAttribute('dir'),'ltr');
       let englishWidth=await page.evaluate(()=>document.documentElement.scrollWidth);
       assert(englishWidth<=width+3,'English horizontal overflow '+width);
       await page.locator('#language').click();
