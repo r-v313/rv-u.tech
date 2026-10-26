@@ -8,6 +8,9 @@ on:
       - 'styles.css'
       - 'styles.min.css'
       - 'app.js'
+      - 'viewer.html'
+      - 'viewer.css'
+      - 'viewer.js'
       - 'measurement.js'
       - 'experience.js'
       - 'robots.txt'
@@ -35,6 +38,7 @@ jobs:
       - name: Verify JavaScript syntax
         run: |
           node --check app.js
+          node --check viewer.js
           node --check measurement.js
           node --check experience.js
           node --check _maintenance/verify.cjs
