@@ -21,7 +21,8 @@ for(const name of ['measurement.js','app.js','experience.js'])w.eval(fs.readFile
  assert.equal(d.querySelector('.application-open-banner'),null,'Old application banner must be removed');
  assert.equal(d.querySelector('.hero-primary-apply').textContent,'قدم لانترفيو الكامب الخامس ↗');
  assert(d.querySelector('.hero-primary-apply').hasAttribute('data-apply'),'Single application CTA must be functional');
- assert.equal(d.querySelector('.hero-visual-unified > .cover-top .mono').textContent.trim(),'RVU MENTORSHIP · ONLINE BUG BOUNTY CAMP');
+ assert.equal(d.querySelector('.camp-masthead-main').textContent.trim(),'RVU MENTORSHIP');
+ assert.equal(d.querySelector('.camp-masthead-sub').textContent.trim(),'ONLINE BUG BOUNTY CAMP');
  assert.equal(d.querySelector('.mentor-cover .cover-top'),null,'Camp title must be outside the portrait card');
  assert(!d.querySelector('.hero-camp-label'),'Duplicate badge must not render');
  assert(!d.querySelector('.mentor-cover .live-dot'),'No glowing dot near the portrait heading');
