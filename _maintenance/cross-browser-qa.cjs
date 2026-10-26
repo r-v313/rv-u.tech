@@ -93,6 +93,7 @@ const audit=async(page,label)=>{
             await page.waitForURL(url=>url.pathname==='/');
             const second=page.locator('#reports-track [data-image="1"]');
             await second.scrollIntoViewIfNeeded();await second.click();
+            await page.waitForFunction(()=>{const img=document.querySelector('#full-image');return !!img&&img.getAttribute('src')==='\/poc-02-full.webp'&&img.naturalWidth>0;});
             assert.match(await page.locator('#full-image').getAttribute('src'),/poc-02-full\.webp/);
             await page.locator('#close-viewer').click();
             await page.waitForURL(url=>url.pathname==='/');
