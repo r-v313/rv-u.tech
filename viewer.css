@@ -7,10 +7,12 @@ body{overflow:hidden}
 #image-surface.is-grabbing{cursor:grabbing}
 #image-surface:focus-visible{outline:2px solid var(--accent);outline-offset:-3px}
 #full-image{display:block;position:absolute;left:50%;top:50%;max-width:calc(100% - 32px);max-height:calc(100% - 120px);width:auto;height:auto;object-fit:contain;transform-origin:center center;transform:translate(-50%,-50%) translate(0,0) scale(1);user-select:none;-webkit-user-select:none;-webkit-user-drag:none;pointer-events:none;will-change:transform}
-.viewer-toolbar{position:fixed;z-index:5;top:0;left:0;right:0;display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:clamp(8px,2vw,20px);padding:calc(10px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) 12px max(12px,env(safe-area-inset-left,0px));background:linear-gradient(to bottom,rgba(8,9,11,.96),rgba(8,9,11,.75) 80%,rgba(8,9,11,0))}
+.viewer-toolbar{direction:ltr;position:fixed;z-index:5;top:0;left:0;right:0;display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:clamp(8px,2vw,20px);padding:calc(10px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) 12px max(12px,env(safe-area-inset-left,0px));background:linear-gradient(to bottom,rgba(8,9,11,.96),rgba(8,9,11,.75) 80%,rgba(8,9,11,0))}
 .close{grid-column:1;grid-row:1;display:grid;place-items:center;width:46px;height:46px;border-radius:50%;border:1px solid #686060;background:#191818;color:#fff;font-size:32px;line-height:1;text-decoration:none;touch-action:manipulation}
 .close:hover,.close:focus-visible{background:#a64914;outline:2px solid var(--accent);outline-offset:2px}
 .viewer-title{grid-column:2;grid-row:1;min-width:0;text-align:start}
+html[lang=ar] .viewer-title{direction:rtl}
+html[lang=en] .viewer-title{direction:ltr}
 .viewer-title strong{display:block;font-size:clamp(14px,2vw,18px);line-height:1.45;overflow-wrap:break-word}
 .viewer-title span{display:block;font-size:12px;line-height:1.6;color:#d0c6bb}
 .viewer-controls{grid-column:3;grid-row:1;display:flex;align-items:center;gap:7px;direction:ltr}
