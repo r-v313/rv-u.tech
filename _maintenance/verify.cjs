@@ -43,9 +43,10 @@ function boot(success=true) {
   assert(!html.includes('IBM+Plex+Mono:wght'),'No redundant monospaced Google Font request');
   assert(fs.readFileSync(path.join(root,'measurement.js'),'utf8').includes('requestIdleCallback'));
   assert.equal(d.querySelector('.hero-problem'),null,'Target qualification paragraph must be completely removed');
-  assert.equal(d.querySelector('.hero-lead').textContent,'اشكر ربنا على نجاح الدفعة الرابعة من الكامب والأولى أونلاين.. وبعلن عن الدفعة الخامسة من RVU Mentorship Camp والتقديم للانترفيو مفتوح لأي حد حابب يطور من نفسه.');
-  assert.equal(d.querySelector('.hero-lead .thanks-underline').textContent,'اشكر ربنا');
-  assert.equal(d.querySelectorAll('.hero-lead .thanks-underline').length,1,'One underlined thanks phrase appears');
+  assert.equal(d.querySelector('.hero-lead .thanks-details').textContent,'على نجاح الدفعة الرابعة من الكامب والأولى أونلاين.. وبعلن عن الدفعة الخامسة من RVU Mentorship Camp والتقديم للانترفيو مفتوح لأي حد حابب يطور من نفسه.');
+  assert.equal(d.querySelector('.hero-lead .thanks-plain').textContent,'اشكر ربنا');
+  assert.equal(d.querySelectorAll('.hero-lead .thanks-plain').length,1,'One standalone thank-you heading appears');
+  assert.equal(d.querySelector('.hero-lead .thanks-plain').nextElementSibling.className,'thanks-details','Announcement begins below the gratitude line');
   assert.equal(d.querySelectorAll('.hero-lead .thanks-oval').length,0,'Remove the oval gratitude badge');
   assert.equal(d.querySelector('.hero-lead-followup'),null,'Remove redundant long six-week promise');
   assert.equal(d.querySelector('.hero-benefits-inline'),null,'Remove duplicate duration and personal-mentoring row');
@@ -131,7 +132,9 @@ function boot(success=true) {
   assert(!styles.includes('.hero.hero-unified .hero-benefits-inline span::before'),'The two orange dots under the intro must be removed');
   assert(!styles.includes('border-bottom:1px solid #34363c;'),'Mentor biography divider must be removed');
   assert(!styles.includes('.hero.hero-unified .hero-problem{'),'Deleted target paragraph must not retain hero-specific CSS');
-  assert.match(styles,/\.hero\.hero-unified \.hero-lead \.thanks-underline\s*\{/,'Underlined thanks must have its own styling');
+  assert.match(styles,/\.hero\.hero-unified \.hero-lead \.thanks-plain\s*\{/,'Standalone thanks must have its own styling');
+  assert(!styles.includes('.thanks-underline'),'Retired gratitude underline CSS must be deleted');
+  assert.match(styles,/#mentorship \.mentorship-heading::after\{content:none;display:none\}/,'Underline below section heading must be absent');
   assert.match(styles,/\.hero\.hero-unified \.hero-quick-pill\s*\{/,'Reviews link must be an oval black and orange control');
   assert.match(styles,/\.hero\.hero-unified \.hero-quick-shape\s*\{/,'Side links must be black and orange circles');
   assert(!styles.includes('.cohort-capacity'),'Removed cohort stat strip must not retain CSS');
@@ -166,7 +169,11 @@ function boot(success=true) {
   assert.equal(d.querySelectorAll('#gallery-track .lesson-tag').length,4);
   assert([...d.querySelectorAll('#gallery-track .lesson-tag')].every(x=>!/\s\/\s\d/.test(x.textContent)),'No numbering inside the video tags');
   assert.equal(d.querySelector('.gallery-next-step'),null,'Remove redundant video-to-mentorship promotion');
-  assert.equal(d.querySelector('#mentorship .mentorship-heading h2').textContent,'نظام المتابعة والتطبيق');
+  assert.equal(d.querySelector('#mentorship .mentorship-heading h2').textContent,'متابعة شخصية وتطبيق عملي');
+  assert.equal(d.querySelector('#mentorship .mentorship-index').textContent,'04 / نظام المتابعة والتطبيق');
+  assert.deepEqual(['curriculum','outcomes','resources','fit','apply','faq'].map(id=>d.querySelector('#'+id+' > .section-heading .eyebrow, #'+id+' .apply-section>.eyebrow, #'+id+' .section-heading .eyebrow, #'+id+' .eyebrow')?.textContent),
+    ['05 / منهج الكامب','06 / بعد ٦ أسابيع','08 / موارد عملية','09 / الكامب مناسب ليك؟','10 / التقديم للدفعة الخامسة','11 / قبل ما تنضم']);
+  assert([...d.querySelectorAll('p.eyebrow')].every(p=>p.hasAttribute('data-en')),'All category eyebrows need Arabic copy and English translation');
   assert(d.querySelector('#mentorship .mentorship-heading').compareDocumentPosition(d.querySelector('#mentorship .camp-format')) & w.Node.DOCUMENT_POSITION_FOLLOWING);
   assert.match(styles,/#experience \.container::after\s*\{/,'Video-to-reviews divider must be styled');
   assert.match(styles,/\.hero\.hero-unified \.hero-visual-unified>\.cover-top \.mono\s*\{/,'External title must be styled with a large font');
@@ -326,7 +333,9 @@ function boot(success=true) {
   assert.match(d.querySelector('.fit-yes').textContent,/You know the fundamentals and have plenty of information/);
   assert.match(d.querySelector('.fit-yes').textContent,/make time to practise alongside the sessions/);
   assert.match(d.querySelector('.hero-lead').textContent,/interviews are open to anyone who wants to improve their skills/i);
-  assert.equal(d.querySelector('.hero-lead .thanks-underline').textContent,'I thank God');
+  assert.equal(d.querySelector('.hero-lead .thanks-plain').textContent,'I thank God');
+  assert.equal(d.querySelector('#mentorship .mentorship-index').textContent,'04 / MENTORSHIP AND PRACTICE');
+  assert.equal(d.querySelector('#curriculum .eyebrow').textContent,'05 / THE LEARNING PATH');
   assert.equal(d.querySelector('.hero-lead-followup'),null);
   assert.equal(d.querySelector('.hero-benefits-inline'),null);
   assert.equal(d.querySelector('.hero-facts-featured'),null);
@@ -347,7 +356,7 @@ function boot(success=true) {
   assert.equal(d.querySelector('.cover-bio-copy .bio-goal-title').textContent,'The aim of the camp');
   assert.equal(d.querySelector('.cover-bio-copy .bio-name').textContent,'Ramez Medhat');
   assert.equal(d.querySelector('#experience .gallery-heading h2').textContent,'A look at my camp teaching');
-  assert.equal(d.querySelector('#mentorship .mentorship-heading h2').textContent,'Mentorship & practical learning');
+  assert.equal(d.querySelector('#mentorship .mentorship-heading h2').textContent,'Personal mentorship and hands-on learning');
   assert.equal(d.querySelector('.student-feedback-card:last-child blockquote').getAttribute('lang'),'ar');
   assert.match(d.querySelector('#review-zain-name').closest('article').querySelector('blockquote').textContent,/رأيى بكل صراحة/);
   assert([...d.querySelectorAll('#resources .resource-card a')].every(a=>a.href.endsWith('-ar.pdf')));
