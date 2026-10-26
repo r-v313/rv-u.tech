@@ -6921,3 +6921,183 @@ html[lang=ar] .hero .eyebrow {
     text-align:start;
   }
 }
+
+/* One-card hero: instructor portrait and profile first, then the camp story. */
+.hero.hero-unified{
+  display:block;
+  width:calc(100% - 48px);
+  max-width:1080px;
+  min-height:0;
+  padding-block:clamp(25px,4vw,58px) clamp(34px,5vw,65px);
+}
+.hero.hero-unified .hero-visual-unified{
+  display:block;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  padding:0;
+  margin:0 auto;
+  justify-self:stretch;
+}
+.hero.hero-unified .mentor-cover{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width:100%;
+  min-width:0;
+  padding:clamp(19px,3.4vw,38px);
+  overflow:hidden;
+  border-radius:22px;
+}
+.hero.hero-unified .cover-top{width:100%;margin-bottom:18px}
+.hero.hero-unified .cover-portrait{
+  flex:0 0 auto;
+  width:clamp(155px,21vw,210px);
+  margin:0 auto 16px;
+  padding:8px;
+  border-radius:12px;
+}
+.hero.hero-unified .cover-portrait img{
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:5/6;
+  object-fit:cover;
+  border-radius:7px;
+}
+.hero.hero-unified .cover-name{
+  display:block;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  text-align:center;
+}
+.hero.hero-unified .cover-name .eyebrow{justify-content:center}
+.hero.hero-unified .cover-name .signature-title{
+  width:min(100%,340px);
+  margin:9px auto 7px!important;
+}
+.hero.hero-unified .cover-roles{
+  justify-content:center;
+  width:fit-content;
+  max-width:100%;
+  margin:10px auto 17px;
+}
+.hero.hero-unified .cover-bio{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 50px;
+  align-items:center;
+  gap:17px;
+  width:min(100%,850px);
+  padding:22px 0;
+  margin:0 auto;
+}
+.hero.hero-unified .cover-bio-copy p{
+  font-size:clamp(13px,1.42vw,16px);
+  line-height:1.92;
+}
+.hero.hero-unified .hero-copy{
+  width:min(100%,850px);
+  max-width:100%;
+  min-width:0;
+  margin:0 auto;
+  padding:clamp(22px,3vw,33px) 0 0;
+  text-align:center;
+}
+.hero.hero-unified .hero-title{
+  margin:0 auto 19px;
+  font-size:clamp(35px,5.2vw,64px);
+  line-height:1.38;
+  text-wrap:balance;
+}
+html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(30px,4.9vw,60px)}
+.hero.hero-unified .hero-problem{
+  width:min(100%,710px);
+  max-width:100%;
+  margin:0 auto 18px;
+  font-size:clamp(15px,1.6vw,19px);
+  line-height:1.95;
+  text-wrap:pretty;
+}
+.hero.hero-unified .hero-introduction{margin-top:16px}
+.hero.hero-unified .hero-lead{
+  width:min(100%,780px);
+  max-width:100%;
+  margin-inline:auto;
+  font-size:clamp(14px,1.4vw,17px);
+  line-height:1.9;
+}
+.hero.hero-unified .hero-lead-followup{
+  width:min(100%,790px);
+  margin:19px auto 0;
+  text-align:start;
+}
+.hero.hero-unified .hero-benefits-inline{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+  gap:9px 22px;
+  margin:20px auto 2px;
+  color:#ffb477;
+  font-weight:750;
+  font-size:clamp(14px,1.4vw,17px);
+}
+.hero.hero-unified .hero-benefits-inline span{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  white-space:nowrap;
+}
+.hero.hero-unified .hero-benefits-inline span::before{
+  content:"";
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#ff8f39;
+}
+.hero.hero-unified .cohort-capacity{
+  width:min(100%,720px);
+  justify-content:center;
+  margin:18px auto 0;
+  text-align:center;
+}
+.hero.hero-unified .hero-actions{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:12px;
+  margin:24px auto 0;
+}
+.hero.hero-unified .micro{max-width:100%;margin:14px auto 0;text-align:center}
+.hero.hero-unified .cover-sample{
+  width:min(100%,720px);
+  margin:22px auto 0;
+  padding:14px 8px;
+  font-size:clamp(12px,1.3vw,14px);
+}
+.hero.hero-unified .application-open-banner{
+  width:min(100%,780px);
+  min-height:90px;
+  margin:20px auto 0;
+  padding:17px 19px;
+}
+@media(max-width:600px){
+  .hero.hero-unified{width:calc(100% - 26px);padding-block:18px 32px}
+  .hero.hero-unified .mentor-cover{padding:18px 14px 24px;border-radius:16px}
+  .hero.hero-unified .cover-top{margin-bottom:15px}
+  .hero.hero-unified .cover-portrait{width:clamp(142px,39vw,185px);margin-bottom:15px}
+  .hero.hero-unified .cover-bio{width:100%;grid-template-columns:minmax(0,1fr);gap:13px;padding:17px 0}
+  .hero.hero-unified .cover-bio-links{flex-direction:row;justify-content:center}
+  .hero.hero-unified .hero-copy{width:100%;padding-top:23px}
+  .hero.hero-unified .hero-title{font-size:clamp(30px,8.5vw,45px);line-height:1.5}
+  html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(27px,7.8vw,39px);line-height:1.2}
+  .hero.hero-unified .hero-problem{font-size:clamp(14px,3.6vw,16px)}
+  .hero.hero-unified .hero-lead,.hero.hero-unified .hero-lead-followup{font-size:clamp(13px,3.4vw,15px)}
+  .hero.hero-unified .hero-benefits-inline{gap:8px 15px;font-size:clamp(12px,3.2vw,15px)}
+  .hero.hero-unified .cohort-capacity{padding:13px 11px}
+  .hero.hero-unified .hero-actions{flex-direction:column;align-items:stretch;width:100%}
+  .hero.hero-unified .hero-actions .button{max-width:100%;width:100%;min-height:48px}
+  .hero.hero-unified .cover-sample{margin-top:16px}
+  .hero.hero-unified .application-open-banner{margin-top:14px}
+}
