@@ -6921,21 +6921,29 @@ html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(30px,4.9vw,60px)}
 }
 
 /* Fifth-cohort refinement: one clear CTA, underlined gratitude, quiet section rhythm. */
-.hero.hero-unified .hero-lead .thanks-underline{
-  display:inline;
-  padding:0 1px 3px;
+.hero.hero-unified .hero-introduction .hero-lead{
+  width:100%;
+  max-width:100%;
   margin:0;
+  text-align:start;
+  line-height:1.95;
+}
+.hero.hero-unified .hero-lead .thanks-plain{
+  display:block;
+  width:100%;
+  margin:0 0 3px;
+  padding:0;
   border:0;
-  border-radius:0;
   background:none;
-  box-shadow:none;
   color:#ffb15e;
   font-weight:850;
-  text-decoration-line:underline;
-  text-decoration-color:#ff902b;
-  text-decoration-thickness:3px;
-  text-underline-offset:6px;
-  text-decoration-skip-ink:auto;
+  text-align:start;
+  text-decoration:none;
+}
+.hero.hero-unified .hero-lead .thanks-details{
+  display:block;
+  width:100%;
+  text-align:start;
 }
 .hero.hero-unified .hero-actions{
   margin:12px auto 0;
@@ -7007,29 +7015,45 @@ html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(30px,4.9vw,60px)}
 #mentorship .rhythm-refined{row-gap:clamp(26px,3.3vw,38px)}
 #mentorship .mentorship-heading{
   grid-column:1/-1;
-  margin:0 0 -8px;
-  text-align:center;
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:10px 28px;
+  width:100%;
+  margin:0 0 8px;
+  padding:0;
+  text-align:start;
 }
-#mentorship .mentorship-heading>div{width:100%}
+#mentorship .mentorship-heading>div{
+  flex:1 1 255px;
+  min-width:0;
+}
 #mentorship .mentorship-heading h2{
-  display:inline-block;
+  display:block;
   max-width:100%;
-  margin:0 auto;
+  margin:0;
   color:#fff2dc;
   font-size:clamp(27px,3.4vw,43px);
   font-weight:800;
   line-height:1.4;
+  text-align:start;
   text-wrap:balance;
 }
-#mentorship .mentorship-heading::after{
-  content:"";
-  display:block;
-  width:min(260px,55%);
-  height:2px;
-  margin:10px auto 0;
-  border-radius:100px;
-  background:linear-gradient(90deg,transparent,#ff912b,transparent);
+#mentorship .mentorship-heading .mentorship-index{
+  flex:0 0 auto;
+  margin:0;
+  color:#ff8c21;
+  font-family:var(--font);
+  font-size:clamp(13px,1.3vw,16px);
+  font-weight:800;
+  letter-spacing:0;
+  line-height:1.7;
+  white-space:normal;
+  text-align:start;
 }
+#mentorship .mentorship-heading::after{content:none;display:none}
 @media(max-width:600px){
   .hero.hero-unified .hero-visual-unified>.cover-top .mono{
     padding:13px 11px;
@@ -7048,7 +7072,8 @@ html[lang=en] .hero.hero-unified .hero-title{font-size:clamp(30px,4.9vw,60px)}
   }
   #experience.gallery-section{padding-bottom:28px}
   #voices.section.student-feedback{padding-top:29px}
-  #mentorship .mentorship-heading{margin-bottom:-4px}
+  #mentorship .mentorship-heading{margin-bottom:0;gap:7px 14px}
+  #mentorship .mentorship-heading .mentorship-index{font-size:13px}
 }
 @media(prefers-reduced-motion:reduce){
   .hero.hero-unified .hero-primary-apply:hover{transform:none}
