@@ -68,3 +68,33 @@ html[dir="rtl"] .price-discount-en{display:none!important}
   .price-panel .price-display .camp-price{font-size:54px!important}
   .price-panel .price-display .camp-price-old{font-size:25px!important}
 }
+
+/* Crisp, high-contrast discounted price */
+.price-panel .price-display .camp-price{
+  color:#fff!important;
+  font-size:clamp(64px,8vw,82px)!important;
+  font-weight:900!important;
+  letter-spacing:-.045em!important;
+  text-shadow:0 2px 0 #8f3a08,0 0 12px #ff7a1a35!important;
+  filter:none!important;
+  opacity:1!important;
+}
+.price-panel .price-display .camp-price-currency{
+  display:block!important;
+  grid-column:1!important;
+  grid-row:3!important;
+  margin:0 auto!important;
+  color:#ff8a35!important;
+  font-size:14px!important;
+  font-weight:800!important;
+  line-height:1.5!important;
+  text-align:center!important;
+  letter-spacing:.02em!important;
+}
+@media(max-width:540px){
+ .price-panel .price-display .camp-price{font-size:66px!important}
+ .price-panel .price-display .camp-price-currency{font-size:14px!important}
+}
+@media(max-width:360px){
+ .price-panel .price-display .camp-price{font-size:59px!important}
+}
