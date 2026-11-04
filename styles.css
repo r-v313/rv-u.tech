@@ -6902,3 +6902,11 @@ html[dir=ltr] #experience .arrow-next svg,html[dir=ltr] #research .arrow-next sv
   border-top:0!important;
   border-inline-start:1px solid #444046!important;
 }
+
+.price-payment-note {
+  margin:6px 0 0!important;
+  color:#d8a36b;
+  font-size:12px!important;
+  line-height:1.8;
+  text-align:center;
+}
