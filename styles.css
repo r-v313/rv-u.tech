@@ -6904,9 +6904,10 @@ html[dir=ltr] #experience .arrow-next svg,html[dir=ltr] #research .arrow-next sv
 }
 
 .price-payment-note {
-  margin:6px 0 0!important;
-  color:#d8a36b;
-  font-size:12px!important;
-  line-height:1.8;
+  margin:9px 0 5px!important;
+  color:#f0b477;
+  font-size:16px!important;
+  font-weight:800;
+  line-height:1.7;
   text-align:center;
 }
