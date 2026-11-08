@@ -1,6 +1,24 @@
 name: RVU site quality
 
 on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'styles.css'
+      - 'styles.min.css'
+      - 'app.js'
+      - 'viewer.html'
+      - 'viewer.css'
+      - 'viewer.js'
+      - 'measurement.js'
+      - 'experience.js'
+      - 'robots.txt'
+      - 'sitemap.xml'
+      - 'poc-*-full.webp'
+      - 'assets/**'
+      - '_maintenance/**'
+      - '.github/workflows/rvu-quality.yml'
   push:
     branches: [main]
     paths:
@@ -71,7 +89,8 @@ jobs:
 
   cross-browser-accessibility:
     name: Firefox / WebKit / WCAG 2.1 AA
-    runs-on: ubuntu-latest
+    # Playwright 1.56 cannot install Firefox on the newer ubuntu-latest image.
+    runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4

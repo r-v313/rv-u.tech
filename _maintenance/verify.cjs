@@ -124,6 +124,16 @@ function boot() {
   assert.equal(submits[0].opts.keepalive,true);
   assert.equal(navigation.length,1,'WhatsApp navigation is immediate');
   assert(navigation[0].indexOf('https://wa.me/')===0);
+  // Form-created links bypass delegated click listeners; track the conversion explicitly.
+  assert.equal(typeof w.rvuTrack,'function');
+  assert.equal(submits[0].opts.credentials,'omit');
+  const restoredPage = new w.Event('pageshow');
+  Object.defineProperty(restoredPage,'persisted',{value:true});
+  w.dispatchEvent(restoredPage);
+  form.dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));
+  await Promise.resolve();
+  assert.equal(submits.length,2,'Page return restores ability to submit');
+  assert.equal(navigation.length,2,'Page return restores WhatsApp navigation');
   assert.equal(errors.length,0,errors.join('\n'));
   assert(minCSS.length>0);
   dom.window.close();
