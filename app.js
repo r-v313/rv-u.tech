@@ -176,8 +176,10 @@
     link.rel = 'noreferrer';
     link.click();
   });
-  // A restored page must accept another application, including non-bfcache returns.
-  window.addEventListener('pageshow', () => { submitting = false; });
+  // Back-forward cache restores reuse the same JS state: allow a fresh application.
+  window.addEventListener('pageshow', event => {
+    if (event.persisted) submitting = false;
+  });
 
   function createShelf(trackId, prefix) {
     const track = $(trackId);
