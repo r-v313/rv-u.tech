@@ -89,7 +89,8 @@ jobs:
 
   cross-browser-accessibility:
     name: Firefox / WebKit / WCAG 2.1 AA
-    runs-on: ubuntu-latest
+    # Playwright 1.56 cannot install Firefox on the newer ubuntu-latest image.
+    runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
