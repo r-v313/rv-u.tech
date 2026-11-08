@@ -127,7 +127,9 @@ function boot() {
   // Form-created links bypass delegated click listeners; track the conversion explicitly.
   assert.equal(typeof w.rvuTrack,'function');
   assert.equal(submits[0].opts.credentials,'omit');
-  w.dispatchEvent(new w.Event('pageshow'));
+  const restoredPage = new w.Event('pageshow');
+  Object.defineProperty(restoredPage,'persisted',{value:true});
+  w.dispatchEvent(restoredPage);
   form.dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));
   await Promise.resolve();
   assert.equal(submits.length,2,'Page return restores ability to submit');
