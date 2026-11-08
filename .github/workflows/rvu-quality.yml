@@ -1,6 +1,24 @@
 name: RVU site quality
 
 on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'styles.css'
+      - 'styles.min.css'
+      - 'app.js'
+      - 'viewer.html'
+      - 'viewer.css'
+      - 'viewer.js'
+      - 'measurement.js'
+      - 'experience.js'
+      - 'robots.txt'
+      - 'sitemap.xml'
+      - 'poc-*-full.webp'
+      - 'assets/**'
+      - '_maintenance/**'
+      - '.github/workflows/rvu-quality.yml'
   push:
     branches: [main]
     paths:
