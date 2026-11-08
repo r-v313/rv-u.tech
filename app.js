@@ -168,15 +168,16 @@
       }).catch(() => {});
     } catch (_) {
     }
+    // This link is created programmatically, so delegated click tracking never sees it.
+    try { if (typeof window.rvuTrack === 'function') window.rvuTrack('WhatsApp_Click'); } catch (_) {}
     const link = document.createElement('a');
     link.href = whatsappUrl;
     link.target = '_self';
     link.rel = 'noreferrer';
     link.click();
   });
-  window.addEventListener('pageshow', event => {
-    if (event.persisted) submitting = false;
-  });
+  // A restored page must accept another application, including non-bfcache returns.
+  window.addEventListener('pageshow', () => { submitting = false; });
 
   function createShelf(trackId, prefix) {
     const track = $(trackId);
