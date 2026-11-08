@@ -6641,6 +6641,42 @@ html[dir=ltr] #experience .arrow-next svg,html[dir=ltr] #research .arrow-next sv
   }
 }
 
+/* Pricing component: one canonical style, shared by Arabic and English. */
+.price-panel {
+  text-align:center;
+  padding:clamp(26px,4vw,42px);
+}
+.price-display {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  margin:0 auto 20px;
+}
+.price-panel .price-display .camp-price {
+  display:block;
+  width:100%;
+  margin:0;
+  color:#fff;
+  font:900 clamp(58px,7.8vw,82px)/1.08 "Manrope","IBM Plex Sans Arabic",sans-serif;
+  letter-spacing:-.045em;
+  line-height:1.08;
+  text-shadow:0 2px 0 #8f3a08,0 0 12px #ff7a1a35;
+}
+.price-panel .price-display .camp-price-currency {
+  display:block;
+  margin:0;
+  color:#ff8a35;
+  font-size:14px;
+  font-weight:800;
+  line-height:1.5;
+  letter-spacing:.02em;
+}
+@media (max-width:360px) {
+  .price-panel .price-display .camp-price {font-size:54px}
+}
+
 /* Statistics: no outer frame or top rules; retain only the two inter-item dividers. */
 #journey.camp-history,
 #journey .history-stats,
