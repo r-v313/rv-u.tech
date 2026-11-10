@@ -19,7 +19,7 @@ for(const name of ['measurement.js','app.js','experience.js'])w.eval(fs.readFile
  assert.equal(d.compatMode,'CSS1Compat');
  assert(!/بجهز للدفعة الثانية|Coming next · announcement|Official announcement on 1 November/.test(html),'No postponed announcement copy');
  assert.equal(d.querySelector('.application-open-banner'),null,'Old application banner must be removed');
- assert.equal(d.querySelector('.hero-primary-apply').textContent,'قدم لانترفيو الكامب الخامس ↗');
+ assert.equal(d.querySelector('.hero-primary-apply').textContent,'قدم لانترفيو الكامب الخامس');
  assert(d.querySelector('.hero-primary-apply').hasAttribute('data-apply'),'Single application CTA must be functional');
  assert.equal(d.querySelector('.camp-masthead-main').textContent.trim(),'RVU MENTORSHIP');
  assert.equal(d.querySelector('.camp-masthead-sub').textContent.trim(),'ONLINE BUG BOUNTY CAMP');

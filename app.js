@@ -168,7 +168,6 @@
       }).catch(() => {});
     } catch (_) {
     }
-    // This link is created programmatically, so delegated click tracking never sees it.
     try { if (typeof window.rvuTrack === 'function') window.rvuTrack('WhatsApp_Click'); } catch (_) {}
     const link = document.createElement('a');
     link.href = whatsappUrl;
@@ -176,7 +175,6 @@
     link.rel = 'noreferrer';
     link.click();
   });
-  // Back-forward cache restores reuse the same JS state: allow a fresh application.
   window.addEventListener('pageshow', event => {
     if (event.persisted) submitting = false;
   });

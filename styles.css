@@ -3296,9 +3296,6 @@ html[dir=ltr] .arrow-next svg {
   border-color:#4e4e50;
 }
 
-@media (max-width:1100px) {
-}
-
 @media (max-width:850px) {
   .menu-toggle {
     display:grid;
@@ -4853,9 +4850,6 @@ html[lang=ar] .hero .eyebrow {
   font-weight:600;
 }
 
-@media (max-width:420px) {
-}
-
 .mentor-cover .cover-top {
   justify-content:center;
   text-align:center;
@@ -5167,8 +5161,6 @@ html[lang=ar] .hero .eyebrow {
   .camp-format-item strong {font-size:21px}
   .rhythm-refined .rhythm-list {gap:22px 14px}
 }
-@media (prefers-reduced-motion:reduce) {
-}
 
 .mentor-cover .cover-bio {
   grid-column:1/-1;
@@ -5203,8 +5195,6 @@ html[lang=ar] .hero .eyebrow {
     font-size:clamp(12px,3.25vw,14px);
     line-height:1.85;
   }
-}
-@media (prefers-reduced-motion:reduce) {
 }
 
 .section.student-feedback {
@@ -5901,59 +5891,7 @@ html[lang=ar] .hero .eyebrow {
   overflow-wrap:normal;
   text-wrap:balance;
 }
-.hero.hero-unified .hero-apply-dates{
-  position:relative;
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  align-items:center;
-  width:min(100%,660px);
-  margin:clamp(17px,2.5vw,25px) auto 10px;
-  padding:clamp(13px,1.7vw,19px) clamp(10px,2.3vw,22px);
-  border:1px solid #513017;
-  border-radius:14px;
-  background:linear-gradient(115deg,#0b0a0b,#11100f 52%,#0b0a0b);
-  box-shadow:0 8px 25px #0004,inset 0 1px #ffad3914;
-  color:#ffac5f;
-  text-align:center;
-}
-.hero.hero-unified .hero-apply-dates::before{
-  content:"";
-  position:absolute;
-  inset-block:18%;
-  inset-inline-start:50%;
-  width:1px;
-  background:linear-gradient(transparent,#7a421d,transparent);
-  pointer-events:none;
-}
-.hero.hero-unified .hero-apply-date-item{
-  display:flex;
-  min-width:0;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  gap:5px;
-  padding-inline:8px;
-}
-.hero.hero-unified .hero-apply-date-label{
-  color:#f7a65e;
-  font-size:clamp(12px,1.25vw,15px);
-  font-weight:650;
-  line-height:1.6;
-}
-.hero.hero-unified .hero-apply-date-value{
-  display:block;
-  color:#ffba7c;
-  font-family:"Manrope",sans-serif;
-  font-size:clamp(19px,2.3vw,27px);
-  font-weight:800;
-  line-height:1.25;
-  letter-spacing:.015em;
-  white-space:nowrap;
-  unicode-bidi:isolate;
-}
-.hero.hero-unified .hero-apply-dates + .hero-actions{
-  margin-top:10px;
-}
+
 @media(max-width:600px){
   .hero.hero-unified .hero-visual-unified > .cover-top .mono{
     font-size:clamp(22px,5.9vw,31px);
@@ -5961,14 +5899,7 @@ html[lang=ar] .hero .eyebrow {
     letter-spacing:.01em;
     overflow-wrap:normal;
   }
-  .hero.hero-unified .hero-apply-dates{
-    margin-top:17px;
-    padding:14px 8px;
-    border-radius:12px;
-  }
-  .hero.hero-unified .hero-apply-date-item{padding-inline:5px}
-  .hero.hero-unified .hero-apply-date-label{font-size:clamp(12px,3.3vw,14px)}
-  .hero.hero-unified .hero-apply-date-value{font-size:clamp(18px,5.4vw,23px)}
+
 }
 
 .hero.hero-unified .hero-visual-unified > .cover-top .camp-masthead{
@@ -6204,8 +6135,7 @@ iframe{border:0}
   #research #reports-track .research-card{flex:0 0 85%;width:85%}
   .hero.hero-unified .hero-actions{width:100%;min-width:0}
   .hero.hero-unified .hero-actions .button{width:100%;max-width:100%;white-space:normal;min-height:48px}
-  .hero.hero-unified .hero-apply-dates{width:100%;min-width:0}
-  .hero.hero-unified .hero-apply-date-value{white-space:nowrap}
+
   #video-dialog,
 #apply-dialog{width:calc(100vw - 20px);padding:clamp(12px,4vw,20px)}
   .mobile-cta{padding-bottom:12px;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))}
@@ -6216,9 +6146,7 @@ iframe{border:0}
   .hero.hero-unified .mentor-cover{padding-inline:10px}
   .hero.hero-unified .camp-masthead-main{font-size:clamp(18px,5.3vw,21px);letter-spacing:.08em}
   .hero.hero-unified .camp-masthead-sub{font-size:10px;letter-spacing:.075em}
-  .hero.hero-unified .hero-apply-date-label{font-size:11px}
-  .hero.hero-unified .hero-apply-date-value{font-size:18px}
-  .hero.hero-unified .hero-apply-date-item{padding-inline:2px}
+
   .hero.hero-unified .hero-quick-links{gap:7px}
   .hero.hero-unified .hero-quick-link{min-width:0}
   .hero.hero-unified .hero-quick-shape{width:46px;height:46px}
@@ -6284,10 +6212,7 @@ iframe{border:0}
   .hero.hero-unified .hero-quick-link{flex:0 0 100px;min-width:100px;margin:0 9px}
   .hero.hero-unified .hero-quick-shape{width:58px;height:58px}
   .hero.hero-unified .hero-quick-pill{width:132px;max-width:132px;height:58px}
-  .hero.hero-unified .hero-apply-dates{display:grid;width:100%;max-width:640px;margin:20px auto 10px;padding:16px 14px}
-  .hero.hero-unified .hero-apply-dates::before{top:18%;bottom:18%;left:50%;right:auto}
-  .hero.hero-unified .hero-apply-date-label{font-size:14px}
-  .hero.hero-unified .hero-apply-date-value{font-size:25px}
+
   .hero.hero-unified .hero-actions{display:flex;flex-direction:row;flex-wrap:wrap;align-items:stretch;justify-content:center;width:100%;gap:0}
   .hero.hero-unified .hero-actions .hero-primary-apply{flex:1 1 310px;width:auto;max-width:450px;min-height:58px;margin:4px 5px;padding:11px 14px;font-size:17px}
   .hero.hero-unified .hero-actions .button.outline{flex:0 1 230px;width:auto;min-height:58px;margin:4px 5px;padding:11px 13px;font-size:15px}
@@ -6334,10 +6259,7 @@ iframe{border:0}
   .hero.hero-unified .cover-bio-copy p{font-size:16px;line-height:1.95}
   .hero.hero-unified .hero-copy{width:100%;max-width:850px}
   .hero.hero-unified .hero-lead{font-size:16px}
-  .hero.hero-unified .hero-apply-dates{width:100%;max-width:660px;margin:20px auto 11px;padding:17px 20px}
-  .hero.hero-unified .hero-apply-dates::before{top:18%;bottom:18%;left:50%;right:auto}
-  .hero.hero-unified .hero-apply-date-label{font-size:15px}
-  .hero.hero-unified .hero-apply-date-value{font-size:27px}
+
   .hero.hero-unified .hero-actions .hero-primary-apply{font-size:18px;min-height:61px}
   #gallery-track .media-card{flex:0 0 37%;width:37%;max-width:37%}
   #research #reports-track .research-card{flex:0 0 34%;width:34%;max-width:34%}
@@ -6359,7 +6281,7 @@ iframe{border:0}
   #resources .section-heading h2.section-dot-title,
   #fit .section-heading h2.section-dot-title,
   #faq h2.section-dot-title{line-height:1.45}
-  .hero.hero-unified .hero-apply-dates::before{top:18%;bottom:18%;left:50%}
+
   .hero.hero-unified .hero-quick-links{flex-wrap:wrap}
   #gallery-track,#research #reports-track{-webkit-overflow-scrolling:touch}
 }
@@ -6641,43 +6563,158 @@ html[dir=ltr] #experience .arrow-next svg,html[dir=ltr] #research .arrow-next sv
   }
 }
 
-/* Pricing component: one canonical style, shared by Arabic and English. */
+.ui-icon {
+  display:inline-block;
+  width:18px;
+  height:18px;
+  flex:0 0 auto;
+  vertical-align:middle;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.text-link .ui-icon,.pdf-link .ui-icon {margin-inline-start:6px}
+.fit-marker .ui-icon {width:24px;height:24px}
+[data-apply] .cta-arrow {
+  width:19px;
+  height:19px;
+  flex:0 0 auto;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.hero.hero-unified .hero-apply-dates {
+  display:block;
+  width:min(100%,360px);
+  max-width:100%;
+  min-width:0;
+  margin:22px auto 12px;
+  padding:15px 22px;
+  border:1px solid #633b22;
+  border-radius:16px;
+  background:linear-gradient(120deg,#191512,#111214);
+  box-shadow:inset 0 1px #ffffff08;
+}
+.hero.hero-unified .hero-apply-date-item {
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:center;
+  gap:clamp(18px,5vw,34px);
+  min-width:0;
+  padding:0;
+}
+.hero.hero-unified .hero-apply-date-label {
+  color:#e2d9cf;
+  font-size:15px;
+  font-weight:600;
+  line-height:1.6;
+}
+.hero.hero-unified .hero-apply-date-value {
+  color:#ffad70;
+  font:800 clamp(24px,5vw,30px)/1.3 "Manrope",sans-serif;
+  letter-spacing:.01em;
+  white-space:nowrap;
+  unicode-bidi:isolate;
+}
+.hero.hero-unified .hero-apply-dates + .hero-actions {margin-top:12px}
+.apply-section {gap:clamp(36px,6vw,84px)}
 .price-panel {
-  text-align:center;
+  position:relative;
+  min-width:0;
   padding:clamp(26px,4vw,42px);
+  border:1px solid #80502f;
+  border-radius:24px;
+  background:radial-gradient(ellipse at 50% 0,#ff7a1a16,transparent 65%),linear-gradient(150deg,#1b1917,#111214 75%);
+  box-shadow:0 20px 60px #0003,inset 0 1px #ffffff0d;
+  text-align:center;
+}
+.price-panel .price-eyebrow {
+  margin:0 0 18px;
+  color:#e8ded2;
+  font-size:15px;
+  font-weight:600;
+  line-height:1.6;
 }
 .price-display {
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:5px;
-  margin:0 auto 20px;
+  gap:8px;
+  margin:0 auto;
 }
 .price-panel .price-display .camp-price {
   display:block;
   width:100%;
   margin:0;
-  color:#fff;
-  font:900 clamp(58px,7.8vw,82px)/1.08 "Manrope","IBM Plex Sans Arabic",sans-serif;
-  letter-spacing:-.045em;
-  line-height:1.08;
-  text-shadow:0 2px 0 #8f3a08,0 0 12px #ff7a1a35;
+  color:#fff6e9;
+  font:800 clamp(58px,7.8vw,86px)/1.08 "Manrope",sans-serif;
+  letter-spacing:-.055em;
+  text-shadow:none;
+  font-variant-numeric:tabular-nums;
 }
 .price-panel .price-display .camp-price-currency {
   display:block;
   margin:0;
-  color:#ff8a35;
-  font-size:14px;
-  font-weight:800;
-  line-height:1.5;
-  letter-spacing:.02em;
+  color:#e0c6ae;
+  font-size:15px;
+  font-weight:600;
+  line-height:1.6;
+  letter-spacing:0;
 }
-@media (max-width:360px) {
-  .price-panel .price-display .camp-price {font-size:54px}
+.price-panel .price-includes {
+  margin:18px 0 0;
+  color:#d7d5d0;
+  font-size:14px;
+  line-height:1.9;
+  text-wrap:balance;
+}
+.price-panel .price-offer {
+  margin:20px 0 24px;
+  padding:12px 8px;
+  border-block:1px solid #ff9c5033;
+  color:#ffba83;
+  font-size:14px;
+  font-weight:600;
+  line-height:1.8;
+  text-wrap:balance;
+}
+.price-panel > .button {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  width:100%;
+  min-height:56px;
+  padding:14px 18px;
+  border-radius:12px;
+  font-size:16px;
+  line-height:1.7;
+  box-shadow:0 8px 24px #ff6a001c;
+}
+.price-panel .price-payment {
+  display:block;
+  margin:14px 0 0;
+  color:#c1b8af;
+  font-size:12px;
+  line-height:1.9;
+  text-wrap:balance;
+}
+@media(max-width:600px) {
+  .hero.hero-unified .hero-apply-dates {margin:18px auto 12px;padding:14px 18px}
+  .price-panel {border-radius:20px}
+  .price-panel > .button {font-size:15px}
+}
+@media(prefers-contrast:more) {
+  .price-panel {border-color:#d58c50}
+  .price-panel .price-payment {color:#ede5dc}
 }
 
-/* Statistics: no outer frame or top rules; retain only the two inter-item dividers. */
 #journey.camp-history,
 #journey .history-stats,
 #journey .history-stats::before,
