@@ -8,12 +8,12 @@ A single-page bilingual website served by GitHub Pages. The published files are 
 
 - Run `python _maintenance/check_structure.py` and the JavaScript regression/security checks before publishing.
 - PDF dependencies are listed in `_maintenance/requirements.txt`. Run `python _maintenance/build_guides.py` to regenerate the three public Arabic field guides. Arabic source text lives in `_maintenance/content`, and the font license notices are retained.
-- Three genuine student testimonials are published: Ahmed Alaa, Zain Ali, and Ghada Abdelrahman. The reviews retain the exact Arabic text and line breaks supplied by the students. The responsive grid shows three columns on wide desktop layouts, two on tablets, and one on phones. The new fifth overall cohort is the second online cohort after three offline and one completed online cohorts.
+- Three genuine student testimonials are published: Ahmed Alaa, Zain Ali, and Ghada Abdelrahman. The reviews retain the exact Arabic text and line breaks supplied by the students. The responsive grid shows three columns on wide desktop layouts, two on tablets, and one on phones. The current announcement is for the sixth cohort; historical camp counts and published student testimonials are retained without assuming an updated online-cohort count.
 - The application form sends a best-effort background POST to Formspree before opening WhatsApp with a prefilled application message. YouTube loads only when a teaching video is opened. Analytics events exclude application field values and the application dialog is masked.
 - Deployment and rollback use Git history. No duplicate or legacy website is published.
 
 
-## Production quality and performance (Cohort 05)
+## Production quality and performance (Cohort 06)
 
 - Keep `styles.css` readable as the **source**. After editing it, run `node _maintenance/minify-css.cjs` and commit both `styles.css` and `styles.min.css`. The page loads the minified version. Dead CSS rules are removed only after confirming they do not correspond to current HTML or JavaScript states.
 - Report evidence is served as optimized thumbnail and full-resolution WebP. Large source PNGs are not published; Git history retains prior versions. If a new original PNG is supplied, `python _maintenance/optimize_assets.py` can regenerate its WebP (requires Pillow).

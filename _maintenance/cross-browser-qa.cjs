@@ -85,7 +85,7 @@ const audit=async(page,label)=>{
             assert(info.page<=width+3,engine+' horizontal overflow '+width+' '+lang+' '+JSON.stringify(info));
             assert(info.picture>0,engine+' portrait image failed');
             assert.equal(info.pictureFit,'contain',engine+' image evidence was cropped');
-            assert(info.banner.includes(lang==='ar'?'قدم لانترفيو الكامب الخامس':'Apply for the fifth camp interview'),engine+' application CTA missing');
+            assert(info.banner.includes(lang==='ar'?'قدم لانترفيو الكامب السادس':'Apply for the sixth camp interview'),engine+' application CTA missing');
           };
           await check('ar');
           if(width===390){

@@ -32,7 +32,7 @@
     document.querySelectorAll('[data-alt-en]').forEach(img => img.alt = ar ? img.dataset.altAr : img.dataset.altEn);
     language.textContent = ar ? 'EN' : 'AR';
     language.setAttribute('aria-label', ar ? 'Switch to English' : 'التبديل إلى العربية');
-    document.title = ar ? 'الدفعة الخامسة — التقديم مفتوح الآن | RVU Mentorship Camp' : 'Cohort 05 — Applications Open | RVU Mentorship Camp';
+    document.title = ar ? 'الدفعة السادسة — التقديم مفتوح الآن | RVU Mentorship Camp' : 'Cohort 06 — Applications Open | RVU Mentorship Camp';
     $('form-error').hidden = true;
     shelves.forEach(shelf => shelf.reset());
     document.querySelectorAll('a[data-image]').forEach(link => {link.href='/viewer.html?image='+(Number(link.dataset.image)+1)+(ar?'':'&lang=en');});
@@ -113,8 +113,8 @@
     if (!name || !phone || !goal || !fields.level.value) return false;
     const level = fields.level.selectedOptions[0].textContent;
     const message = isArabic()
-      ? `طلب تقديم — RVU Camp / الدفعة الخامسة\n\nالاسم: ${name}\nواتساب: ${phone}\nالمستوى: ${level}\nهدفي: ${goal}\n\nالمصدر: موقع RVU Camp الرسمي`
-      : `Application — RVU Camp / Cohort 05\n\nName: ${name}\nWhatsApp: ${phone}\nLevel: ${level}\nGoal: ${goal}\n\nSource: RVU Camp official website`;
+      ? `طلب تقديم — RVU Camp / الدفعة السادسة\n\nالاسم: ${name}\nواتساب: ${phone}\nالمستوى: ${level}\nهدفي: ${goal}\n\nالمصدر: موقع RVU Camp الرسمي`
+      : `Application — RVU Camp / Cohort 06\n\nName: ${name}\nWhatsApp: ${phone}\nLevel: ${level}\nGoal: ${goal}\n\nSource: RVU Camp official website`;
     const url = new URL('https://wa.me/201012809358');
     url.searchParams.set('text', message);
     return url.href;
@@ -147,9 +147,9 @@
         : Array.from(crypto.getRandomValues(new Uint8Array(16)), byte => byte.toString(16).padStart(2, '0')).join('');
       Object.assign(payload, {
         submission_id:submissionId, submitted_at:new Date().toISOString(),
-        page_url:location.origin + location.pathname, cohort:'05',
+        page_url:location.origin + location.pathname, cohort:'06',
         source:'camp-website', language:isArabic() ? 'ar' : 'en',
-        _subject:'RVU Camp cohort 05 application - ' + payload.name
+        _subject:'RVU Camp cohort 06 application - ' + payload.name
       });
       const params = new URLSearchParams(location.search);
       for (const key of ['utm_source','utm_medium','utm_campaign','utm_content','utm_term']) {

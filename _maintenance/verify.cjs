@@ -64,8 +64,14 @@ function boot() {
   assert.equal(d.querySelector('meta[property="og:image"]').content,d.querySelector('.cover-portrait img').src,'Social preview must match the displayed portrait');
   assert(d.querySelector('meta[name="description"]').content.includes('RVU Mentorship Camp'),'SEO description must be present and reference the camp');
   assert(d.querySelector('meta[property="og:description"]').content.includes('RVU Mentorship Camp'),'Social description must be present and reference the camp');
-  assert(d.querySelector('meta[property="og:title"]').content.includes('Cohort 05'),'Social title must match cohort 05');
+  assert(d.querySelector('meta[property="og:title"]').content.includes('Cohort 06'),'Social title must match cohort 06');
   assert(/#curriculum .week-topics span/.test(css),'Weekly topics retain readable font rules');
+  assert.equal(d.querySelector('.hero-apply-date-value').getAttribute('datetime'),'2026-11-22','Camp start date must be 22 November 2026');
+  assert.equal(d.querySelector('.hero-apply-date-value').textContent.trim(),'11 / 22','Visible start date must match');
+  assert.equal(d.querySelector('.hero-primary-apply').textContent,'قدم لانترفيو الكامب السادس','Current camp CTA must say sixth');
+  const structuredCourse=JSON.parse(d.querySelector('script[type="application/ld+json"]').textContent)['@graph'].find(entry=>entry['@type']==='Course');
+  assert.equal(structuredCourse.hasCourseInstance.startDate,'2026-11-22','Structured course date must match');
+  assert.equal(structuredCourse.name,'RVU Mentorship Camp — Cohort 06');
   assert(d.querySelector('link[href*="styles.min.css"]'));
   assert.equal(d.querySelectorAll('[data-en]').length>160,true,'English translations required');
   for(const asset of d.querySelectorAll('[src],[href]')){
