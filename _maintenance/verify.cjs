@@ -76,6 +76,19 @@ function boot() {
   assert.equal(structuredCourse.offers,undefined,'Course structured data must not expose a price');
   assert(!/(?:2,000|4,000|2000|4000|٢٠٠٠|٤٠٠٠|EGP|جنيه مصري|سعر الكامب|تكلفة الكامب|InstaPay|Vodafone Cash|Orange Cash)/i.test(html),'No camp prices or payment methods anywhere on the public page');
   assert.equal(d.querySelector('#pricing,.price-display,.price-before,.price-payment'),null,'No pricing cards, amounts or payment instructions');
+  const switchTheme=d.getElementById('theme-toggle');
+  assert(switchTheme,'Dark/cream switch is required in header');
+  assert.equal(d.documentElement.getAttribute('data-theme'),'dark');
+  switchTheme.click();
+  assert.equal(d.documentElement.getAttribute('data-theme'),'light');
+  assert.equal(switchTheme.getAttribute('aria-pressed'),'true');
+  assert.equal(d.querySelector('meta[name="theme-color"]').content,'#f5f1e6');
+  assert.equal(switchTheme.querySelector('.theme-toggle-text').textContent,'داكن');
+  switchTheme.click();
+  assert.equal(d.documentElement.getAttribute('data-theme'),'dark');
+  assert.equal(switchTheme.getAttribute('aria-pressed'),'false');
+  assert.equal(d.querySelector('.mobile-cta-promo').textContent,'خصم 50% على الكامب السادس فقط');
+  assert(d.querySelector('.mobile-cta .mobile-cta-apply[data-apply]'),'Dock CTA must open application');
   const discountBadge=d.querySelector('.discount-float');
   assert(discountBadge,'Sixth-cohort offer must be visible');
   assert.equal(discountBadge.parentElement,d.querySelector('.hero.hero-unified .mentor-cover'),'Discount must sit in top-left hero card instead of the viewport');
@@ -117,6 +130,8 @@ function boot() {
   d.getElementById('language').click();
   assert.equal(d.documentElement.lang,'en');
   assert.equal(d.documentElement.dir,'ltr');
+  assert.equal(switchTheme.querySelector('.theme-toggle-text').textContent,'Light');
+  assert.equal(d.querySelector('.mobile-cta-promo').textContent,'50% OFF · COHORT 06 ONLY');
   assert.equal(d.querySelector('#student-feedback-title').textContent,'Feedback from the fourth camp');
   assert.equal(d.querySelector('#voices blockquote').lang,'en');
   assert.equal(d.querySelector('#voices blockquote').dir,'ltr');
