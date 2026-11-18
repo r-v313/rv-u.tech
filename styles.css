@@ -6732,19 +6732,58 @@ html[dir=ltr] #experience .arrow-next svg,html[dir=ltr] #research .arrow-next sv
   border-inline-start:1px solid #444046!important;
 }
 
-/* Current-cohort floating offer */
+/* Current-cohort floating offer: show both prices without strikethrough */
 #pricing{scroll-margin-top:120px}
-.discount-float{position:fixed;z-index:12;inset-inline-end:clamp(16px,2.5vw,34px);bottom:clamp(24px,4vh,46px);display:flex;flex-direction:column;align-items:center;justify-content:center;width:112px;height:112px;padding:10px 12px 16px;border:2px solid #ffd6b4;border-radius:50%;background:radial-gradient(circle at 28% 22%,#ffc78e 0%,#ff9847 38%,#fa6c16 100%);color:#19100a;text-align:center;line-height:1.05;box-shadow:0 15px 38px #0009,0 0 0 5px #ff7a1a22,inset 0 2px 7px #fff6;transition:transform .2s ease,box-shadow .2s ease}
+.discount-float{
+  position:fixed;
+  z-index:12;
+  inset-inline-end:clamp(16px,2.5vw,34px);
+  bottom:clamp(24px,4vh,46px);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:1px;
+  width:132px;
+  height:132px;
+  padding:12px 8px;
+  border:2px solid #ffd6b4;
+  border-radius:50%;
+  background:radial-gradient(circle at 28% 22%,#ffc78e 0%,#ff9847 38%,#fa6c16 100%);
+  color:#19100a;
+  text-align:center;
+  line-height:1.1;
+  box-shadow:0 15px 38px #0009,0 0 0 5px #ff7a1a22,inset 0 2px 7px #fff6;
+  transition:transform .2s ease,box-shadow .2s ease;
+}
 .discount-float-caption{font-size:15px;font-weight:800}
-.discount-float-percent{display:block;font-family:'Outfit','Manrope',sans-serif;font-size:37px;font-weight:900;letter-spacing:-1.2px;line-height:1.1}
-.discount-float-old{position:absolute;bottom:-17px;inset-inline-end:-10px;display:flex;flex-direction:column;align-items:center;justify-content:center;width:56px;height:56px;border:2px solid #ffc48b;border-radius:50%;background:#171717;color:#f7e8d8;box-shadow:0 7px 16px #0009;line-height:1.15}
-.discount-float-old del{font-family:'Outfit','Manrope',sans-serif;font-size:13px;font-weight:800;text-decoration-color:#ff895c;text-decoration-thickness:2px}
-.discount-float-old small{margin-top:3px;font-size:10px;font-weight:700;color:#ffd6b0}
+.discount-float-percent{display:block;font-family:'Outfit','Manrope',sans-serif;font-size:42px;font-weight:900;letter-spacing:-1.2px;line-height:1}
+.discount-float-price{
+  display:block;
+  margin-top:6px;
+  padding:5px 6px;
+  border:1px solid #ffd6b477;
+  border-radius:9px;
+  background:#20170f;
+  color:#fff2e5;
+  font-size:13px;
+  font-weight:800;
+  line-height:1.3;
+  white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+html[dir=ltr] .discount-float-price{font-size:10.5px;letter-spacing:-.1px}
 .discount-float:hover{transform:translateY(-4px);box-shadow:0 19px 42px #000a,0 0 0 6px #ff7a1a38,inset 0 2px 7px #fff6}
 .discount-float:focus-visible{outline:3px solid #91f1ce;outline-offset:6px}
 .modal-open .discount-float{visibility:hidden}
 .price-panel .price-before{display:flex;align-items:center;justify-content:center;gap:8px;margin:8px 0 2px;color:#d2c7ba;font-size:14px;line-height:1.5}
 .price-panel .price-before del{color:#c9bcb0;font-family:'Outfit','Manrope',sans-serif;font-size:18px;font-weight:700;text-decoration-color:#fb8c6c;text-decoration-thickness:2px}
 .price-panel .price-eyebrow{color:#ffbb89}
-@media(max-width:800px){.discount-float{inset-inline-end:20px;bottom:calc(105px + env(safe-area-inset-bottom));width:91px;height:91px;padding:8px 8px 13px}.discount-float-caption{font-size:12px}.discount-float-percent{font-size:30px}.discount-float-old{width:46px;height:46px;bottom:-13px;inset-inline-end:-10px}.discount-float-old del{font-size:11px}.discount-float-old small{font-size:9px}}
+@media(max-width:800px){
+  .discount-float{inset-inline-end:18px;bottom:calc(105px + env(safe-area-inset-bottom));width:116px;height:116px;padding:9px 5px}
+  .discount-float-caption{font-size:13px}
+  .discount-float-percent{font-size:35px}
+  .discount-float-price{margin-top:4px;font-size:11.5px;padding:4px 4px}
+  html[dir=ltr] .discount-float-price{font-size:9px}
+}
 @media(prefers-reduced-motion:reduce){.discount-float{transition:none}.discount-float:hover{transform:none}}
