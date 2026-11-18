@@ -93,7 +93,13 @@ function boot() {
   assert.equal(discountBadge.getAttribute('href'),'#apply','Offer badge opens application section');
   assert.equal(discountBadge.querySelector('.discount-float-percent').textContent.trim(),'50%');
   assert.equal(discountBadge.querySelector('.discount-float-price').textContent.trim(),'للكامب السادس');
-  assert(d.querySelector('.price-panel [data-apply]'),'Application button must remain in the offer panel');
+  const offerHeading=d.querySelector('.price-panel .price-discount-heading');
+  assert(offerHeading,'Discount heading must replace previous cohort application label');
+  assert.equal(offerHeading.textContent.trim(),'50%خصم على الكامب السادس');
+  assert.equal(offerHeading.dataset.en,'50% off for Cohort 06 only');
+  assert.equal(offerHeading.querySelector('.price-discount-number').textContent.trim(),'50%');
+  assert(css.includes('.price-panel .price-discount-heading'),'Styled orange discount heading must be present');
+    assert(d.querySelector('.price-panel [data-apply]'),'Application button must remain in the offer panel');
   assert(css.includes('.discount-float')&&minCSS.includes('.discount-float'),'Refined offer styles must be published');
   assert(d.querySelector('link[href*="styles.min.css"]'));
   assert.equal(d.querySelectorAll('[data-en]').length>160,true,'English translations required');
