@@ -53,6 +53,17 @@ const server=http.createServer((req,res)=>{
         };
       });
       assert(info.full<=width+3,'Horizontal overflow at '+width+'px '+JSON.stringify(info));
+      const badgeInfo=await page.locator('.mentor-cover > .discount-float').evaluate(el=>{
+        const r=el.getBoundingClientRect(),card=el.parentElement.getBoundingClientRect();
+        const name=document.querySelector('.name-signature').getBoundingClientRect();
+        const overlapsName=r.left<name.right&&r.right>name.left&&r.top<name.bottom&&r.bottom>name.top;
+        return {position:getComputedStyle(el).position,left:r.left,right:r.right,top:r.top,bottom:r.bottom,
+          coverLeft:card.left,coverRight:card.right,coverTop:card.top,coverBottom:card.bottom,overlapsName};
+      });
+      assert.equal(badgeInfo.position,'absolute','Badge must be anchored inside card at '+width);
+      assert(badgeInfo.left>=badgeInfo.coverLeft-1&&badgeInfo.right<=badgeInfo.coverRight+1,'Badge outside hero card horizontally at '+width+': '+JSON.stringify(badgeInfo));
+      assert(badgeInfo.top>=badgeInfo.coverTop-1&&badgeInfo.bottom<=badgeInfo.coverBottom+1,'Badge outside hero card vertically at '+width+': '+JSON.stringify(badgeInfo));
+      assert(!badgeInfo.overlapsName,'Badge overlaps instructor signature at '+width+': '+JSON.stringify(badgeInfo));
       assert(info.portraitLoaded,'Portrait missing at '+width);
       assert(info.heroLeft>=-3 && info.heroRight<=width+3,'Hero card clipped at '+width);
       assert.equal(info.topBorder,'0px','No border above camp statistics');
