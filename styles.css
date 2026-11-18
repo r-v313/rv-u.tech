@@ -6732,150 +6732,50 @@ html[dir=ltr] #experience .arrow-next svg,html[dir=ltr] #research .arrow-next sv
   border-inline-start:1px solid #444046!important;
 }
 
-/* Premium 50% offer: an anchored corner badge inside the mentor card */
+
+/* A compact sixth-cohort discount badge with touch drag and ball-like physics */
 .hero.hero-unified .mentor-cover{position:relative}
 .mentor-cover > .discount-float{
-  position:absolute;
-  z-index:5;
-  top:clamp(17px,2.7vw,28px);
-  left:clamp(17px,2.7vw,28px);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:2px;
-  width:132px;
-  min-height:98px;
-  padding:12px;
-  border:1px solid #c07839;
-  border-radius:16px;
-  background:linear-gradient(150deg,#33271f 0%,#1d1b1a 52%,#151618 100%);
-  color:#f5eae0;
-  text-align:center;
-  text-decoration:none;
-  line-height:1.25;
-  box-shadow:0 9px 24px #0008,0 0 16px #fd792010,inset 0 1px 0 #ffffff12;
-  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+  position:absolute;z-index:5;
+  top:clamp(13px,2.6vw,22px);left:clamp(13px,2.6vw,22px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  width:108px;min-height:88px;padding:9px 8px;
+  border:1px solid #c88a57;border-radius:25px;
+  background:radial-gradient(circle at 26% 17%,#ffc18e29,transparent 45%),linear-gradient(145deg,#33251c,#18191a 80%);
+  color:#f8eee4;text-align:center;text-decoration:none;line-height:1.22;
+  box-shadow:0 9px 25px #0008,0 0 14px #f3792910,inset 0 1px #ffffff22;
+  touch-action:none;user-select:none;-webkit-user-select:none;
+  cursor:grab;will-change:transform;
+  transition:border-color .2s ease,box-shadow .2s ease;
 }
-.discount-float-caption{
-  color:#e5d8cb;
-  font-size:11px;
-  font-weight:650;
-  line-height:1.4;
-}
-.discount-float-percent{
-  display:block;
-  color:#ffac73;
-  font-family:'Outfit','Manrope',sans-serif;
-  font-size:35px;
-  font-weight:800;
-  letter-spacing:-1px;
-  line-height:1.15;
-}
-.discount-float-price{
-  display:block;
-  color:#eee5db;
-  font-size:11px;
-  font-weight:650;
-  line-height:1.4;
-  white-space:nowrap;
-}
-html[dir=ltr] .discount-float-price{font-size:10px}
-.mentor-cover > .discount-float:hover{
-  transform:translateY(-2px);
-  border-color:#ec9b59;
-  box-shadow:0 12px 28px #0008,0 0 18px #fd792020,inset 0 1px 0 #ffffff18;
-}
+.mentor-cover > .discount-float:hover{border-color:#f0a46c;box-shadow:0 12px 26px #0009,0 0 20px #f3792924}
+.mentor-cover > .discount-float.is-dragging{cursor:grabbing;border-color:#ffc399;box-shadow:0 17px 36px #000b,0 0 24px #f3792930}
+.discount-float-caption{color:#ead1c0;font-size:10px;font-weight:750;line-height:1.25}
+.discount-float-percent{display:block;color:#ffb27e;font:850 31px/1.1 'Outfit','Manrope',sans-serif;letter-spacing:-1px}
+.discount-float-price{display:block;color:#f1e6db;font-size:10px;font-weight:650;line-height:1.35;white-space:nowrap}
+html[dir=ltr] .discount-float-price{font-size:9px}
 .mentor-cover > .discount-float:focus-visible{outline:2px solid #91f1ce;outline-offset:4px}
 .modal-open .discount-float{visibility:hidden}
 @media(max-width:800px){
-  .mentor-cover > .discount-float{
-    top:clamp(15px,3.6vw,22px);
-    left:clamp(13px,3.7vw,19px);
-    width:clamp(98px,30.5vw,122px);
-    min-height:82px;
-    padding:9px 7px;
-    border-radius:14px;
-  }
-  .discount-float-caption{font-size:10px}
-  .discount-float-percent{font-size:clamp(27px,8vw,31px)}
-  .discount-float-price{font-size:clamp(9px,2.65vw,10.5px)}
-  html[dir=ltr] .discount-float-price{font-size:9px}
+  .mentor-cover > .discount-float{top:13px;left:13px;width:clamp(84px,25vw,98px);min-height:clamp(75px,22vw,84px);padding:8px 5px;border-radius:23px}
+  .discount-float-caption{font-size:9px}
+  .discount-float-percent{font-size:clamp(26px,7.4vw,29px)}
+  .discount-float-price{font-size:clamp(8.5px,2.5vw,9.5px)}
+  html[dir=ltr] .discount-float-price{font-size:8px}
 }
-@media(max-width:360px){
-  .mentor-cover > .discount-float{top:12px;left:11px;min-height:76px}
-}
-@media(prefers-reduced-motion:reduce){
-  .mentor-cover > .discount-float{transition:none}
-  .mentor-cover > .discount-float:hover{transform:none}
-}
+@media(max-width:360px){.mentor-cover > .discount-float{top:11px;left:10px}}
+@media(prefers-reduced-motion:reduce){.mentor-cover > .discount-float{transition:none}}
 
-/* Cohort 06 — premium application dock and accessibility-conscious theme controls */
-.theme-toggle{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:44px;min-height:44px;padding:6px 10px;border:1px solid #775640;border-radius:12px;background:#29221d;color:#ffe2c9;font:700 12px/1.4 var(--font);white-space:nowrap;transition:background .2s,border-color .2s,transform .2s}
-.theme-toggle:hover{background:#37291e;border-color:#b98660}
-.theme-toggle:focus-visible{outline:2px solid #82d3ac;outline-offset:3px}
-.theme-toggle svg{width:18px;height:18px;flex:none}
-.theme-toggle .theme-moon{display:none}
-html[data-theme=light] .theme-toggle .theme-sun{display:none}
-html[data-theme=light] .theme-toggle .theme-moon{display:block}
-@media(max-width:540px){.theme-toggle{width:40px;min-width:40px;padding:7px;border-radius:11px}.theme-toggle-text{display:none}.nav-actions{gap:2px}.language{min-width:36px;padding:6px}}
+/* A minimal persistent application dock: avoid duplicating the discount sentence */
 @media(max-width:850px){
- .mobile-cta{display:block;position:fixed;inset-inline:0;bottom:0;z-index:9;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));background:#111416f7;border-top:1px solid #96603e;box-shadow:0 -10px 35px #0008;backdrop-filter:blur(16px)}
- .mobile-cta-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:650px;margin-inline:auto}
- .mobile-cta-offer{display:flex;flex:1 1 auto;min-width:0;flex-direction:column;align-items:flex-start;gap:5px}
- .mobile-cta-promo{display:block;width:fit-content;max-width:100%;padding:7px 10px;border:1px solid #ffb27363;border-radius:9px;background:linear-gradient(115deg,#ef6c21,#c94d1f);color:#fff9ef;font:800 clamp(10px,2.7vw,13px)/1.55 var(--font);text-align:start;box-shadow:0 4px 12px #ef6c2118;overflow-wrap:break-word}
- .mobile-cta-note{color:#dbcbc0;font:600 clamp(9px,2.4vw,11px)/1.5 var(--font)}
- .mobile-cta .mobile-cta-apply{display:inline-flex;flex:0 0 auto;align-items:center;justify-content:center;gap:7px;min-width:132px;max-width:48%;min-height:48px;padding:10px 13px;border:1px solid #f8bb86;border-radius:11px;background:linear-gradient(130deg,#ffa34d,#fa781f);color:#20140c;font:800 clamp(11px,2.9vw,14px)/1.4 var(--font);white-space:nowrap;box-shadow:0 5px 18px #fa781f33}
- .mobile-cta .mobile-cta-apply:hover{transform:translateY(-1px);box-shadow:0 7px 23px #fa781f45}
- .mobile-cta .mobile-cta-apply svg{width:17px;height:17px;flex:none}
- .modal-open .mobile-cta{visibility:hidden}
+  .mobile-cta{display:block;position:fixed;inset-inline:0;bottom:0;z-index:9;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));background:#111416f7;border-top:1px solid #96603e;box-shadow:0 -10px 35px #0008;backdrop-filter:blur(16px)}
+  .mobile-cta-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:650px;margin-inline:auto}
+  .mobile-cta-offer{display:flex;flex:1 1 auto;min-width:0;flex-direction:column;align-items:flex-start;gap:5px}
+  .mobile-cta-note{color:#dbcbc0;font:600 clamp(10px,2.6vw,12px)/1.5 var(--font)}
+  .mobile-cta .mobile-cta-apply{display:inline-flex;flex:0 0 auto;align-items:center;justify-content:center;gap:7px;min-width:132px;max-width:55%;min-height:48px;padding:10px 13px;border:1px solid #f8bb86;border-radius:11px;background:linear-gradient(130deg,#ffa34d,#fa781f);color:#20140c;font:800 clamp(11px,2.9vw,14px)/1.4 var(--font);white-space:nowrap;box-shadow:0 5px 18px #fa781f33}
+  .mobile-cta .mobile-cta-apply:hover{transform:translateY(-1px);box-shadow:0 7px 23px #fa781f45}
+  .mobile-cta .mobile-cta-apply svg{width:17px;height:17px;flex:none}
+  .modal-open .mobile-cta{visibility:hidden}
 }
-@media(max-width:360px){.mobile-cta{padding-inline:9px}.mobile-cta-inner{gap:7px}.mobile-cta-promo{padding:6px 7px}.mobile-cta .mobile-cta-apply{min-width:114px;padding:8px 7px;gap:4px}}
-
-/* Cream + forest green: a separate light visual identity, not an inverted dark mode */
-html[data-theme=light]{--bg:#f5f1e6;--panel:#fffaf0;--ink:#173b30;--muted:#526c60;--orange:#276f53;--line:#d7dfd2;--paper:#fffaf0;--dark:#214a3b;color-scheme:light}
-html[data-theme=light] body{background:radial-gradient(ellipse at 5% 5%,#e1ecde 0,transparent 43%),linear-gradient(180deg,#f6f1e7,#eeeadd 68%,#f7f3e9);color:#173b30}
-html[data-theme=light] .site-header{background:#fdf9f0f2;border-color:#d2ddce;box-shadow:0 8px 25px #284a3612}
-html[data-theme=light] .brand-name,html[data-theme=light] .nav nav a,html[data-theme=light] .language,html[data-theme=light] .menu-toggle{color:#183d30}
-html[data-theme=light] .brand-light,html[data-theme=light] .nav nav a:hover,html[data-theme=light] em{color:#287457}
-html[data-theme=light] .theme-toggle{background:#e1eadc;color:#1d5944;border-color:#aac3ae}
-html[data-theme=light] .theme-toggle:hover{background:#d4e4d4;border-color:#7ba88e}
-html[data-theme=light] .hero{background:radial-gradient(ellipse at 20% 25%,#d1e7ce80,transparent 67%)}
-html[data-theme=light] .camp-masthead-main,html[data-theme=light] .mentor-cover .cover-top .mono{color:#1c6147;text-shadow:0 2px 15px #28745718}
-html[data-theme=light] .camp-masthead-sub{color:#5c806c}
-html[data-theme=light] .hero-visual .mentor-cover{background:linear-gradient(140deg,#fffdf6,#e7eee2 95%);border-color:#a9bfa9;box-shadow:0 16px 46px #315b3f20}
-html[data-theme=light] .hero.hero-unified .cover-roles span,html[data-theme=light] .hero.hero-unified .cover-bio-copy,html[data-theme=light] .hero.hero-unified .cover-bio-copy p,html[data-theme=light] .hero.hero-unified .hero-lead{color:#244e3f}
-html[data-theme=light] .cover-bio-intro,html[data-theme=light] .cover-bio-goal{color:#244e3f}
-html[data-theme=light] .bio-accent,html[data-theme=light] .thanks-plain{color:#236a4b}
-html[data-theme=light] .mentor-cover>.discount-float{background:linear-gradient(145deg,#f0e1cc,#fff8ea);border-color:#c99053;color:#284f3d;box-shadow:0 8px 22px #6d4f231c}
-html[data-theme=light] .discount-float-caption,html[data-theme=light] .discount-float-price{color:#315540}
-html[data-theme=light] .discount-float-percent{color:#b44f22}
-html[data-theme=light] .hero-quick-link,html[data-theme=light] .hero-quick-pill,html[data-theme=light] .hero.hero-unified .hero-apply-dates{background:#fffaf0;border-color:#b6cdb9;color:#1d5b44;box-shadow:0 6px 18px #3b614217}
-html[data-theme=light] .hero.hero-unified .hero-apply-date-label,html[data-theme=light] .hero.hero-unified .hero-apply-date-value{color:#225c47}
-html[data-theme=light] .button,html[data-theme=light] .hero-primary-apply,html[data-theme=light] .price-panel>.button{background:#267253;border-color:#267253;color:#fffaf0;box-shadow:0 7px 22px #26725326}
-html[data-theme=light] .button:hover{background:#1c5f45;border-color:#1c5f45}
-html[data-theme=light] .button.outline{background:#f4f7ed;color:#245f48;border-color:#91b59e}
-html[data-theme=light] .section-heading h2,html[data-theme=light] .section-dot-title,html[data-theme=light] h2,html[data-theme=light] h3{color:#194b39}
-html[data-theme=light] .section-heading p,html[data-theme=light] .section p,html[data-theme=light] .resource-card p,html[data-theme=light] .gallery-card-info p,html[data-theme=light] .research-card p{color:#46675a}
-html[data-theme=light] .history-stats article,html[data-theme=light] .journey-drawer,html[data-theme=light] .student-feedback-card,html[data-theme=light] .camp-format-item,html[data-theme=light] .rhythm-list article,html[data-theme=light] .weekly-overview,html[data-theme=light] .outcomes-list article,html[data-theme=light] .research-card,html[data-theme=light] .gallery-card,html[data-theme=light] .resource-card,html[data-theme=light] .fit-yes,html[data-theme=light] .fit-no,html[data-theme=light] .price-panel,html[data-theme=light] .faq-list details{background:#fffaf0;border-color:#cad8c9;color:#234c3d;box-shadow:0 8px 25px #315d4011}
-html[data-theme=light] .camp-history,html[data-theme=light] .rhythm-wrap,html[data-theme=light] .gallery-section,html[data-theme=light] .apply-wrap{background:#ecf1e5}
-html[data-theme=light] #journey .history-stats article+article{border-inline-start-color:#c4d3c5!important}
-html[data-theme=light] .history-number,html[data-theme=light] .outcome-index,html[data-theme=light] .price-eyebrow,html[data-theme=light] .price-panel .price-eyebrow{color:#246d51}
-html[data-theme=light] .price-panel .price-offer{color:#1f6049;border-block-color:#a0c7a8}
-html[data-theme=light] .faq-list summary,html[data-theme=light] .faq-list summary span,html[data-theme=light] .faq-list p,html[data-theme=light] .curriculum summary,html[data-theme=light] .week-content,html[data-theme=light] .week-topics{color:#254f40}
-html[data-theme=light] .curriculum details,html[data-theme=light] .curriculum .week-content,html[data-theme=light] .outcome-example{background:#fffaf0;border-color:#d2ddcb;color:#315b49}
-html[data-theme=light] .gallery-card-info,html[data-theme=light] .research-card-info{background:#fffaf0;color:#244f3f}
-html[data-theme=light] .resource-actions a,html[data-theme=light] .pdf-link,html[data-theme=light] .text-link{color:#206e50}
-html[data-theme=light] .footer{background:#e6eee1;border-color:#b9cbb9;color:#315646}
-html[data-theme=light] dialog{background:#fffaf0;color:#214c3b;border-color:#b7cbb8}
-html[data-theme=light] .close-button{background:#deeadc;color:#1f5944}
-html[data-theme=light] #application-form input,html[data-theme=light] #application-form select,html[data-theme=light] #application-form textarea{background:#fffdf8;border-color:#b9cbb8;color:#163f30}
-html[data-theme=light] .phone-help,html[data-theme=light] #apply-dialog small{color:#537364}
-html[data-theme=light] dialog::backdrop{background:#143b3180}
-@media(max-width:850px){
- html[data-theme=light] .mobile-cta{background:#fffaf1f5;border-top-color:#91b8a0;box-shadow:0 -7px 26px #2d54401e}
- html[data-theme=light] .mobile-cta-promo{background:linear-gradient(120deg,#ed8131,#ce5725);color:#fffdf6;border-color:#fbbd82}
- html[data-theme=light] .mobile-cta-note{color:#426956}
- html[data-theme=light] .mobile-cta .mobile-cta-apply{background:#246f50;color:#fffaf0;border-color:#42916c;box-shadow:0 6px 18px #246f5030}
-}
-@media(prefers-reduced-motion:reduce){.theme-toggle,.mobile-cta .mobile-cta-apply{transition:none}}
+@media(max-width:360px){.mobile-cta{padding-inline:9px}.mobile-cta-inner{gap:7px}.mobile-cta .mobile-cta-apply{min-width:114px;padding:8px 7px;gap:4px}}
+@media(prefers-reduced-motion:reduce){.mobile-cta .mobile-cta-apply{transition:none}}
