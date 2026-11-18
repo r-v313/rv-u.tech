@@ -19,6 +19,32 @@
   const arabicContent = new Map(translated.map(el => [el, [...el.childNodes].map(node => node.cloneNode(true))]));
   let lastFocus = null;
   const isArabic = () => document.documentElement.lang === 'ar';
+  const themeToggle = $('theme-toggle');
+  const themeStoreKey = 'rvu-camp-theme';
+  let activeTheme = 'dark';
+  try {if (window.localStorage.getItem(themeStoreKey) === 'light') activeTheme = 'light';} catch (_) {}
+  function updateThemeControl() {
+    if (!themeToggle) return;
+    const switchToLight = activeTheme === 'dark';
+    const ar = isArabic();
+    const title = switchToLight ? (ar ? 'تفعيل الوضع الفاتح' : 'Switch to cream light mode') : (ar ? 'تفعيل الوضع الداكن' : 'Switch to dark mode');
+    themeToggle.setAttribute('aria-label', title);
+    themeToggle.setAttribute('title', title);
+    themeToggle.setAttribute('aria-pressed', String(activeTheme === 'light'));
+    const label = themeToggle.querySelector('.theme-toggle-text');
+    if (label) label.textContent = switchToLight ? (ar ? 'فاتح' : 'Light') : (ar ? 'داكن' : 'Dark');
+  }
+  function setTheme(next, persist = true) {
+    activeTheme = next === 'light' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', activeTheme);
+    const browserColor = document.querySelector('meta[name="theme-color"]');
+    if (browserColor) browserColor.setAttribute('content', activeTheme === 'light' ? '#f5f1e6' : '#090909');
+    updateThemeControl();
+    if (persist) {try {window.localStorage.setItem(themeStoreKey, activeTheme);} catch (_) {}}
+  }
+  setTheme(activeTheme, false);
+  if (themeToggle) themeToggle.addEventListener('click', () => setTheme(activeTheme === 'dark' ? 'light' : 'dark'));
+
   function setLanguage(lang) {
     const ar = lang === 'ar';
     document.documentElement.lang = lang;
@@ -32,6 +58,7 @@
     document.querySelectorAll('[data-alt-en]').forEach(img => img.alt = ar ? img.dataset.altAr : img.dataset.altEn);
     language.textContent = ar ? 'EN' : 'AR';
     language.setAttribute('aria-label', ar ? 'Switch to English' : 'التبديل إلى العربية');
+    updateThemeControl();
     document.title = ar ? 'الدفعة السادسة — التقديم مفتوح الآن | RVU Mentorship Camp' : 'Cohort 06 — Applications Open | RVU Mentorship Camp';
     $('form-error').hidden = true;
     shelves.forEach(shelf => shelf.reset());
