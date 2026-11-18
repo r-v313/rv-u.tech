@@ -19,32 +19,6 @@
   const arabicContent = new Map(translated.map(el => [el, [...el.childNodes].map(node => node.cloneNode(true))]));
   let lastFocus = null;
   const isArabic = () => document.documentElement.lang === 'ar';
-  const themeToggle = $('theme-toggle');
-  const themeStoreKey = 'rvu-camp-theme';
-  let activeTheme = 'dark';
-  try {if (window.localStorage.getItem(themeStoreKey) === 'light') activeTheme = 'light';} catch (_) {}
-  function updateThemeControl() {
-    if (!themeToggle) return;
-    const switchToLight = activeTheme === 'dark';
-    const ar = isArabic();
-    const title = switchToLight ? (ar ? 'تفعيل الوضع الفاتح' : 'Switch to cream light mode') : (ar ? 'تفعيل الوضع الداكن' : 'Switch to dark mode');
-    themeToggle.setAttribute('aria-label', title);
-    themeToggle.setAttribute('title', title);
-    themeToggle.setAttribute('aria-pressed', String(activeTheme === 'light'));
-    const label = themeToggle.querySelector('.theme-toggle-text');
-    if (label) label.textContent = switchToLight ? (ar ? 'فاتح' : 'Light') : (ar ? 'داكن' : 'Dark');
-  }
-  function setTheme(next, persist = true) {
-    activeTheme = next === 'light' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', activeTheme);
-    const browserColor = document.querySelector('meta[name="theme-color"]');
-    if (browserColor) browserColor.setAttribute('content', activeTheme === 'light' ? '#f5f1e6' : '#090909');
-    updateThemeControl();
-    if (persist) {try {window.localStorage.setItem(themeStoreKey, activeTheme);} catch (_) {}}
-  }
-  setTheme(activeTheme, false);
-  if (themeToggle) themeToggle.addEventListener('click', () => setTheme(activeTheme === 'dark' ? 'light' : 'dark'));
-
   function setLanguage(lang) {
     const ar = lang === 'ar';
     document.documentElement.lang = lang;
@@ -58,7 +32,6 @@
     document.querySelectorAll('[data-alt-en]').forEach(img => img.alt = ar ? img.dataset.altAr : img.dataset.altEn);
     language.textContent = ar ? 'EN' : 'AR';
     language.setAttribute('aria-label', ar ? 'Switch to English' : 'التبديل إلى العربية');
-    updateThemeControl();
     document.title = ar ? 'الدفعة السادسة — التقديم مفتوح الآن | RVU Mentorship Camp' : 'Cohort 06 — Applications Open | RVU Mentorship Camp';
     $('form-error').hidden = true;
     shelves.forEach(shelf => shelf.reset());
@@ -99,6 +72,106 @@
   });
   document.querySelectorAll('[data-close]').forEach(button => button.addEventListener('click', () => $(button.dataset.close).close()));
   document.querySelectorAll('[data-apply]').forEach(button => button.addEventListener('click', () => openDialog($('apply-dialog'))));
+
+  // Drag-and-fling the discount badge without sacrificing its normal #apply link.
+  function setupDiscountDrag() {
+    const badge = document.querySelector('.mentor-cover > .discount-draggable');
+    if (!badge || !window.PointerEvent) return;
+    const card = badge.parentElement;
+    const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+    let x = 0, y = 0, vx = 0, vy = 0, pointer = null, moved = false;
+    let startX = 0, startY = 0, fromX = 0, fromY = 0, lastX = 0, lastY = 0, lastT = 0;
+    let frame = 0, lastFrame = 0, suppressClickUntil = 0;
+
+    function bounds() {
+      const margin = 9, baseX = badge.offsetLeft, baseY = badge.offsetTop;
+      const signature = card.querySelector('.cover-name');
+      const signatureTop = signature ? signature.offsetTop - 12 : card.clientHeight;
+      const limitY = Math.min(card.clientHeight - margin, signatureTop);
+      const minX = margin - baseX, minY = margin - baseY;
+      return {
+        minX, minY,
+        maxX: Math.max(minX, card.clientWidth - margin - badge.offsetWidth - baseX),
+        maxY: Math.max(minY, limitY - badge.offsetHeight - baseY)
+      };
+    }
+    function draw() {
+      badge.style.transform = 'translate3d(' + x.toFixed(2) + 'px,' + y.toFixed(2) + 'px,0)';
+    }
+    function stop() {
+      if (frame) cancelAnimationFrame(frame);
+      frame = 0; lastFrame = 0;
+    }
+    function animate(t) {
+      const dt = lastFrame ? clamp((t - lastFrame) / 16.67, .5, 2.1) : 1;
+      lastFrame = t;
+      const b = bounds();
+      x += vx * dt;
+      y += vy * dt;
+      if (x < b.minX) { x = b.minX; vx = Math.abs(vx) * .72; }
+      if (x > b.maxX) { x = b.maxX; vx = -Math.abs(vx) * .72; }
+      if (y < b.minY) { y = b.minY; vy = Math.abs(vy) * .72; }
+      if (y > b.maxY) { y = b.maxY; vy = -Math.abs(vy) * .72; }
+      const friction = Math.pow(.963, dt);
+      vx *= friction; vy *= friction;
+      draw();
+      if (Math.abs(vx) + Math.abs(vy) > .09) frame = requestAnimationFrame(animate);
+      else { frame = 0; vx = vy = 0; lastFrame = 0; }
+    }
+    badge.addEventListener('pointerdown', e => {
+      if ((e.pointerType === 'mouse' && e.button !== 0) || pointer !== null) return;
+      stop();
+      pointer = e.pointerId; moved = false;
+      startX = lastX = e.clientX;
+      startY = lastY = e.clientY;
+      fromX = x; fromY = y; vx = vy = 0;
+      lastT = performance.now();
+      badge.classList.add('is-dragging');
+      if (badge.setPointerCapture) badge.setPointerCapture(e.pointerId);
+    });
+    badge.addEventListener('pointermove', e => {
+      if (e.pointerId !== pointer) return;
+      const moveX = e.clientX - startX, moveY = e.clientY - startY;
+      if (!moved && Math.hypot(moveX, moveY) < 6) return;
+      moved = true;
+      const b = bounds();
+      x = clamp(fromX + moveX, b.minX, b.maxX);
+      y = clamp(fromY + moveY, b.minY, b.maxY);
+      const now = performance.now();
+      const dt = Math.max(4, now - lastT);
+      vx = clamp((e.clientX - lastX) / dt * 16.67 * .8 + vx * .2, -17, 17);
+      vy = clamp((e.clientY - lastY) / dt * 16.67 * .8 + vy * .2, -17, 17);
+      lastX = e.clientX; lastY = e.clientY; lastT = now;
+      draw();
+    });
+    function release(e) {
+      if (e.pointerId !== pointer) return;
+      pointer = null;
+      badge.classList.remove('is-dragging');
+      if (badge.hasPointerCapture && badge.hasPointerCapture(e.pointerId)) badge.releasePointerCapture(e.pointerId);
+      if (!moved) return;
+      suppressClickUntil = performance.now() + 320;
+      if (prefersReducedMotion()) { vx = vy = 0; return; }
+      if (performance.now() - lastT > 100) vx = vy = 0;
+      if (Math.abs(vx) + Math.abs(vy) > .09) frame = requestAnimationFrame(animate);
+    }
+    badge.addEventListener('pointerup', release);
+    badge.addEventListener('pointercancel', e => { vx = vy = 0; release(e); });
+    badge.addEventListener('click', e => {
+      if (e.detail && performance.now() < suppressClickUntil) {
+        e.preventDefault(); e.stopImmediatePropagation();
+      }
+    }, true);
+    window.addEventListener('resize', () => {
+      stop();
+      const b = bounds();
+      x = clamp(x, b.minX, b.maxX);
+      y = clamp(y, b.minY, b.maxY);
+      draw();
+    }, {passive:true});
+  }
+  setupDiscountDrag();
+
   const videos = new Set(['0O1a8Uv2RIs', 'xZR5-4iXnI0', 'CZx_WauYbcI', 'FDWt0pSoFTA']);
   document.querySelectorAll('[data-video]').forEach(button => {
     button.addEventListener('click', () => {
