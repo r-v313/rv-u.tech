@@ -53,22 +53,14 @@ const server=http.createServer((req,res)=>{
         };
       });
       assert(info.full<=width+3,'Horizontal overflow at '+width+'px '+JSON.stringify(info));
-      if([320,390,800,1280].includes(width)){
-        const theme=page.locator('#theme-toggle');
-        await theme.click();
-        const state=await page.evaluate(()=>({mode:document.documentElement.getAttribute('data-theme'),color:getComputedStyle(document.body).color,background:getComputedStyle(document.body).backgroundColor}));
-        assert.equal(state.mode,'light','Theme toggle must activate cream mode');
-        assert(!state.color.includes('242, 239, 233'),'Cream theme cannot keep original light text');
-        assert.equal(await theme.getAttribute('aria-pressed'),'true');
-        await theme.click();
-        assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
-        if(width<=800){
-          const dock=page.locator('.mobile-cta');
-          assert(await dock.isVisible(),'Fixed application dock should be visible at '+width);
-          assert.equal(await dock.locator('.mobile-cta-promo').textContent(),'خصم 50% على الكامب السادس فقط');
-          const rect=await dock.evaluate(el=>{const r=el.getBoundingClientRect();return {left:r.left,right:r.right};});
-          assert(rect.left>=-2&&rect.right<=width+2,'CTA bar overflow at '+width);
-        }
+      assert.equal(await page.locator('#theme-toggle').count(),0,'Light mode switch must be absent at '+width);
+      if([320,390,800].includes(width)){
+        const dock=page.locator('.mobile-cta');
+        assert(await dock.isVisible(),'Application dock must remain at '+width);
+        assert.equal(await dock.locator('.mobile-cta-promo').count(),0,'No repeated discount text in dock');
+        assert.equal(await dock.locator('.mobile-cta-apply').count(),1,'Application button remains in dock');
+        const r=await dock.evaluate(el=>{const rect=el.getBoundingClientRect();return {left:rect.left,right:rect.right};});
+        assert(r.left>=-2&&r.right<=width+2,'Dock must fit viewport at '+width);
       }
       const badgeInfo=await page.locator('.mentor-cover > .discount-float').evaluate(el=>{
         const r=el.getBoundingClientRect(),card=el.parentElement.getBoundingClientRect();
@@ -78,6 +70,8 @@ const server=http.createServer((req,res)=>{
           coverLeft:card.left,coverRight:card.right,coverTop:card.top,coverBottom:card.bottom,overlapsName};
       });
       assert.equal(badgeInfo.position,'absolute','Badge must be anchored inside card at '+width);
+      assert.equal(await page.locator('.mentor-cover > .discount-draggable').count(),1,'One small draggable badge at '+width);
+      assert(await page.locator('.discount-draggable').evaluate(el=>el.offsetWidth<=112),'Badge should remain compact at '+width);
       assert(badgeInfo.left>=badgeInfo.coverLeft-1&&badgeInfo.right<=badgeInfo.coverRight+1,'Badge outside hero card horizontally at '+width+': '+JSON.stringify(badgeInfo));
       assert(badgeInfo.top>=badgeInfo.coverTop-1&&badgeInfo.bottom<=badgeInfo.coverBottom+1,'Badge outside hero card vertically at '+width+': '+JSON.stringify(badgeInfo));
       assert(!badgeInfo.overlapsName,'Badge overlaps instructor signature at '+width+': '+JSON.stringify(badgeInfo));
@@ -146,6 +140,18 @@ const server=http.createServer((req,res)=>{
           await page.locator('#menu-toggle').click();
           assert.equal(await page.locator('#menu-toggle').getAttribute('aria-expanded'),'false');
         }
+      }
+      if(width===390){
+        const control=page.locator('.discount-draggable');
+        const initial=await control.boundingBox();
+        await page.mouse.move(initial.x+initial.width/2,initial.y+initial.height/2);
+        await page.mouse.down();
+        await page.mouse.move(initial.x+initial.width/2+32,initial.y+initial.height/2+20,{steps:4});
+        await page.mouse.up();
+        await page.waitForTimeout(120);
+        const moved=await control.evaluate(el=>getComputedStyle(el).transform);
+        assert.notEqual(moved,'none','Dragging the badge must change its transform');
+        assert.equal(new URL(page.url()).hash,'','Dragging must not navigate to #apply');
       }
       assert.deepEqual(errors,[],'JS error at '+width);
       console.log('PASS: responsive Chromium '+width+'x'+height+' AR/EN; session label '+info.tag);
