@@ -6779,3 +6779,35 @@ html[dir=ltr] .discount-float-price{font-size:9px}
 }
 @media(max-width:360px){.mobile-cta{padding-inline:9px}.mobile-cta-inner{gap:7px}.mobile-cta .mobile-cta-apply{min-width:114px;padding:8px 7px;gap:4px}}
 @media(prefers-reduced-motion:reduce){.mobile-cta .mobile-cta-apply{transition:none}}
+
+/* Elegant, compact discount title in the application card */
+.price-panel .price-discount-heading{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  column-gap:9px;
+  row-gap:3px;
+  max-width:100%;
+  margin:0 auto 18px;
+  padding:10px 16px;
+  border:1px solid #e3945c;
+  border-radius:13px;
+  background:linear-gradient(120deg,#b94a21,#e46c2a);
+  color:#fff9ee;
+  box-shadow:0 7px 20px #c65c291f,inset 0 1px 0 #ffffff21;
+  font-family:'IBM Plex Sans Arabic',var(--font);
+  font-size:clamp(14px,2.2vw,17px);
+  font-weight:750;
+  line-height:1.6;
+  text-align:center;
+  text-wrap:balance;
+}
+.price-panel .price-discount-number{
+  color:#fff9ee;
+  font:850 clamp(18px,2.7vw,22px)/1.15 'Outfit','Manrope',sans-serif;
+  font-variant-numeric:tabular-nums;
+  letter-spacing:-.02em;
+}
+.price-panel .price-discount-copy{color:inherit;font:inherit}
+@media(max-width:360px){.price-panel .price-discount-heading{padding:9px 11px;font-size:13px;column-gap:6px}}
