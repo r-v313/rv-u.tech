@@ -53,6 +53,23 @@ const server=http.createServer((req,res)=>{
         };
       });
       assert(info.full<=width+3,'Horizontal overflow at '+width+'px '+JSON.stringify(info));
+      if([320,390,800,1280].includes(width)){
+        const theme=page.locator('#theme-toggle');
+        await theme.click();
+        const state=await page.evaluate(()=>({mode:document.documentElement.getAttribute('data-theme'),color:getComputedStyle(document.body).color,background:getComputedStyle(document.body).backgroundColor}));
+        assert.equal(state.mode,'light','Theme toggle must activate cream mode');
+        assert(!state.color.includes('242, 239, 233'),'Cream theme cannot keep original light text');
+        assert.equal(await theme.getAttribute('aria-pressed'),'true');
+        await theme.click();
+        assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
+        if(width<=800){
+          const dock=page.locator('.mobile-cta');
+          assert(await dock.isVisible(),'Fixed application dock should be visible at '+width);
+          assert.equal(await dock.locator('.mobile-cta-promo').textContent(),'خصم 50% على الكامب السادس فقط');
+          const rect=await dock.evaluate(el=>{const r=el.getBoundingClientRect();return {left:r.left,right:r.right};});
+          assert(rect.left>=-2&&rect.right<=width+2,'CTA bar overflow at '+width);
+        }
+      }
       const badgeInfo=await page.locator('.mentor-cover > .discount-float').evaluate(el=>{
         const r=el.getBoundingClientRect(),card=el.parentElement.getBoundingClientRect();
         const name=document.querySelector('.name-signature').getBoundingClientRect();
