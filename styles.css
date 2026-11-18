@@ -6732,77 +6732,80 @@ html[dir=ltr] #experience .arrow-next svg,html[dir=ltr] #research .arrow-next sv
   border-inline-start:1px solid #444046!important;
 }
 
-/* Refined, low-visual-noise offer badge for the sixth cohort */
-.discount-float{
-  position:fixed;
-  z-index:12;
-  inset-inline-end:clamp(16px,2.5vw,34px);
-  bottom:clamp(24px,4vh,46px);
+/* Premium 50% offer: an anchored corner badge inside the mentor card */
+.hero.hero-unified .mentor-cover{position:relative}
+.mentor-cover > .discount-float{
+  position:absolute;
+  z-index:5;
+  top:clamp(17px,2.7vw,28px);
+  left:clamp(17px,2.7vw,28px);
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
   gap:2px;
-  width:146px;
+  width:132px;
   min-height:98px;
-  padding:11px 13px 12px;
-  border:1px solid #9c7252;
-  border-radius:18px;
-  background:linear-gradient(145deg,#292421,#17191a 80%);
-  color:#f4eee8;
+  padding:12px;
+  border:1px solid #c07839;
+  border-radius:16px;
+  background:linear-gradient(150deg,#33271f 0%,#1d1b1a 52%,#151618 100%);
+  color:#f5eae0;
   text-align:center;
   text-decoration:none;
-  line-height:1.2;
-  box-shadow:0 12px 30px #0008,inset 0 1px 0 #ffffff14;
+  line-height:1.25;
+  box-shadow:0 9px 24px #0008,0 0 16px #fd792010,inset 0 1px 0 #ffffff12;
   transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
 }
 .discount-float-caption{
-  color:#d4bba6;
+  color:#e5d8cb;
   font-size:11px;
-  font-weight:700;
+  font-weight:650;
   line-height:1.4;
 }
 .discount-float-percent{
   display:block;
-  color:#ffb37c;
+  color:#ffac73;
   font-family:'Outfit','Manrope',sans-serif;
   font-size:35px;
   font-weight:800;
-  letter-spacing:-.9px;
-  line-height:1.12;
+  letter-spacing:-1px;
+  line-height:1.15;
 }
 .discount-float-price{
   display:block;
-  margin-top:1px;
   color:#eee5db;
-  font-size:11.5px;
-  font-weight:600;
-  line-height:1.45;
+  font-size:11px;
+  font-weight:650;
+  line-height:1.4;
   white-space:nowrap;
 }
 html[dir=ltr] .discount-float-price{font-size:10px}
-.discount-float:hover{
+.mentor-cover > .discount-float:hover{
   transform:translateY(-2px);
-  border-color:#c4946e;
-  box-shadow:0 14px 32px #0009,inset 0 1px 0 #ffffff18;
+  border-color:#ec9b59;
+  box-shadow:0 12px 28px #0008,0 0 18px #fd792020,inset 0 1px 0 #ffffff18;
 }
-.discount-float:focus-visible{outline:2px solid #91f1ce;outline-offset:4px}
+.mentor-cover > .discount-float:focus-visible{outline:2px solid #91f1ce;outline-offset:4px}
 .modal-open .discount-float{visibility:hidden}
 @media(max-width:800px){
-  .discount-float{
-    inset-inline-end:14px;
-    bottom:calc(105px + env(safe-area-inset-bottom));
-    width:120px;
+  .mentor-cover > .discount-float{
+    top:clamp(15px,3.6vw,22px);
+    left:clamp(13px,3.7vw,19px);
+    width:clamp(98px,30.5vw,122px);
     min-height:82px;
-    padding:9px 8px;
-    border-radius:15px;
+    padding:9px 7px;
+    border-radius:14px;
   }
   .discount-float-caption{font-size:10px}
-  .discount-float-percent{font-size:30px}
-  .discount-float-price{font-size:10px}
+  .discount-float-percent{font-size:clamp(27px,8vw,31px)}
+  .discount-float-price{font-size:clamp(9px,2.65vw,10.5px)}
   html[dir=ltr] .discount-float-price{font-size:9px}
 }
+@media(max-width:360px){
+  .mentor-cover > .discount-float{top:12px;left:11px;min-height:76px}
+}
 @media(prefers-reduced-motion:reduce){
-  .discount-float{transition:none}
-  .discount-float:hover{transform:none}
+  .mentor-cover > .discount-float{transition:none}
+  .mentor-cover > .discount-float:hover{transform:none}
 }
