@@ -60,7 +60,7 @@ function boot() {
   assert(!html.includes('poc-01.png'));
   assert(/border-top:0/.test(css),'Statistics top border removed');
   assert(/#journey\s+\.history-stats\s+article\s*\+\s*article\s*\{\s*border-inline-start:1px solid #444046!important;?\s*\}/.test(css),'Desktop statistic dividers must remain between cards');
-  assert(/#journey \.history-stats article \+ article \{\s*border-top:0!important;\s*border-inline-start:1px solid #444046!important;\s*\}\s*$/.test(css),'Statistics must show only vertical dividers between the three items');
+  assert(/#journey \.history-stats article \+ article \{\s*border-top:0!important;\s*border-inline-start:1px solid #444046!important;\s*\}/.test(css),'Statistics must show only vertical dividers between the three items');
   assert.equal(d.querySelector('meta[property="og:image"]').content,d.querySelector('.cover-portrait img').src,'Social preview must match the displayed portrait');
   assert(d.querySelector('meta[name="description"]').content.includes('RVU Mentorship Camp'),'SEO description must be present and reference the camp');
   assert(d.querySelector('meta[property="og:description"]').content.includes('RVU Mentorship Camp'),'Social description must be present and reference the camp');
@@ -78,6 +78,9 @@ function boot() {
   assert.equal(d.querySelector('#pricing,.price-display,.price-before,.price-payment'),null,'No pricing cards, amounts or payment instructions');
   const discountBadge=d.querySelector('.discount-float');
   assert(discountBadge,'Sixth-cohort offer must be visible');
+  assert.equal(discountBadge.parentElement,d.querySelector('.hero.hero-unified .mentor-cover'),'Discount must sit in top-left hero card instead of the viewport');
+  assert.equal(discountBadge.previousElementSibling,null,'Offer badge must precede portrait');
+  assert(/\.mentor-cover\s*>\s*\.discount-float\s*\{\s*position:absolute/.test(css),'Badge must be card-anchored, not viewport-fixed');
   assert.equal(discountBadge.getAttribute('href'),'#apply','Offer badge opens application section');
   assert.equal(discountBadge.querySelector('.discount-float-percent').textContent.trim(),'50%');
   assert.equal(discountBadge.querySelector('.discount-float-price').textContent.trim(),'للكامب السادس');
