@@ -143,6 +143,7 @@ const server=http.createServer((req,res)=>{
       }
       if(width===390){
         const control=page.locator('.discount-draggable');
+        await control.scrollIntoViewIfNeeded();
         const initial=await control.boundingBox();
         await page.mouse.move(initial.x+initial.width/2,initial.y+initial.height/2);
         await page.mouse.down();
@@ -152,6 +153,8 @@ const server=http.createServer((req,res)=>{
         const moved=await control.evaluate(el=>getComputedStyle(el).transform);
         assert.notEqual(moved,'none','Dragging the badge must change its transform');
         assert.equal(new URL(page.url()).hash,'','Dragging must not navigate to #apply');
+        await control.evaluate(el=>el.click());
+        assert.equal(new URL(page.url()).hash,'#apply','Tapping discount badge should navigate to application');
       }
       assert.deepEqual(errors,[],'JS error at '+width);
       console.log('PASS: responsive Chromium '+width+'x'+height+' AR/EN; session label '+info.tag);
