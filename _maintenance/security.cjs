@@ -79,10 +79,8 @@ for(const name of ['measurement.js','app.js','experience.js'])w.eval(fs.readFile
  for(const old of ['labs','test','submit.html','submit.js','submit.css','legacy-redirect.js','not-found.js'])assert(!fs.existsSync(path.join(root,old)));
  assert(!/\/labs\/|\/test\/|id="labs"|rvu-commerce/.test(html));
  const appSource=fs.readFileSync(path.join(root,'app.js'),'utf8');
- assert(!/sessionStorage/.test(appSource),'No session persistence is permitted');
- assert(appSource.includes("themeStoreKey = 'rvu-camp-theme'"),'Only a display preference may be persisted');
- assert(appSource.includes('localStorage.getItem(themeStoreKey)'),'Theme load must use the dedicated key');
- assert(appSource.includes('localStorage.setItem(themeStoreKey, activeTheme)'),'Theme save must use the dedicated key');
- assert(!/localStorage\.(?:setItem|getItem)\(.*(?:name|phone|goal|payload|form)/.test(appSource),'Never persist applicant fields');
+ assert(!/sessionStorage|localStorage/.test(appSource),'No visitor preferences or applicant data should be stored locally');
+ assert(!/themeToggle|setTheme|data-theme/.test(appSource),'Light mode and its toggle must be removed');
+ assert(appSource.includes('setupDiscountDrag()'),'Discount drag code must load');
  console.log('PASS: production metadata, FAQ order, CSP hashes, safe rendering, hostile input, fixed video destinations, URL encoding, bounded campaign fields, immediate WhatsApp navigation with private background submission, language round trips and retired-route removal. All submissions mocked locally.');
 })().catch(e=>{console.error(e);dom.window.close();process.exit(1)});
