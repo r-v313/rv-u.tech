@@ -72,6 +72,18 @@ function boot() {
   const structuredCourse=JSON.parse(d.querySelector('script[type="application/ld+json"]').textContent)['@graph'].find(entry=>entry['@type']==='Course');
   assert.equal(structuredCourse.hasCourseInstance.startDate,'2026-11-25','Structured course date must match');
   assert.equal(structuredCourse.name,'RVU Mentorship Camp — Cohort 06');
+
+  assert.equal(structuredCourse.offers,undefined,'Course structured data must not expose a price');
+  assert(!/(?:2,000|4,000|2000|4000|٢٠٠٠|٤٠٠٠|EGP|جنيه مصري|سعر الكامب|تكلفة الكامب|InstaPay|Vodafone Cash|Orange Cash)/i.test(html),'No camp prices or payment methods anywhere on the public page');
+  assert.equal(d.querySelector('#pricing,.price-display,.price-before,.price-payment'),null,'No pricing cards, amounts or payment instructions');
+  const discountBadge=d.querySelector('.discount-float');
+  assert(discountBadge,'Sixth-cohort offer must be visible');
+  assert.equal(discountBadge.getAttribute('href'),'#apply','Offer badge opens application section');
+  assert.equal(discountBadge.querySelector('.discount-float-percent').textContent.trim(),'50%');
+  assert.equal(discountBadge.querySelector('.discount-float-price').textContent.trim(),'للكامب السادس');
+  assert.equal(d.querySelector('.price-offer').textContent.trim(),'خصم 50% مخصص للكامب السادس فقط');
+  assert(d.querySelector('.price-panel [data-apply]'),'Application button must remain in the offer panel');
+  assert(css.includes('.discount-float')&&minCSS.includes('.discount-float'),'Refined offer styles must be published');
   assert(d.querySelector('link[href*="styles.min.css"]'));
   assert.equal(d.querySelectorAll('[data-en]').length>160,true,'English translations required');
   for(const asset of d.querySelectorAll('[src],[href]')){
